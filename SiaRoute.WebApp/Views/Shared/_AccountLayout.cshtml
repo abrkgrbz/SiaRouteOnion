@@ -1,0 +1,21 @@
+﻿<!DOCTYPE html>
+
+<html lang="tr">
+<!--begin::Head-->
+<head>
+    <title>Sia Route Giriş </title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+    <link href="~/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+</head>
+<body id="kt_body" class="bg-body">
+
+@RenderBody()
+<script src="~/assets/plugins/global/plugins.bundle.js"></script>
+<script src="~/assets/js/scripts.bundle.js"></script>
+    
+@await RenderSectionAsync("js", false)
+</body>
+
+</html>

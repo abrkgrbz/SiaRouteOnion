@@ -1,0 +1,367 @@
+﻿@{
+    ViewData["Title"] = "ProjectDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    Html.RenderPartial("_ProjectDetailPartialView");
+}
+<style>
+    #chartdiv {
+      width: 100%;
+      height: 300px;
+    }
+</style>
+<div class="row g-6 g-xl-9">
+    <div class="col-lg-6">
+        <div class="card card-flush h-lg-100">
+            <div class="card-body p-9 pt-5">
+                <div class="d-flex flex-wrap">
+                    <div class="position-relative d-flex flex-center h-175px w-175px me-15 mb-7">
+                        <div class="position-absolute translate-middle start-50 top-50 d-flex flex-column flex-center">
+                            <span id="total-participants" class="fs-2qx fw-bolder"></span>
+                            <span class="fs-6 fw-bold text-gray-400">Katılımcı</span>
+                        </div>
+                        <canvas id="project_overview_chart"></canvas>
+                    </div>
+                    <div class="d-flex flex-column justify-content-center flex-row-fluid pe-11 mb-5">
+                        <div class="d-flex fs-6 fw-bold align-items-center mb-3">
+                            <div class="bullet bg-success me-3"></div>
+                            <div class="text-gray-400">Tamamlanmış</div>
+                            <div id="completed-count" class="ms-auto fw-bolder text-gray-700"></div>
+                        </div>
+                        <div class="d-flex fs-6 fw-bold align-items-center mb-3">
+                            <div class="bullet bg-warning me-3"></div>
+                            <div class="text-gray-400">Tamamlanmamış</div>
+                            <div id="incomplete-count" class="ms-auto fw-bolder text-gray-700"></div>
+                        </div>
+                        <div class="d-flex fs-6 fw-bold align-items-center mb-3">
+                            <div class="bullet bg-danger me-3"></div>
+                            <div class="text-gray-400">Diskalifiye</div>
+                            <div id="disqualified-count" class="ms-auto fw-bolder text-gray-700"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="notice d-flex bg-light-primary rounded border-primary border border-dashed p-6">
+                    <div class="d-flex flex-stack flex-grow-1">
+                        <div class="fw-bold">
+                            <div class="fs-6 text-gray-700">
+                                <a href="#" class="fw-bolder me-1">Proje Katılımcıları</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card card-flush h-lg-100">
+            <div class="card-body p-9  ">
+                <div class="d-flex flex-wrap pb-5">
+                    <div id="chartdiv"></div>
+                    
+                </div>
+                <div class="notice d-flex bg-light-primary rounded border-primary border border-dashed p-6">
+                    <div class="d-flex flex-stack flex-grow-1">
+                        <div class="fw-bold">
+                            <div class="fs-6 text-gray-700">
+                                <a href="#" class="fw-bolder me-1">Proje Kotaları</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 pb-10">
+        <div class="card card-flush h-lg-100">
+            <div class="card-body p-9  ">
+                <div class="table-responsive">
+                    <table class="table table-row-dashed table-row-gray-300 gy-7">
+                        <thead>
+                        <tr class="fw-bolder fs-6 text-gray-800">
+
+                            <th class="text-center"></th>
+                            <th class="text-center">Planlanan Tarih</th>
+                            <th class="text-center">Gerçekleşen Tarih</th>
+                            <th class="text-center">Durum</th>
+                        </tr>
+                        </thead>
+                        <tbody> 
+                        </tbody>
+                    </table>
+                </div>
+                <div class="notice d-flex bg-light-primary rounded border-primary border border-dashed p-6">
+                    <div class="d-flex flex-stack flex-grow-1">
+                        <div class="fw-bold">
+                            <div class="fs-6 text-gray-700">
+                                <a href="#" class="fw-bolder me-1">Proje Planlanan ve Gerçekleşen Tarihler</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--end::Row-->
+@section js {
+    <!-- HTML -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/tr.min.js"></script> 
+    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+    <script>
+        "use strict";
+        var KTProjectOverview = function() {
+
+            return {
+                init: function() {
+                    var s, i;
+                    $.ajax({
+                        url: 'get-project-details-chart-data',
+                        method: 'GET',
+                        success: function(response) { 
+                    var filteredResponse = response.filter(item => !item.hasOwnProperty('Total'));
+                    var totalParticipants = response.find(item => item.hasOwnProperty('Total')).Total;
+                     
+                    var data = filteredResponse.map(item => Object.values(item)[0]);
+                    var labels = filteredResponse.map(item => Object.keys(item)[0]);
+
+                    // HTML güncelleme
+                    document.getElementById('total-participants').textContent = totalParticipants;
+                    document.getElementById('completed-count').textContent = filteredResponse.find(item => item.Completed !== undefined)?.Completed || 0;
+                    document.getElementById('incomplete-count').textContent = filteredResponse.find(item => item.Incomplete !== undefined)?.Incomplete || 0;
+                    document.getElementById('disqualified-count').textContent = filteredResponse.find(item => item.Disqualified !== undefined)?.Disqualified || 0;
+                            var t = document.getElementById("project_overview_chart");
+                            if (t) {
+                                var e = t.getContext("2d");
+                                new Chart(e, {
+                                    type: "doughnut",
+                                    data: {
+                                        datasets: [{
+                                            data: data,
+                                            backgroundColor: ["#50CD89", "#FFC700", "#F1416C"]
+                                        }],
+                                        labels: labels
+                                    },
+                                    options: {
+                                        chart: {
+                                            fontFamily: "inherit"
+                                        },
+                                        cutoutPercentage: 75,
+                                        responsive: !0,
+                                        maintainAspectRatio: !1,
+                                        cutout: "75%",
+                                        title: {
+                                            display: !1
+                                        },
+                                        animation: {
+                                            animateScale: !0,
+                                            animateRotate: !0
+                                        },
+                                        tooltips: {
+                                            enabled: !0,
+                                            intersect: !1,
+                                            mode: "nearest",
+                                            bodySpacing: 5,
+                                            yPadding: 10,
+                                            xPadding: 10,
+                                            caretPadding: 0,
+                                            displayColors: !1,
+                                            backgroundColor: "#20D489",
+                                            titleFontColor: "#ffffff",
+                                            cornerRadius: 4,
+                                            footerSpacing: 0,
+                                            titleSpacing: 0
+                                        },
+                                        plugins: {
+                                            legend: {
+                                                display: !1
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error fetching data:', error);
+                        }
+                    });
+                }
+            }
+        }();
+
+        KTUtil.onDOMContentLoaded((function() {
+            KTProjectOverview.init();
+        }));
+
+    </script>
+    <script>
+       
+         am5.ready(function() {
+          var root = am5.Root.new("chartdiv");
+
+          root.setThemes([
+            am5themes_Animated.new(root)
+          ]);
+
+          var chart = root.container.children.push(am5xy.XYChart.new(root, {
+            panX: true,
+            panY: true,
+            wheelX: "panX",
+            wheelY: "zoomX",
+            pinchZoomX: true,
+            paddingLeft: 0,
+            paddingRight: 1
+          }));
+
+          var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {}));
+          cursor.lineY.set("visible", false);
+
+          var xRenderer = am5xy.AxisRendererX.new(root, {
+            minGridDistance: 30,
+            minorGridEnabled: true
+          });
+
+          xRenderer.labels.template.setAll({
+            rotation: -90,
+            centerY: am5.p50,
+            centerX: am5.p200,
+            paddingRight: 15
+          });
+
+          xRenderer.grid.template.setAll({
+            location: 1
+          });
+
+          var xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
+            maxDeviation: 0.3,
+            categoryField: "methodName",
+            renderer: xRenderer,
+            tooltip: am5.Tooltip.new(root, {})
+          }));
+
+          var yRenderer = am5xy.AxisRendererY.new(root, {
+            strokeOpacity: 0.1
+          });
+
+          var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+            maxDeviation: 0.3,
+            renderer: yRenderer
+          }));
+
+          var series = chart.series.push(am5xy.ColumnSeries.new(root, {
+            name: "Series 1",
+            xAxis: xAxis,
+            yAxis: yAxis,
+            valueYField: "size",
+            sequencedInterpolation: true,
+            categoryXField: "methodName",
+            tooltip: am5.Tooltip.new(root, {
+              labelText: "{valueY}"
+            })
+          }));
+
+          series.columns.template.setAll({ cornerRadiusTL: 5, cornerRadiusTR: 5, strokeOpacity: 0 });
+          series.columns.template.adapters.add("fill", function(fill, target) {
+            return chart.get("colors").getIndex(series.columns.indexOf(target));
+          });
+
+          series.columns.template.adapters.add("stroke", function(stroke, target) {
+            return chart.get("colors").getIndex(series.columns.indexOf(target));
+          });
+         const urlParams = new URLSearchParams(window.location.search);
+         const projectId = urlParams.get('id');
+          $.ajax({
+            url: 'get-project-methods', // API endpoint URL'nizi buraya girin
+            method: 'GET',
+            data: { projectId: projectId },
+            success: function(response) { 
+              var data = response.data; 
+              var totalValue = data.reduce((acc, item) => acc + item.size, 0);
+
+         
+              chart.children.unshift(am5.Label.new(root, {
+          text: "Toplam: " + totalValue,
+          fontSize: 20,
+          fill: am5.color(0xE6E6FA),
+          x: am5.p50,
+          centerX: am5.p50,
+          y: am5.p0,
+          centerY: am5.p0
+               }));
+              xAxis.data.setAll(data);
+              series.data.setAll(data);
+              series.appear(1000);
+              chart.appear(1000, 100);
+            },
+            error: function(xhr, status, error) {
+              console.error('Veri çekme sırasında hata oluştu:', error);
+            }
+          });
+        });
+
+    </script>
+    <script>
+                const urlParams = new URLSearchParams(window.location.search);
+        const projectId = urlParams.get('id');
+
+        $(document).ready(function() {
+            function loadTable(projectId) {
+                $.ajax({
+                    url: 'get-project-process',
+                    type: 'GET',
+                    data: { projectId: projectId },
+                    success: function(response) {
+                        var tbody = $('table.table tbody');
+                        tbody.empty(); // Tabloyu temizle
+                         
+                        response.data.sort(function(a, b) {
+                            console.log(a)
+                            if (a.processName === "Soru Formu Teslim") return -1;
+                            if (b.processName === "Soru Formu Teslim") return 1;
+                            return 0;
+                        });
+
+                        response.data.forEach(function(process) {
+                            console.log(process);
+                            var plannedDate = process.plannedDate ? moment(process.plannedDate).format('DD/MM/YYYY') : '-';
+                            var realizedDate = process.realizedDate ? moment(process.realizedDate).format('DD/MM/YYYY') : '-';
+                            var statusClass;
+
+                            if (process.status === 'Zamanında') {
+                                statusClass = 'success';
+                            } else if (process.status === 'Gecikmeli') {
+                                statusClass = 'danger';
+                            } else {
+                                statusClass = 'warning'; // Gerçekleşmedi
+                            }
+
+                            var row = `
+                                <tr>
+                                    <td class="text-center">${process.processName}</td>
+                                    <td class="text-center">${plannedDate}</td>
+                                    <td class="text-center">${realizedDate}</td>
+                                    <td class="text-center">
+                                        <div class="badge badge-light-${statusClass}">${process.status}</div>
+                                    </td>
+                                </tr>
+                            `;
+                            tbody.append(row);
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Veri çekme hatası: ", error);
+                    }
+                });
+            }
+
+            loadTable(projectId);
+        });
+
+
+    </script>
+}

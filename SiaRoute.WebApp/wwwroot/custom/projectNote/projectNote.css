@@ -1,0 +1,25 @@
+﻿
+.scrollable-container {
+    max-height: 400px; /* İstediğiniz yüksekliği ayarlayabilirsiniz */
+    overflow-y: auto;
+    padding-right: 8px; /* Scroll çubuğu için biraz boşluk */
+}
+
+    /* Webkit (Chrome, Safari vb.) tarayıcılar için kaydırma çubuğu stilini özelleştirme */
+    .scrollable-container::-webkit-scrollbar {
+        width: 18px;
+    }
+
+    .scrollable-container::-webkit-scrollbar-track {
+        background-color: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    .scrollable-container::-webkit-scrollbar-thumb {
+        background-color: #c1c1c1;
+        border-radius: 10px;
+    }
+
+        .scrollable-container::-webkit-scrollbar-thumb:hover {
+            background-color: #a8a8a8;
+        }

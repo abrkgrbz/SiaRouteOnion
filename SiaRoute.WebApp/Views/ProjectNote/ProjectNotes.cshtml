@@ -1,0 +1,627 @@
+﻿@{
+    ViewData["Title"] = "ProjectNotes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section css {
+    <link href="~/custom/projectNote/projectNote.css" rel="stylesheet" type="text/css" />
+
+}
+@{
+    Html.RenderPartial("_ProjectDetailPartialView");
+}
+<div class="modal fade" id="add_project_notes" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mw-650px">
+        <div class="modal-content rounded">
+            <div class="modal-header pb-0 border-0 justify-content-end">
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+                        </svg>
+                    </span>
+                </div>
+            </div>
+            <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
+                <form id="kt_modal_new_target_form" class="form" action="#">
+                    <div class="mb-13 text-center">
+                        <h1 class="mb-3">Not Oluşturun</h1>
+                        <div class="text-muted fw-bold fs-5">
+                            Oluşturulan not proje ekibi tarafından görüntülenecektir.
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-column mb-8">
+                        <textarea class="form-control form-control-solid" rows="6" name="note" placeholder="Lütfen Notunuzu buraya yazınız."></textarea>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="reset" id="kt_modal_new_target_cancel" class="btn btn-light me-3">Vazgeç</button>
+                        <button type="submit" id="kt_modal_new_target_submit" class="btn btn-primary">
+                            <span class="indicator-label">Kaydet</span>
+                            <span class="indicator-progress">
+                                Lütfen Bekleyiniz...
+                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-9">
+    <div class="col-md-4 col-lg-12 col-xl-4">
+        <div class="mb-9" id="notes">
+            <div class="d-flex flex-stack">
+                <div class="fw-bolder fs-4">
+                    Notlar
+                </div>
+            </div>
+            <div class="h-3px w-100 bg-warning"></div>
+        </div>
+        <div class="scrollable-container">
+            <div class="card mb-6 mb-xl-9">
+                <div class="card-body">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-lg-12 col-xl-4">
+        <div class="mb-9" id="tk">
+            <div class="d-flex flex-stack">
+                <div class="fw-bolder fs-4">
+                    TK Soruları
+                </div>
+
+            </div>
+            <div class="h-3px w-100 bg-info"></div>
+        </div>
+        <div class="scrollable-container">
+            <div class="card mb-6 mb-xl-9">
+                <div class="card-body">
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-4 col-lg-12 col-xl-4">
+        <div class="mb-9" id="data">
+            <div class="d-flex flex-stack">
+                <div class="fw-bolder fs-4">
+                    Data Kontrol Soruları
+                </div>
+
+            </div>
+            <div class="h-3px w-100 bg-danger"></div>
+        </div>
+        <div class="scrollable-container">
+            <div class="card mb-6 mb-xl-9">
+                <div class="card-body">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="modal fade" id="add_project_add_tk" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mw-650px">
+        <div class="modal-content rounded">
+            <div class="modal-header pb-0 border-0 justify-content-end">
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+                        </svg>
+                    </span>
+                </div>
+            </div>
+            <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
+                <form id="kt_modal_new_target_form_tk" class="form" action="#">
+                    <div class="mb-13 text-center">
+                        <h1 class="mb-3">TK Soruları Oluşturun</h1>
+                        <div class="text-muted fw-bold fs-5">
+                            Oluşturulan TK Soruları proje ekibi tarafından görüntülenecektir.
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-column mb-8">
+                        <textarea class="form-control form-control-solid" rows="6" name="note_tk" placeholder="Lütfen TK Sorularını buraya yazınız."></textarea>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="reset" id="kt_modal_tk_new_target_cancel_tk" class="btn btn-light me-3">Vazgeç</button>
+                        <button type="submit" id="kt_modal_tk_new_target_submit_tk" class="btn btn-primary">
+                            <span class="indicator-label">Kaydet</span>
+                            <span class="indicator-progress">
+                                Lütfen Bekleyiniz...
+                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="add_project_add_dks" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mw-650px">
+        <div class="modal-content rounded">
+            <div class="modal-header pb-0 border-0 justify-content-end">
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+                        </svg>
+                    </span>
+                </div>
+            </div>
+            <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
+                <form id="kt_modal_new_target_form_dks" class="form" action="#">
+                    <div class="mb-13 text-center">
+                        <h1 class="mb-3">Data Kontrol Soruları Oluşturun</h1>
+                        <div class="text-muted fw-bold fs-5">
+                            Oluşturulan Data Kontrol Soruları proje ekibi tarafından görüntülenecektir.
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-column mb-8">
+                        <textarea class="form-control form-control-solid" rows="6" name="note_dks" placeholder="Lütfen Data Kontrol Sorularını buraya yazınız."></textarea>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="reset" id="kt_modal_dks_new_target_cancel_dks" class="btn btn-light me-3">Vazgeç</button>
+                        <button type="submit" id="kt_modal_dks_new_target_submit_dks" class="btn btn-primary">
+                            <span class="indicator-label">Kaydet</span>
+                            <span class="indicator-progress">
+                                Lütfen Bekleyiniz...
+                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editNoteModal" tabindex="-1" aria-labelledby="editNoteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editNoteModalLabel">Not Düzenle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editNoteForm">
+                    <input type="hidden" id="editNoteId">
+                    <div class="mb-3">
+                        <textarea class="form-control" id="editNoteContent" rows="5"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">İptal</button>
+                <button type="button" class="btn btn-primary" id="saveNoteChanges">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section js {
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/tr.js"></script>
+    <script>
+                    function fetchAllData() {
+                      const urlParams = new URLSearchParams(window.location.search);
+                      const projectId = urlParams.get('id');
+
+                      $.ajax({
+                        url: '@Url.Action("GetAllProjectNoteByProject")',
+                        method: 'GET',
+                        data: { ProjectId: projectId },
+                        success: function(response) {
+                          console.log('Tüm veriler:', response);
+
+                           if (response.succeeded && response.data) {
+                            const groupedData = response.data;
+
+                            const notes = groupedData['Not'] || [];
+                             const tkQuestions = groupedData['TkSorulari'] || [];
+                             const dataQuestions = groupedData['DataKontrolSorulari'] || [];
+
+                            updateSection('notes', notes);
+                            updateSection('tk', tkQuestions);
+                            updateSection('data', dataQuestions);
+                          } else {
+                            showErrorInAllSections('Veri formatı beklendiği gibi değil veya veri bulunamadı');
+                          }
+                        },
+                             error: function(xhr, status, error) {
+
+               if (xhr.responseJSON) {
+                 if (xhr.responseJSON.Message) {
+                   errorMessage = xhr.responseJSON.Message;
+                 } else if (xhr.responseJSON.Errors && xhr.responseJSON.Errors.length > 0) {
+                   errorMessage = xhr.responseJSON.Errors.join(', ');
+                 }
+               }
+
+               showErrorInAllSections(errorMessage);
+            }
+                      });
+                    }
+                    function updateSection(sectionId, items) {
+              const sectionHeader = $(`#${sectionId}`);
+              const sectionContainer = sectionHeader.next('.scrollable-container');
+              if (sectionContainer.length === 0) {
+                sectionHeader.after('<div class="scrollable-container"></div>');
+                sectionContainer = sectionHeader.next('.scrollable-container');
+              }
+
+              $(`#${sectionId} .fs-6.text-gray-400`).text(items.length);
+
+              sectionContainer.empty();
+
+              if (items && items.length > 0) {
+                items.forEach(item => {
+                  console.log(item)
+                  const itemDate = new Date(item.created).toLocaleString();
+                  const content = item.note || "";
+                        // İçeriği güvenli hale getir
+            const safeContent = encodeURIComponent(content).replace(/'/g, "\\'");
+
+                  const card = `
+                    <div class="card mb-6 mb-xl-9">
+                      <div class="card-body">
+                                                                            <div class="d-flex flex-stack mb-3">
+                                                            <div class="badge badge-light">Seçenekler</div>
+                                                            <div>
+                                                                <button type="button" class="btn btn-sm btn-icon btn-color-dark btn-active-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                                                    <span class="svg-icon svg-icon-2">
+                                                                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path opacity="0.3" d="M22.1 11.5V12.6C22.1 13.2 21.7 13.6 21.2 13.7L19.9 13.9C19.7 14.7 19.4 15.5 18.9 16.2L19.7 17.2999C20 17.6999 20 18.3999 19.6 18.7999L18.8 19.6C18.4 20 17.8 20 17.3 19.7L16.2 18.9C15.5 19.3 14.7 19.7 13.9 19.9L13.7 21.2C13.6 21.7 13.1 22.1 12.6 22.1H11.5C10.9 22.1 10.5 21.7 10.4 21.2L10.2 19.9C9.4 19.7 8.6 19.4 7.9 18.9L6.8 19.7C6.4 20 5.7 20 5.3 19.6L4.5 18.7999C4.1 18.3999 4.1 17.7999 4.4 17.2999L5.2 16.2C4.8 15.5 4.4 14.7 4.2 13.9L2.9 13.7C2.4 13.6 2 13.1 2 12.6V11.5C2 10.9 2.4 10.5 2.9 10.4L4.2 10.2C4.4 9.39995 4.7 8.60002 5.2 7.90002L4.4 6.79993C4.1 6.39993 4.1 5.69993 4.5 5.29993L5.3 4.5C5.7 4.1 6.3 4.10002 6.8 4.40002L7.9 5.19995C8.6 4.79995 9.4 4.39995 10.2 4.19995L10.4 2.90002C10.5 2.40002 11 2 11.5 2H12.6C13.2 2 13.6 2.40002 13.7 2.90002L13.9 4.19995C14.7 4.39995 15.5 4.69995 16.2 5.19995L17.3 4.40002C17.7 4.10002 18.4 4.1 18.8 4.5L19.6 5.29993C20 5.69993 20 6.29993 19.7 6.79993L18.9 7.90002C19.3 8.60002 19.7 9.39995 19.9 10.2L21.2 10.4C21.7 10.5 22.1 11 22.1 11.5ZM12.1 8.59998C10.2 8.59998 8.6 10.2 8.6 12.1C8.6 14 10.2 15.6 12.1 15.6C14 15.6 15.6 14 15.6 12.1C15.6 10.2 14 8.59998 12.1 8.59998Z" fill="currentColor"/>
+            <path d="M17.1 12.1C17.1 14.9 14.9 17.1 12.1 17.1C9.30001 17.1 7.10001 14.9 7.10001 12.1C7.10001 9.29998 9.30001 7.09998 12.1 7.09998C14.9 7.09998 17.1 9.29998 17.1 12.1ZM12.1 10.1C11 10.1 10.1 11 10.1 12.1C10.1 13.2 11 14.1 12.1 14.1C13.2 14.1 14.1 13.2 14.1 12.1C14.1 11 13.2 10.1 12.1 10.1Z" fill="currentColor"/>
+            </svg>
+                                                                    </span>
+                                                                </button>
+                                                                <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-bold w-200px py-3" data-kt-menu="true" style="">
+
+                                                                    <div class="menu-item px-3">
+                                                                             <a href="javascript:EditProjectNote(${item.id}, '${safeContent}')" class="menu-link px-3">Düzenle</a>
+                                                                    </div>
+                                                                    <div class="menu-item px-3">
+                                                                        <a href="javascript:DeleteProjectNote(${item.id})" class="menu-link px-3 text-danger">Sil</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                        <div class="fs-6 fw-bold text-gray-600 mb-5">${escapeHtml(content)}</div>
+                        <div class="text-muted fs-7">${itemDate}</div>
+                      </div>
+                    </div>`;
+                  sectionContainer.append(card);
+                  KTMenu.createInstances();
+                });
+              } else {
+                // Kayıt yoksa bilgi mesajı göster
+                const emptyCard = `
+                  <div class="card mb-6 mb-xl-9">
+                    <div class="card-body">
+                      <div class="fs-6 fw-bold text-gray-600 mb-5">Bu bölüm için oluşturulmuş herhangi bir kayıt yoktur</div>
+                    </div>
+                  </div>`;
+                sectionContainer.append(emptyCard);
+               
+              }
+                    }
+                    function showErrorInAllSections(errorMessage) {
+                      ['notes', 'tk', 'data'].forEach(sectionId => {
+                        const sectionContainer = $(`#${sectionId}`).parent();
+                        const errorCard = `
+                          <div class="card mb-6 mb-xl-9">
+                            <div class="card-body">
+                              <div class="fs-6 fw-bold text-danger mb-5">${errorMessage}</div>
+                            </div>
+                          </div>`;
+                        sectionContainer.find('.card').remove();
+                        sectionContainer.append(errorCard);
+                      });
+                    }
+
+                    function escapeHtml(unsafe) {
+                      return unsafe
+                        .replace(/&/g, "&amp;")
+                        .replace(/</g, "&lt;")
+                        .replace(/>/g, "&gt;")
+                        .replace(/"/g, "&quot;")
+                        .replace(/'/g, "&#039;");
+                    }
+
+                    $(document).ready(function() {
+                      fetchAllData();
+                    });
+
+                    function DeleteProjectNote(id)
+                    {
+                              Swal.fire({
+                html: `<b>Bu Notu silmek istiyormusunuz?</b>`,
+                icon: "warning",
+                buttonsStyling: false,
+                showCancelButton: true,
+                confirmButtonText: "Evet",
+                cancelButtonText: 'Hayır',
+                customClass: {
+                    confirmButton: "btn btn-danger",
+                    cancelButton: 'btn btn-light'
+                }
+            }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '@Url.Action("DeleteProjectNote")',
+                type: 'GET',
+                data: {
+                    id: id
+                },
+                success: function(response) {
+              Swal.fire({
+    title: 'Başarılı!',
+    text: 'Not başarıyla silindi',
+    icon: 'success',
+    buttonsStyling: false,
+    customClass: {
+        confirmButton: "btn btn-primary"
+    }
+        }).then((result) => {
+    if (result.isConfirmed) { 
+        window.location.reload();
+    }
+        });
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire({
+                        title: 'Hata!',
+                        text: 'Not silinirken bir hata oluştu',
+                        icon: 'error',
+                        buttonsStyling: false,
+                        customClass: {
+                            confirmButton: "btn btn-primary"
+                        }
+                    });
+                }
+            });
+        }
+            });
+                    }
+
+               // HTML Decode fonksiyonu (modalda gösterirken)
+        function decodeHtml(html) {
+            var txt = document.createElement("textarea");
+            txt.innerHTML = html;
+            return txt.value;
+        }
+
+        // Modal açılırken içeriği decode et
+        function EditProjectNote(noteId, encodedContent) {
+            const content = decodeURIComponent(encodedContent);
+            $('#editNoteModal').modal('show');
+            $('#editNoteContent').val(decodeHtml(content));
+            $('#editNoteId').val(noteId);
+        }
+
+                $(document).ready(function() {
+          // Kaydet butonuna tıklandığında
+          $('#saveNoteChanges').on('click', function() {
+            const noteId = $('#editNoteId').val();
+            const updatedContent = $('#editNoteContent').val();
+
+            // AJAX ile güncelleme isteği gönder
+            $.ajax({
+              url: '@Url.Action("UpdateProjectNote")',
+              method: 'POST',
+              data: {
+                id: noteId,
+                note: updatedContent
+              },
+              success: function(response) {
+                if (response.succeeded) {
+                  $('#editNoteModal').modal('hide');
+
+                  fetchAllData();
+
+                  toastr.success('Not başarıyla güncellendi');
+                } else {
+                  toastr.error(response.message || 'Not güncellenirken bir hata oluştu');
+                }
+              },
+              error: function(xhr, status, error) {
+                let errorMessage = 'Not güncellenirken bir hata oluştu';
+
+                if (xhr.responseJSON) {
+                  if (xhr.responseJSON.Message) {
+                    errorMessage = xhr.responseJSON.Message;
+                  } else if (xhr.responseJSON.Errors && xhr.responseJSON.Errors.length > 0) {
+                    errorMessage = xhr.responseJSON.Errors.join(', ');
+                  }
+                }
+
+                toastr.error(errorMessage);
+              }
+            });
+          });
+        });
+    </script>
+    <script>
+               $(document).ready(function(){
+                        toastr.options = {
+            "closeButton": true,
+            "debug": true,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toastr-bottom-center",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+            const urlParams = new URLSearchParams(window.location.search);
+            const projectId = urlParams.get('id');
+            const noteType=1;
+            $('#kt_modal_new_target_form').submit(function(event){
+                event.preventDefault(); // Formun standart gönderimini engelle
+
+                var formData = new FormData();
+                formData.append('Note', $('textarea[name="note"]').val());
+                formData.append('ProjectId', projectId);
+                formData.append('NoteType',noteType);
+                $.ajax({
+                    url: '@Url.Action("AddProjectNote")',
+                    method: 'POST',
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    beforeSend: function() {
+                        $('#kt_modal_new_target_submit .indicator-label').hide();
+                        $('#kt_modal_new_target_submit .indicator-progress').show();
+                    },
+                    success: function(response){
+                        console.log(response)
+                        toastr.success("Notunuz oluşturuldu");
+                        $('#kt_modal_new_target_form')[0].reset();
+                          fetchAllData();
+                    },
+                    error: function(){
+                        toastr.error("Notunuz oluşturulamadı");
+                    },
+                    complete: function() {
+                        $('#kt_modal_new_target_submit .indicator-label').show();
+                        $('#kt_modal_new_target_submit .indicator-progress').hide();
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function(){
+               toastr.options = {
+                "closeButton": true,
+                "debug": true,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toastr-bottom-center",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+                const urlParams = new URLSearchParams(window.location.search);
+                const projectId = urlParams.get('id');
+                const noteType=2;
+                        $('#kt_modal_new_target_form_tk').submit(function(event){
+                    event.preventDefault(); // Formun standart gönderimini engelle
+
+                    var formData = new FormData();
+                    formData.append('Note', $('textarea[name="note_tk"]').val());
+                    formData.append('ProjectId', projectId);
+                    formData.append('NoteType',noteType);
+                    $.ajax({
+                        url: '@Url.Action("AddProjectNote")',
+                        method: 'POST',
+                        processData: false,
+                        contentType: false,
+                        data: formData,
+                        beforeSend: function() {
+                            $('#kt_modal_new_target_submit_tk .indicator-label').hide();
+                            $('#kt_modal_new_target_submit_tk .indicator-progress').show();
+                        },
+                        success: function(response){
+                            console.log(response)
+                            toastr.success("TK Sorusu oluşturuldu");
+                            $('#kt_modal_new_target_form_tk')[0].reset();
+                                  fetchAllData();
+                        },
+                        error: function(){
+                            toastr.error("Notunuz oluşturulamadı");
+                        },
+                        complete: function() {
+                            $('#kt_modal_new_target_submit_tk .indicator-label').show();
+                            $('#kt_modal_new_target_submit_tk .indicator-progress').hide();
+                        }
+                    });
+                });
+            });
+    </script>
+    <script>
+        $(document).ready(function(){
+               toastr.options = {
+                "closeButton": true,
+                "debug": true,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toastr-bottom-center",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+                const urlParams = new URLSearchParams(window.location.search);
+                const projectId = urlParams.get('id');
+                const noteType=3;
+                        $('#kt_modal_new_target_form_dks').submit(function(event){
+                    event.preventDefault(); // Formun standart gönderimini engelle
+
+                    var formData = new FormData();
+                    formData.append('Note', $('textarea[name="note_dks"]').val());
+                    formData.append('ProjectId', projectId);
+                    formData.append('NoteType',noteType);
+                    $.ajax({
+                        url: '@Url.Action("AddProjectNote")',
+                        method: 'POST',
+                        processData: false,
+                        contentType: false,
+                        data: formData,
+                        beforeSend: function() {
+                            $('#kt_modal_new_target_submit_dks .indicator-label').hide();
+                            $('#kt_modal_new_target_submit_dks .indicator-progress').show();
+                        },
+                        success: function(response){
+                            console.log(response)
+                            toastr.success("Data Kontrol Sorusu oluşturuldu");
+                            $('#kt_modal_new_target_form_dks')[0].reset();
+                            fetchAllData();
+                        },
+                        error: function(){
+                            toastr.error("Notunuz oluşturulamadı");
+                        },
+                        complete: function() {
+                            $('#kt_modal_new_target_submit_dks .indicator-label').show();
+                            $('#kt_modal_new_target_submit_dks .indicator-progress').hide();
+                        }
+                    });
+                });
+            });
+    </script>
+}

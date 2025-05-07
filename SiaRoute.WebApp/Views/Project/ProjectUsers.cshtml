@@ -1,0 +1,220 @@
+﻿@{
+    ViewData["Title"] = "ProjectUsers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    Html.RenderPartial("_ProjectDetailPartialView");
+}
+
+@section css
+{
+    <link href="~/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
+}
+
+<div class="modal bg-white fade" tabindex="-1" id="add_users_list">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content shadow-none">
+            <div class="modal-header">
+                <h5 class="modal-title">Projeye Kullanıcı Ekleme Noktası</h5>
+
+                <!--begin::Close-->
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <span class="svg-icon svg-icon-2x"></span>
+                </div>
+                <!--end::Close-->
+            </div>
+
+            <div class="modal-body">
+                <div class="card container-fluid card-bordered">
+
+                    <div class="card-header border-0 pt-6">
+                        <div class="card-title">
+                            <div class="d-flex align-items-center position-relative my-1">
+                                <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="currentColor" />
+                                        <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="currentColor" />
+                                    </svg>
+                                </span>
+                                <input type="text" data-kt-user-table-filter="search" class="form-control form-control-solid w-250px ps-14" placeholder="Kullanıcı Ara..." />
+                            </div>
+
+
+                        </div>
+                        <div class="d-flex justify-content-end" data-kt-docs-table-toolbar="base">
+                        </div>
+                        <div class="d-flex justify-content-end align-items-center d-none" data-kt-docs-table-toolbar="selected">
+                            <div class="fw-bolder me-5">
+                                <span class="me-2" data-kt-docs-table-select="selected_count"></span> Seçili
+                            </div>
+                            <button type="button" class="btn btn-success btn-sm" data-kt-docs-table-select="delete_selected">Seçilenleri Ekle</button>
+                        </div>
+                    </div>
+                    <div class="card-body py-4">
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="table_userList">
+                            <thead>
+                                <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="w-10px pe-2">
+                                        <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
+                                            <input class="form-check-input" type="checkbox" data-kt-check="true" data-kt-check-target="#kt_datatable_example_1 .form-check-input" value="1" />
+                                        </div>
+                                    </th>
+                                    <th class="min-w-125px">Ad Soyad</th>
+                                    <th class="min-w-125px">Email</th>
+                                    <th class="min-w-125px">Departman</th> 
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-600 fw-bold">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal">Kapat</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="kt_project_users_card_pane" class="tab-pane fade active show" role="tabpanel">
+    <!--begin::Row-->
+    <div class="row g-6 g-xl-9" id="userCardsContainer">
+        <!-- Dinamik olarak eklenecek kartlar buraya gelecek -->
+    </div>
+    <div class="d-flex flex-stack flex-wrap pt-10">
+        <div class="fs-6 fw-semibold text-gray-700">
+            <span id="pagination-info">Showing 1 to 10 of 50 entries</span>
+        </div>
+        <ul class="pagination" id="pagination">
+            <!-- Sayfa numaraları buraya gelecek -->
+        </ul>
+    </div>
+</div>
+
+
+@section js
+{
+
+    <script src="~/assets/plugins/custom/datatables/datatables.bundle.js"></script>
+    <script src="js/user/userLoadTable.js"></script>
+    <script>
+        function deleteUser(id) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const projectId = urlParams.get('id');
+            Swal.fire({
+                html: `<b>Bu kullanıcıyı ilgili projeden çıkarmak istiyormusunuz?</b>`,
+                icon: "danger",
+                buttonsStyling: false,
+                showCancelButton: true,
+                confirmButtonText: "Evet",
+                cancelButtonText: 'Vazgeç',
+                customClass: {
+                    confirmButton: "btn btn-danger",
+                    cancelButton: 'btn btn-light'
+                }
+            }).then(function (result) {
+                if (result.value) {
+                    fetch('delete-user-project', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ UserId: id, ProjectId: projectId })
+
+                    }).then(response => response.json())
+                        .then(data => {
+                            Swal.fire({
+                                text: "Kullanıcı çıkarma işlemi başarıyla gerçekleşti",
+                                icon: "success",
+                                buttonsStyling: false,
+                                confirmButtonText: "Tamam",
+                                customClass: { confirmButton: "btn fw-bold btn-primary" }
+                            }).then(() => {
+                                location.reload();
+                            })
+                            
+                        })
+                        .catch(error => {
+                            Swal.fire({
+                                text: "Bir hata oluştu, lütfen tekrar deneyin",
+                                icon: "error",
+                                buttonsStyling: false,
+                                confirmButtonText: "Tamam",
+                                customClass: { confirmButton: "btn fw-bold btn-primary" }
+                            });
+                        });
+                }
+            });
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const projectId = urlParams.get('id');
+            const pageSize = 6;
+            let pageNumber = 1;
+
+            function loadUserProjects(pageNumber) {
+                fetch(`get-user-project-list?projectId=${projectId}&pageNumber=${pageNumber}&pageSize=${pageSize}`)
+                    .then(response => response.json())
+                    .then(data => {
+                   
+                        const container = document.getElementById('userCardsContainer');
+                        container.innerHTML = '';
+                        data.data.users.forEach(user => {
+                            const card = document.createElement('div');
+                            card.classList.add('col-md-6', 'col-xxl-4');
+
+                            card.innerHTML = `
+                                <div class="card">
+                                    <div class="card-body d-flex flex-center flex-column pt-12 p-9">
+                                        <div class="symbol symbol-65px symbol-circle mb-5">
+                                            <span class="symbol-label fs-2x fw-semibold text-primary bg-light-primary">${user.fullname.charAt(0)}</span>
+                                        </div>
+                                        <a href="#" class="fs-4 text-gray-800 text-hover-primary fw-bold mb-0">${user.fullname}</a>
+                                        <div class="fw-semibold text-gray-500 mb-6">${user.email}</div>
+                                        <div class="d-flex flex-center flex-wrap">
+                                            <div class="border border-gray-300 border-dashed rounded min-w-80px py-3 px-4 mx-2 mb-3">
+                                                <div class="fs-6 fw-bold ">
+                                                    <a href="#" onclick='deleteUser("${user.id}")' class="btn btn-sm btn-bg-danger btn-active-color-white">Çıkar</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+
+                            container.appendChild(card);
+                        });
+
+                        // Sayfalama bilgilerini güncelle
+                        document.getElementById('pagination-info').innerText = `${data.data.totalCount} Kullanıcıdan   ${(pageNumber - 1) * pageSize + 1} ve ${Math.min(pageNumber * pageSize, data.data.totalCount)} arası gösteriliyor`;
+
+                        // Sayfa numaralarını güncelle
+                        const pagination = document.getElementById('pagination');
+                        pagination.innerHTML = '';
+
+                        for (let i = 1; i <= Math.ceil(data.data.totalCount / pageSize); i++) {
+                            const pageItem = document.createElement('li');
+                            pageItem.classList.add('page-item');
+                            if (i === pageNumber) pageItem.classList.add('active');
+
+                            pageItem.innerHTML = `<a href="#" class="page-link">${i}</a>`;
+                            pageItem.addEventListener('click', function (e) {
+                                e.preventDefault();
+                                loadUserProjects(i);
+                            });
+
+                            pagination.appendChild(pageItem);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+
+            loadUserProjects(pageNumber);
+        });
+
+    </script>
+}
