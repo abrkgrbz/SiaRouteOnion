@@ -26,6 +26,7 @@ namespace SiaRoute.WebApp.Middlewares
                 var response = context.Response;
                 response.ContentType = "application/json";
                 var responseModel = new Response<string>() { Succeeded = false, Message = error?.Message };
+                context.Response.Clear();
 
                 switch (error)
                 {

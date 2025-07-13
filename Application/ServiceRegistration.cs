@@ -17,8 +17,13 @@ namespace Application
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
+            services.AddMediatR(cfg =>
+            {
+                cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly());
+                cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(CacheBehavior<,>));
+            });
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            
         }
     }
 }

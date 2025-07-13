@@ -5,1180 +5,365 @@
 
 @section css {
     <link href="~/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
-}
-<div class="card card-stretch">
+    <link href="~/assets/custom/projectlist.css" rel="stylesheet" type="text/css" />
 
+}
+
+<div class="card">
     <div class="card-header border-0 pt-6">
         <div class="card-title">
-            <div class="d-flex align-items-center position-relative my-1">
-                <span class="svg-icon svg-icon-1 position-absolute ms-6">
+            <div class="d-flex align-items-center position-relative">
+                <span class="svg-icon svg-icon-1 position-absolute ms-4">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="currentColor" />
                         <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="currentColor" />
                     </svg>
                 </span>
-                <input type="text" data-kt-user-table-filter="search" class="form-control form-control-solid w-250px ps-14" placeholder="Proje Ara..." />
+                <input type="text" data-kt-user-table-filter="search" class="form-control form-control-solid w-250px ps-14 project-search" placeholder="Proje Ara..." />
             </div>
         </div>
-        @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
-        {
-            <div class="card-toolbar">
-            <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
-                    <button type="button" class="btn btn-light-info me-3" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-                        <!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
-                        <span class="svg-icon svg-icon-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <path d="M19.0759 3H4.72777C3.95892 3 3.47768 3.83148 3.86067 4.49814L8.56967 12.6949C9.17923 13.7559 9.5 14.9582 9.5 16.1819V19.5072C9.5 20.2189 10.2223 20.7028 10.8805 20.432L13.8805 19.1977C14.2553 19.0435 14.5 18.6783 14.5 18.273V13.8372C14.5 12.8089 14.8171 11.8056 15.408 10.964L19.8943 4.57465C20.3596 3.912 19.8856 3 19.0759 3Z" fill="currentColor" />
-                            </svg>
-                        </span>
-                        <!--end::Svg Icon-->Filtre
-                    </button> 
-                    <div class="menu menu-sub menu-sub-dropdown w-300px w-md-325px" data-kt-menu="true"> 
-                        <div class="px-7 py-5">
-                            <div class="fs-5 text-dark fw-bolder">Filtre Seçenekleri</div>
-                        </div> 
-                        <div class="separator border-gray-200"></div> 
-                        <div class="px-7 py-5" data-kt-project-table-filter="form"> 
-                            
-                            <div class="mb-10">
-                                <label class="form-label fs-6 fw-bold">Proje Durumu:</label>
-                                <select class="form-select form-select-solid fw-bolder" data-kt-select2="true" data-placeholder="Bir filtre seçin" data-allow-clear="true"   data-hide-search="true">
-                                    <option></option>
-                                    <option value="1">Onay Toplantısı</option>
-                                    <option value="2">Soru Formu Paylaşımı</option>
-                                    <option value="3">Script Yazımı</option>
-                                    <option value="4">Script Onayı</option>
-                                    <option value="5">Kota Dosyası</option>
-                                    <option value="6">Saha Başlangıç</option>
-                                    <option value="7">Sahada</option>
-                                    <option value="8">Saha Bitiş</option>
-                                    <option value="0">Kodlama</option>
-                                    <option value="10">Tablolama</option>
-                                    <option value="11">MS Analizleri</option>
-                                    <option value="12">Ek İstekler</option>
-                                    <option value="13">Raporlama</option>
-                                </select>
-                            </div> 
-                           
-                            <div class="mb-10">
-                                <label class="form-label fs-6 fw-bold">Aktiflik:</label>
-                                <select class="form-select form-select-solid fw-bolder" name="isActive" data-kt-select2="true" data-placeholder="Bir filtre seçin" data-allow-clear="true"  data-hide-search="true">
-                                    <option></option>
-                                    <option value="true">Aktif</option>
-                                    <option value="false">Pasif</option> 
-                                </select>
-                            </div> 
-                            <div class="d-flex justify-content-end">
-                                <button type="reset" class="btn btn-light btn-active-light-danger fw-bold me-2 px-6" data-kt-menu-dismiss="true" data-kt-project-table-filter="reset">Sıfırla</button>
-                                <button type="submit" class="btn btn-active-light-success fw-bold px-6" data-kt-menu-dismiss="true" data-kt-project-table-filter="filter">Uygula</button>
-                            </div> 
-                        </div> 
-                    </div>
-                <button type="button" class="btn btn-light-success" data-bs-toggle="modal" data-bs-target="#kt_modal_create_app">
-                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
+
+        <div class="card-toolbar">
+            <div class="d-flex me-3">
+                <span class="grid-view-btn active-view me-2" id="grid-view-btn">
+                    <i class="bi bi-grid-3x3-gap-fill fs-2"></i>
+                </span>
+                <span class="list-view-btn" id="list-view-btn">
+                    <i class="bi bi-list-ul fs-2"></i>
+                </span>
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <button type="button" class="btn btn-light-info me-3" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
                     <span class="svg-icon svg-icon-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="currentColor"/>
-                            <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="currentColor"/>
+                            <path d="M19.0759 3H4.72777C3.95892 3 3.47768 3.83148 3.86067 4.49814L8.56967 12.6949C9.17923 13.7559 9.5 14.9582 9.5 16.1819V19.5072C9.5 20.2189 10.2223 20.7028 10.8805 20.432L13.8805 19.1977C14.2553 19.0435 14.5 18.6783 14.5 18.273V13.8372C14.5 12.8089 14.8171 11.8056 15.408 10.964L19.8943 4.57465C20.3596 3.912 19.8856 3 19.0759 3Z" fill="currentColor" />
                         </svg>
-                    </span> Proje Oluşturma
+                    </span>Filtrele
                 </button>
-            </div>
-                <!--Eski Modal -->
-                <div class="modal fade " id="kt_modal_create_app" tabindex="-1" aria-hidden="true" data-bs-focus="false">
-                    <div class="modal-dialog modal-dialog-centered mw-900px">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h2>Proje Oluştur</h2>
-                                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                                    <span class="svg-icon svg-icon-1">
 
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="modal-body py-lg-10 px-lg-10">
-                                <div class="stepper stepper-pills stepper-column d-flex flex-column flex-xl-row flex-row-fluid" id="kt_modal_create_app_stepper">
-                                    <div class="d-flex justify-content-center justify-content-xl-start flex-row-auto w-100 w-xl-300px">
-                                        <div class="stepper-nav ps-lg-10">
-                                            <div class="stepper-item current" data-kt-stepper-element="nav">
-                                                <div class="stepper-line w-40px"></div>
-                                                <div class="stepper-icon w-40px h-40px">
-                                                    <i class="stepper-check fas fa-check"></i>
-                                                    <span class="stepper-number">1</span>
-                                                </div>
-                                                <div class="stepper-label">
-                                                    <h3 class="stepper-title">Proje Açılış</h3>
-                                                    <div class="stepper-desc">Proje Kod,Ad,Müşteri</div>
-                                                </div>
-                                            </div>
-                                            <div class="stepper-item" data-kt-stepper-element="nav">
-                                                <div class="stepper-line w-40px"></div>
-                                                <div class="stepper-icon w-40px h-40px">
-                                                    <i class="stepper-check fas fa-check"></i>
-                                                    <span class="stepper-number">2</span>
-                                                </div>
-                                                <div class="stepper-label">
-                                                    <h3 class="stepper-title">Sektör</h3>
-                                                    <div class="stepper-desc">Proje için uygun sektör</div>
-                                                </div>
-                                            </div>
-                                            <div class="stepper-item" data-kt-stepper-element="nav">
-                                                <div class="stepper-line w-40px"></div>
-                                                <div class="stepper-icon w-40px h-40px">
-                                                    <i class="stepper-check fas fa-check"></i>
-                                                    <span class="stepper-number">3</span>
-                                                </div>
-                                                <div class="stepper-label">
-                                                    <h3 class="stepper-title">Metot ve Örneklem</h3>
-                                                    <div class="stepper-desc">Proje için uygun metot</div>
-                                                </div>
-                                            </div>
-                                            <div class="stepper-item" data-kt-stepper-element="nav">
-                                                <div class="stepper-line w-40px"></div>
-                                                <div class="stepper-icon w-40px h-40px">
-                                                    <i class="stepper-check fas fa-check"></i>
-                                                    <span class="stepper-number">4</span>
-                                                </div>
-                                                <div class="stepper-label">
-                                                    <h3 class="stepper-title">Veri Toplama Şirketi</h3>
-                                                    <div class="stepper-desc">Proje için uygun saha firması</div>
-                                                </div>
-                                            </div>
-                                            <div class="stepper-item" data-kt-stepper-element="nav">
-                                                <div class="stepper-line w-40px"></div>
-                                                <div class="stepper-icon w-40px h-40px">
-                                                    <i class="stepper-check fas fa-check"></i>
-                                                    <span class="stepper-number">5</span>
-                                                </div>
-                                                <div class="stepper-label">
-                                                    <h3 class="stepper-title">Proje Zaman Planı</h3>
-                                                    <div class="stepper-desc">Proje için beklenen süreç</div>
-                                                </div>
-                                            </div>
-                                            <div class="stepper-item" data-kt-stepper-element="nav">
-                                                <div class="stepper-line w-40px"></div>
-                                                <div class="stepper-icon w-40px h-40px">
-                                                    <i class="stepper-check fas fa-check"></i>
-                                                    <span class="stepper-number">6</span>
-                                                </div>
-                                                <div class="stepper-label">
-                                                    <h3 class="stepper-title">Proje Ekibi ve Notlar</h3>
-                                                    <div class="stepper-desc">Proje için oluşturulan ekip</div>
-                                                </div>
-                                            </div>
-                                            <div class="stepper-item" data-kt-stepper-element="nav">
-                                                <div class="stepper-line w-40px"></div>
-                                                <div class="stepper-icon w-40px h-40px">
-                                                    <i class="stepper-check fas fa-check"></i>
-                                                    <span class="stepper-number">7</span>
-                                                </div>
-                                                <div class="stepper-label">
-                                                    <h3 class="stepper-title">Proje Kapanış</h3>
-                                                    <div class="stepper-desc">İncele ve Gönder</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="flex-row-fluid py-lg-5 px-lg-15">
-                                        <form class="form" novalidate="novalidate" id="kt_modal_create_app_form">
-                                            <div class="current" data-kt-stepper-element="content">
-                                                <div class="w-100">
-                                                    <div class="fv-row mb-10">
-                                                        <label class="d-flex align-items-center fs-5 fw-bold mb-2">
-                                                            <span class="required">Proje Kodu</span>
-                                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Projenin kodunu giriniz"></i>
-                                                        </label>
-                                                        <input type="text" placeholder="Proje Kodunu giriniz" class="form-control form-control-lg form-control-solid" name="ProjectName" placeholder="" value="" />
-                                                    </div>
-                                                    <div class="fv-row mb-10">
-                                                        <label class="d-flex align-items-center fs-5 fw-bold mb-2">
-                                                            <span class="required">Proje Adı</span>
-                                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Projenin adını giriniz"></i>
-                                                        </label>
-                                                        <input type="text" placeholder="Proje Adını giriniz" class="form-control form-control-lg form-control-solid" name="ProjectHeader" placeholder="" value="" />
-                                                    </div>
-                                                    <div class="fv-row mb-10">
-                                                        <label class="d-flex align-items-center fs-5 fw-bold mb-2">
-                                                            <span class="required">Müşteri Adı</span>
-                                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Müşteri adı giriniz"></i>
-                                                        </label>
-                                                        <select class="form-select" data-control="select2" data-placeholder="Müşteri Seçiniz" data-dropdown-parent="#kt_modal_create_app" name="CustomerName">
-                                                            <option></option>
-                                                            <option value="A101">A101</option>
-                                                            <option value="AAMR MARKETING">AAMR MARKETING</option>
-                                                            <option value="ABBOT">ABBOT</option>
-                                                            <option value="ABC">ABC</option>
-                                                            <option value="ABDİ İBRAHİM">ABDİ İBRAHİM</option>
-                                                            <option value="ACIBADEM">ACIBADEM</option>
-                                                            <option value="AÇEV">AÇEV</option>
-                                                            <option value="ADEL">ADEL</option>
-                                                            <option value="ADİDAS">ADİDAS</option>
-                                                            <option value="ADL">ADL</option>
-                                                            <option value="AGESA">AGESA</option>
-                                                            <option value="AĞAOĞLU">AĞAOĞLU</option>
-                                                            <option value="AHMET BATAT">AHMET BATAT</option>
-                                                            <option value="AKAR GIDA">AKAR GIDA</option>
-                                                            <option value="AKBANK">AKBANK</option>
-                                                            <option value="AKSİGORTA">AKSİGORTA</option>
-                                                            <option value="AKTAŞLAR GIDA GRUBU">AKTAŞLAR GIDA GRUBU</option>
-                                                            <option value="ALARKO">ALARKO</option>
-                                                            <option value="ALARKO CARRIER">ALARKO CARRIER</option>
-                                                            <option value="ALKEV OKULLARI">ALKEV OKULLARI</option>
-                                                            <option value="ALLIANZ">ALLIANZ</option>
-                                                            <option value="ALTERNA GIDA">ALTERNA GIDA</option>
-                                                            <option value="AMERİKADANİSTE">AMERİKADANİSTE</option>
-                                                            <option value="ANADOLU EFES">ANADOLU EFES</option>
-                                                            <option value="ANADOLU HAYAT VE EMEKLİLİK">ANADOLU HAYAT VE EMEKLİLİK</option>
-                                                            <option value="ANAKO">ANAKO</option>
-                                                            <option value="ANETA">ANETA</option>
-                                                            <option value="ARÇELİK">ARÇELİK</option>
-                                                            <option value="ARMUT.COM">ARMUT.COM</option>
-                                                            <option value="AROMA">AROMA</option>
-                                                            <option value="ARZUM">ARZUM</option>
-                                                            <option value="ASC HUKUK">ASC HUKUK</option>
-                                                            <option value="ASELSAN">ASELSAN</option>
-                                                            <option value="ASSIST">ASSIST</option>
-                                                            <option value="AVANSAS">AVANSAS</option>
-                                                            <option value="AVOYA">AVOYA</option>
-                                                            <option value="AYGAZ">AYGAZ</option>
-                                                            <option value="AZERSUN">AZERSUN</option>
-                                                            <option value="BAIN & COMPANY">BAIN & COMPANY</option>
-                                                            <option value="BATH & BODY WORKS">BATH & BODY WORKS</option>
-                                                            <option value="BAU">BAU</option>
-                                                            <option value="BAYER">BAYER</option>
-                                                            <option value="BCMM">BCMM</option>
-                                                            <option value="BELLA MAISON">BELLA MAISON</option>
-                                                            <option value="BELLONA">BELLONA</option>
-                                                            <option value="BENARRATIVE">BENARRATIVE</option>
-                                                            <option value="BENOPLAST">BENOPLAST</option>
-                                                            <option value="BERSAY İLETİŞİM">BERSAY İLETİŞİM</option>
-                                                            <option value="BETEK">BETEK</option>
-                                                            <option value="BEYMEN">BEYMEN</option>
-                                                            <option value="BİLGİ ÜNİVERSİTESİ">BİLGİ ÜNİVERSİTESİ</option>
-                                                            <option value="BİLKOM">BİLKOM</option>
-                                                            <option value="BİLYONER">BİLYONER</option>
-                                                            <option value="BİTEXEN">BİTEXEN</option>
-                                                            <option value="BİZ FİNANS">BİZ FİNANS</option>
-                                                            <option value="BLUEYONDER">BLUEYONDER</option>
-                                                            <option value="BOYNER">BOYNER</option>
-                                                            <option value="BRİSA">BRİSA</option>
-                                                            <option value="BSH">BSH</option>
-                                                            <option value="BTA">BTA</option>
-                                                            <option value="BULBSHARE">BULBSHARE</option>
-                                                            <option value="BURGAN BANK">BURGAN BANK</option>
-                                                            <option value="CARREFOURSA">CARREFOURSA</option>
-                                                            <option value="CASTROL">CASTROL</option>
-                                                            <option value="CCI">CCI</option>
-                                                            <option value="CHAKRA">CHAKRA</option>
-                                                            <option value="CHERY GROUP">CHERY GROUP</option>
-                                                            <option value="COCA-COLA">COCA-COLA</option>
-                                                            <option value="COLLEZİONE">COLLEZİONE</option>
-                                                            <option value="COMPANY GLOBAL">COMPANY GLOBAL</option>
-                                                            <option value="COMPETEN FIELDWORK">COMPETEN FIELDWORK</option>
-                                                            <option value="CONCERTATE">CONCERTATE</option>
-                                                            <option value="CONSUL PEOPLE">CONSUL PEOPLE</option>
-                                                            <option value="CORAL TRAVEL">CORAL TRAVEL</option>
-                                                            <option value="COSMOPOLITAN">COSMOPOLİTAN</option>
-                                                            <option value="COURSE5I">COURSE5I</option>
-                                                            <option value="ÇİLEK MOBİLYA">ÇİLEK MOBİLYA</option>
-                                                            <option value="ÇOCUK İYİLİK MERKEZİ">ÇOCUK İYİLİK MERKEZİ</option>
-                                                            <option value="DAİKİN">DAİKİN</option>
-                                                            <option value="DALAN">DALAN</option>
-                                                            <option value="DANONE">DANONE</option>
-                                                            <option value="DANONE - NUTRICIA">DANONE - NUTRICIA</option>
-                                                            <option value="DECATHLON">DECATHLON</option>
-                                                            <option value="DEFACTO">DEFACTO</option>
-                                                            <option value="DEMİRDÖKÜM">DEMİRDÖKÜM</option>
-                                                            <option value="DEMİRÖREN">DEMİRÖREN</option>
-                                                            <option value="DIAGEO">DIAGEO</option>
-                                                            <option value="DIGITAL PANORAMA">DIGITAL PANORAMA</option>
-                                                            <option value="DISS.RESEARCH">DISS.RESEARCH</option>
-                                                            <option value="DİAGEO">DİAGEO</option>
-                                                            <option value="DİMES">DİMES</option>
-                                                            <option value="DİVAN">DİVAN</option>
-                                                            <option value="DOGMA ALERES">DOGMA ALERES</option>
-                                                            <option value="DOĞADAN">DOĞADAN</option>
-                                                            <option value="DOĞAN HOLDİNG">DOĞAN HOLDİNG</option>
-                                                            <option value="DOĞTAŞ">DOĞTAŞ</option>
-                                                            <option value="DOĞUŞ OTOMOTİV">DOĞUŞ OTOMOTİV</option>
-                                                            <option value="DOMİNO'S PİZZA">DOMİNO'S PİZZA</option>
-                                                            <option value="DORİS">DORİS</option>
-                                                            <option value="DRD">DRD</option>
-                                                            <option value="DURU BAKLİYAT">DURU BAKLİYAT</option>
-                                                            <option value="DYO">DYO</option>
-                                                            <option value="DYSON">DYSON</option>
-                                                            <option value="E2E RESEARCH">E2E RESEARCH</option>
-                                                            <option value="EASYCEP">EASYCEP</option>
-                                                            <option value="EBSO">EBSO</option>
-                                                            <option value="ECB TÜKETİM">ECB TÜKETİM</option>
-                                                            <option value="ECLIT">ECLIT</option>
-                                                            <option value="ECZACIBAŞI">ECZACIBAŞI</option>
-                                                            <option value="ECZACIBAŞI TÜKETİM">ECZACIBAŞI TÜKETİM</option>
-                                                            <option value="ECZACIBAŞI YAPI">ECZACIBAŞI YAPI</option>
-                                                            <option value="EDENRED">EDENRED</option>
-                                                            <option value="EINHELL">EINHELL</option>
-                                                            <option value="EMİN EVİM">EMİN EVİM</option>
-                                                            <option value="EMSAN">EMSAN</option>
-                                                            <option value="ENERJİSA">ENERJİSA</option>
-                                                            <option value="ENERYA">ENERYA</option>
-                                                            <option value="ENGLISH HOME">ENGLISH HOME</option>
-                                                            <option value="ENİDA KİMYA">ENİDA KİMYA</option>
-                                                            <option value="EPITOME">EPITOME</option>
-                                                            <option value="EPİTOME RESEARCH">EPİTOME RESEARCH</option>
-                                                            <option value="ERÇAL OTOMOTİV">ERÇAL OTOMOTİV</option>
-                                                            <option value="ERDEMİR">ERDEMİR</option>
-                                                            <option value="ERZPHARMA">ERZPHARMA</option>
-                                                            <option value="EŞARJ">EŞARJ</option>
-                                                            <option value="ETİ">ETİ</option>
-                                                            <option value="EUROKA">EUROKA</option>
-                                                            <option value="EVYAP">EVYAP</option>
-                                                            <option value="FAKİR">FAKİR</option>
-                                                            <option value="FCBART GROUP">FCBART GROUP</option>
-                                                            <option value="FİBABANKA">FİBABANKA</option>
-                                                            <option value="FORD">FORD</option>
-                                                            <option value="FRİTOLAY">FRİTOLAY</option>
-                                                            <option value="FUTUREFULCONSULTİNG">FUTUREFULCONSULTİNG</option>
-                                                            <option value="GARANTİ">GARANTİ</option>
-                                                            <option value="GARANTİ BBVA">GARANTİ BBVA</option>
-                                                            <option value="GARANTİ BVVA EMEKLİ SANDIĞI">GARANTİ BVVA EMEKLİ SANDIĞI</option>
-                                                            <option value="GCA">GCA</option>
-                                                            <option value="GEMIUS">GEMIUS</option>
-                                                            <option value="GETİR">GETİR</option>
-                                                            <option value="GEWISS ELEKTRIK">GEWISS ELEKTRIK</option>
-                                                            <option value="GEZİNOMİ">GEZİNOMİ</option>
-                                                            <option value="GFK SPAIN">GFK SPAIN</option>
-                                                            <option value="GLORIA JEANS">GLORIA JEANS</option>
-                                                            <option value="GOLF DONDURMA">GOLF DONDURMA</option>
-                                                            <option value="GOON">GOON</option>
-                                                            <option value="GRATIS">GRATIS</option>
-                                                            <option value="GREE KLİMA">GREE KLİMA</option>
-                                                            <option value="GREEN SALAD">GREEN SALAD</option>
-                                                            <option value="GTBD">GTBD</option>
-                                                            <option value="GÜNSAN">GÜNSAN</option>
-                                                            <option value="GÜRALLAR">GÜRALLAR</option>
-                                                            <option value="GÜROK">GÜROK</option>
-                                                            <option value="GÜZEL ENERJİ">GÜZEL ENERJİ</option>
-                                                            <option value="HADİ-TOM DİJİTAL">HADİ-TOM DİJİTAL</option>
-                                                            <option value="HALKBANK">HALKBANK</option>
-                                                            <option value="HAMİDİYE SU">HAMİDİYE SU</option>
-                                                            <option value="HAPPY PEOPLE">HAPPY PEOPLE</option>
-                                                            <option value="HARIBO">HARIBO</option>
-                                                            <option value="HAYAT FİNANS">HAYAT FİNANS</option>
-                                                            <option value="HAYAT HOLDİNG">HAYAT HOLDİNG</option>
-                                                            <option value="HAYAT KİMYA">HAYAT KİMYA</option>
-                                                            <option value="HBG KNOWLEDGE">HBG KNOWLEDGE</option>
-                                                            <option value="HEP İYİ SİGORTA">HEP İYİ SİGORTA</option>
-                                                            <option value="HEPSİBURADA">HEPSİBURADA</option>
-                                                            <option value="HERBALIFE">HERBALIFE</option>
-                                                            <option value="HOBİ KOZMETİK">HOBİ KOZMETİK</option>
-                                                            <option value="HRANT DINK VAKFI">HRANT DINK VAKFI</option>
-                                                            <option value="HYUNDAI ASSAN">HYUNDAI ASSAN</option>
-                                                            <option value="IDEFIX">IDEFIX</option>
-                                                            <option value="IDEMA">IDEMA</option>
-                                                            <option value="INGBANK">INGBANK</option>
-                                                            <option value="INOLIVA - Aİ">INOLIVA - Aİ</option>
-                                                            <option value="INTEMA">INTEMA</option>
-                                                            <option value="INTERSPOR">INTERSPOR</option>
-                                                            <option value="IPSOS SWİTZERLAND">IPSOS SWİTZERLAND</option>
-                                                            <option value="ISTANPOL">ISTANPOL</option>
-                                                            <option value="IVECO">IVECO</option>
-                                                            <option value="IZOCAM">IZOCAM</option>
-                                                            <option value="İNCİ AKÜ">İNCİ AKÜ</option>
-                                                            <option value="İPEKYOL">İPEKYOL</option>
-                                                            <option value="İSTANBUL BİLGİ ÜNİVERSİTESİ">İSTANBUL BİLGİ ÜNİVERSİTESİ</option>
-                                                            <option value="İSTANPOL ENTİTÜTÜSÜ">İSTANPOL ENTİTÜTÜSÜ</option>
-                                                            <option value="İŞ BANKASI">İŞ BANKASI</option>
-                                                            <option value="İŞ PORTFÖY">İŞ PORTFÖY</option>
-                                                            <option value="İTÜ">İTÜ</option>
-                                                            <option value="İZOCAM">İZOCAM</option>
-                                                            <option value="JOLLY TUR">JOLLY TUR</option>
-                                                            <option value="JTI">JTI</option>
-                                                            <option value="JUSTGROW">JUSTGROW</option>
-                                                            <option value="KAHVE DÜNYASI">KAHVE DÜNYASI</option>
-                                                            <option value="KALE KİLİT">KALE KİLİT</option>
-                                                            <option value="KALE SERAMİK">KALE SERAMİK</option>
-                                                            <option value="KARACA">KARACA</option>
-                                                            <option value="KARACA HOME">KARACA HOME</option>
-                                                            <option value="KARADENİZ HOLDİNG">KARADENİZ HOLDİNG</option>
-                                                            <option value="KARGOMSENDE">KARGOMSENDE</option>
-                                                            <option value="KELEBEK">KELEBEK</option>
-                                                            <option value="KENTON">KENTON</option>
-                                                            <option value="KEREVİTAŞ">KEREVİTAŞ</option>
-                                                            <option value="KOÇ AİLEM">KOÇ AİLEM</option>
-                                                            <option value="KOÇ HOLDİNG">KOÇ HOLDİNG</option>
-                                                            <option value="KOÇAİLEM">KOÇAİLEM</option>
-                                                            <option value="KOÇTAŞ">KOÇTAŞ</option>
-                                                            <option value="KOM">KOM</option>
-                                                            <option value="KOMAGENE">KOMAGENE</option>
-                                                            <option value="KOPAŞ">KOPAŞ</option>
-                                                            <option value="KOROPLAST">KOROPLAST</option>
-                                                            <option value="KOTON">KOTON</option>
-                                                            <option value="LANDOR&FITCH">LANDOR&FITCH</option>
-                                                            <option value="LAV">LAV</option>
-                                                            <option value="LC WAIKIKI">LC WAIKIKI</option>
-                                                            <option value="LEMONADE">LEMONADE</option>
-                                                            <option value="LEXIS RESEARCH">LEXIS RESEARCH</option>
-                                                            <option value="LEZİTA">LEZİTA</option>
-                                                            <option value="LİLA KAĞIT">LİLA KAĞIT</option>
-                                                            <option value="LİZAY PIRLANTA">LİZAY PIRLANTA</option>
-                                                            <option value="LOGO YAZILIM">LOGO YAZILIM</option>
-                                                            <option value="L'OREAL">L'OREAL</option>
-                                                            <option value="MADAME COCO">MADAME COCO</option>
-                                                            <option value="MAGNETIC MARCA">MAGNETIC MARCA</option>
-                                                            <option value="MARKAMI YÖNET">MARKAMI YÖNET</option>
-                                                            <option value="MARKETİNG TÜRKİYE">MARKETİNG TÜRKİYE</option>
-                                                            <option value="MARKETMIND">MARKETMIND</option>
-                                                            <option value="MARTI">MARTI</option>
-                                                            <option value="MASMI">MASMI</option>
-                                                            <option value="MASTERCARD">MASTERCARD</option>
-                                                            <option value="MAZARS DENGE">MAZARS DENGE</option>
-                                                            <option value="MCDONALDS">MCDONALDS</option>
-                                                            <option value="MEDIAMARKT">MEDIAMARKT</option>
-                                                            <option value="MEDYAPIM GROUP">MEDYAPIM GROUP</option>
-                                                            <option value="MEMORIAL">MEMORIAL</option>
-                                                            <option value="METLIFE">METLIFE</option>
-                                                            <option value="METRO İSTANBUL">METRO İSTANBUL</option>
-                                                            <option value="METRO MARKET">METRO MARKET</option>
-                                                            <option value="MEY">MEY</option>
-                                                            <option value="MITSUBISHI">MITSUBISHI</option>
-                                                            <option value="MİGROS">MİGROS</option>
-                                                            <option value="MODANİSA">MODANİSA</option>
-                                                            <option value="MOMWELL">MOMWELL</option>
-                                                            <option value="MON REVE">MON REVE</option>
-                                                            <option value="MONDELEZ">MONDELEZ</option>
-                                                            <option value="MUSTELA">MUSTELA</option>
-                                                            <option value="N11">N11</option>
-                                                            <option value="NACAR SAAT">NACAR SAAT</option>
-                                                            <option value="NBL PREBİOTİC">NBL PREBİOTİC</option>
-                                                            <option value="NEF">NEF</option>
-                                                            <option value="NESTLE">NESTLE</option>
-                                                            <option value="NEW INN">NEW INN</option>
-                                                            <option value="NGN">NGN</option>
-                                                            <option value="NIKE">NIKE</option>
-                                                            <option value="NİVOGO">NİVOGO</option>
-                                                            <option value="NOBEL">NOBEL</option>
-                                                            <option value="OKUTU">OKUTU</option>
-                                                            <option value="OKX RESEARCH">OKX RESEARCH</option>
-                                                            <option value="OMSAN">OMSAN</option>
-                                                            <option value="ON DİJİTAL">ON DİJİTAL</option>
-                                                            <option value="OPET">OPET</option>
-                                                            <option value="OTOKOÇ">OTOKOÇ</option>
-                                                            <option value="OYAK MADEN METALÜRJİ">OYAK MADEN METALÜRJİ</option>
-                                                            <option value="ÖZTREYLER">ÖZTREYLER</option>
-                                                            <option value="PARAŞÜT">PARAŞÜT</option>
-                                                            <option value="PAŞABAHÇE">PAŞABAHÇE</option>
-                                                            <option value="PAZARAMA">PAZARAMA</option>
-                                                            <option value="PEGASUS">PEGASUS</option>
-                                                            <option value="PERNOD RICARD">PERNOD RICARD</option>
-                                                            <option value="PERRIGO">PERRIGO</option>
-                                                            <option value="PETRA">PETRA</option>
-                                                            <option value="PETROL OFİSİ">PETROL OFİSİ</option>
-                                                            <option value="PEUGEOT">PEUGEOT</option>
-                                                            <option value="PEYMAN">PEYMAN</option>
-                                                            <option value="PHİLOMATH RESEARCH">PHİLOMATH RESEARCH</option>
-                                                            <option value="PINAR">PINAR</option>
-                                                            <option value="PINAR SU">PINAR SU</option>
-                                                            <option value="POLİSAN">POLİSAN</option>
-                                                            <option value="PROFI RESEARCH">PROFI RESEARCH</option>
-                                                            <option value="PSYMA RESEARCH">PSYMA RESEARCH</option>
-                                                            <option value="PURE ENERGY">PURE ENERGY</option>
-                                                            <option value="PYSMA">PYSMA</option>
-                                                            <option value="QNB FİNANSBANK">QNB FİNANSBANK</option>
-                                                            <option value="RAKUTEN">RAKUTEN</option>
-                                                            <option value="RAY SİGORTA">RAY SİGORTA</option>
-                                                            <option value="RECKİTT BENCKİSER">RECKİTT BENCKİSER</option>
-                                                            <option value="RECREAM">RECREAM</option>
-                                                            <option value="REDCRESEARCH">REDCRESEARCH</option>
-                                                            <option value="RENAULT">RENAULT</option>
-                                                            <option value="RESEARCH MRC">RESEARCH MRC</option>
-                                                            <option value="RESEARCH RMC">RESEARCH RMC</option>
-                                                            <option value="RESEARCH VIEW">RESEARCH VIEW</option>
-                                                            <option value="RESERACH RMC">RESERACH RMC</option>
-                                                            <option value="SABANCI EDU">SABANCI EDU</option>
-                                                            <option value="SABANCI VAKFI">SABANCI VAKFI</option>
-                                                            <option value="SAGRA">SAGRA</option>
-                                                            <option value="SAHİBİNDEN.COM">SAHİBİNDEN.COM</option>
-                                                            <option value="SAINT GOBAIN">SAINT GOBAIN</option>
-                                                            <option value="SAMSUNG">SAMSUNG</option>
-                                                            <option value="SANKO OKULLARI">SANKO OKULLARI</option>
-                                                            <option value="SANOFİ">SANOFİ</option>
-                                                            <option value="SCA YILDIZ">SCA YILDIZ</option>
-                                                            <option value="SENDEO">SENDEO</option>
-                                                            <option value="SEPHORA">SEPHORA</option>
-                                                            <option value="SERVIER ILAÇ">SERVIER ILAÇ</option>
-                                                            <option value="SETUR">SETUR</option>
-                                                            <option value="SETUR-MARİNA">SETUR-MARİNA</option>
-                                                            <option value="SEV">SEV</option>
-                                                            <option value="SHELL">SHELL</option>
-                                                            <option value="SİA">SİA</option>
-                                                            <option value="SİSAL ŞANS OYUNLARI">SİSAL ŞANS OYUNLARI</option>
-                                                            <option value="SPEED MEDYA">SPEED MEDYA</option>
-                                                            <option value="STANTEC">STANTEC</option>
-                                                            <option value="STM">STM</option>
-                                                            <option value="STRATEGIR">STRATEGIR</option>
-                                                            <option value="SÜTAŞ">SÜTAŞ</option>
-                                                            <option value="ŞENPİLİÇ">ŞENPİLİÇ</option>
-                                                            <option value="ŞİŞECAM">ŞİŞECAM</option>
-                                                            <option value="ŞÖLEN">ŞÖLEN</option>
-                                                            <option value="TAHİNCİOĞLU">TAHİNCİOĞLU</option>
-                                                            <option value="TAMEK">TAMEK</option>
-                                                            <option value="TARIM KREDİ MARKET">TARIM KREDİ MARKET</option>
-                                                            <option value="TAT">TAT</option>
-                                                            <option value="TATİLSEPETİ">TATİLSEPETİ</option>
-                                                            <option value="TAV">TAV</option>
-                                                            <option value="TAZE FİKİR">TAZE FİKİR</option>
-                                                            <option value="TCHIBO">TCHIBO</option>
-                                                            <option value="TEB">TEB</option>
-                                                            <option value="TEKNOSA">TEKNOSA</option>
-                                                            <option value="TETRA PAK">TETRA PAK</option>
-                                                            <option value="THAAT'S IT!">THAAT'S IT!</option>
-                                                            <option value="THAATSIT">THAATSIT</option>
-                                                            <option value="THE INSİGHTS SHOP">THE INSİGHTS SHOP</option>
-                                                            <option value="THY">THY</option>
-                                                            <option value="TK HOLDİNG">TK HOLDİNG</option>
-                                                            <option value="TOFAŞ">TOFAŞ</option>
-                                                            <option value="TOKEN INC">TOKEN INC</option>
-                                                            <option value="TOKKDER">TOKKDER</option>
-                                                            <option value="TOYOTA">TOYOTA</option>
-                                                            <option value="TRADESOFT">TRADESOFT</option>
-                                                            <option value="TRASSIR">TRASSIR</option>
-                                                            <option value="TRENDYOL">TRENDYOL</option>
-                                                            <option value="TRICONSULT">TRICONSULT</option>
-                                                            <option value="TRT">TRT</option>
-                                                            <option value="TURKCELL">TURKCELL</option>
-                                                            <option value="TUSAS">TUSAS</option>
-                                                            <option value="TÜRK TELEKOM">TÜRK TELEKOM</option>
-                                                            <option value="TÜRK TRAKTÖR">TÜRK TRAKTÖR</option>
-                                                            <option value="TÜRKİYE FİNANS BANKASI">TÜRKİYE FİNANS BANKASI</option>
-                                                            <option value="UNILEVER">UNILEVER</option>
-                                                            <option value="UNITED GROUP">UNITED GROUP</option>
-                                                            <option value="UNO">UNO</option>
-                                                            <option value="UNTAPPED INNOVATION">UNTAPPED INNOVATION</option>
-                                                            <option value="ÜLKER">ÜLKER</option>
-                                                            <option value="ÜLKER">ÜLKER</option>
-                                                            <option value="VAILLANT">VAILLANT</option>
-                                                            <option value="VAKIF KATILIM">VAKIF KATILIM</option>
-                                                            <option value="VAKIFBANK">VAKIFBANK</option>
-                                                            <option value="VDF SİGORTA">VDF SİGORTA</option>
-                                                            <option value="VESTEL">VESTEL</option>
-                                                            <option value="VİSA">VİSA</option>
-                                                            <option value="VODAFONE">VODAFONE</option>
-                                                            <option value="VOLVO">VOLVO</option>
-                                                            <option value="WARMHOUSE">WARMHOUSE</option>
-                                                            <option value="WATSONS">WATSONS</option>
-                                                            <option value="WEAREHUMAN8">WEAREHUMAN8</option>
-                                                            <option value="WEBER">WEBER</option>
-                                                            <option value="WEFOOD">WEFOOD</option>
-                                                            <option value="WHY FIVE">WHY FIVE</option>
-                                                            <option value="YANDEX">YANDEX</option>
-                                                            <option value="YEMEKSEPETİ">YEMEKSEPETİ</option>
-                                                            <option value="YILDIZ DEMİR ÇELİK">YILDIZ DEMİR ÇELİK</option>
-                                                            <option value="YILIN SEÇİLMİŞ ÜRÜNÜ">YILIN SEÇİLMİŞ ÜRÜNÜ</option>
-                                                            <option value="YKB">YKB</option>
-                                                            <option value="YORGLASS">YORGLASS</option>
-                                                            <option value="YURTİÇİ KARGO">YURTİÇİ KARGO</option>
-                                                            <option value="YÜCE OTO">YÜCE OTO</option>
-                                                            <option value="YVES ROCHER">YVES ROCHER</option>
-                                                            <option value="ZEN PIRLANTA">ZEN PIRLANTA</option>
-                                                            <option value="ZER">ZER</option>
-                                                            <option value="ZER -AYGAZ">ZER -AYGAZ</option>
-                                                            <option value="ZER-BİLKOM">ZER-BİLKOM</option>
-                                                            <option value="ZER-FORD">ZER-FORD</option>
-                                                            <option value="ZER-KOÇ HOLDİNG">ZER-KOÇ HOLDİNG</option>
-                                                            <option value="ZER-SETUR">ZER-SETUR</option>
-                                                            <option value="ZES">ZES</option>
+                <div class="menu menu-sub menu-sub-dropdown w-300px w-md-325px" data-kt-menu="true">
+                    <div class="px-7 py-5">
+                        <div class="fs-5 text-dark fw-bolder">Filtre Seçenekleri</div>
+                    </div>
+                    <div class="separator border-gray-200"></div>
+                    <div class="px-7 py-5" data-kt-project-table-filter="form">
+                        <div class="mb-10">
+                            <label class="form-label fs-6 fw-bold">Proje Durumu:</label>
+                            <select class="form-select form-select-solid fw-bolder" data-kt-select2="true" data-placeholder="Bir filtre seçin" data-allow-clear="true" data-hide-search="true">
+                                <option></option>
+                                <option value="1">Onay Toplantısı</option>
+                                <option value="2">Soru Formu Paylaşımı</option>
+                                <option value="3">Script Yazımı</option>
+                                <option value="4">Script Onayı</option>
+                                <option value="5">Kota Dosyası</option>
+                                <option value="6">Saha Başlangıç</option>
+                                <option value="7">Sahada</option>
+                                <option value="8">Saha Bitiş</option>
+                                <option value="0">Kodlama</option>
+                                <option value="10">Tablolama</option>
+                                <option value="11">MS Analizleri</option>
+                                <option value="12">Ek İstekler</option>
+                                <option value="13">Raporlama</option>
+                            </select>
+                        </div>
 
+                        <div class="mb-10">
+                            <label class="form-label fs-6 fw-bold">Aktiflik:</label>
+                            <select class="form-select form-select-solid fw-bolder" name="isActive" data-kt-select2="true" data-placeholder="Bir filtre seçin" data-allow-clear="true" data-hide-search="true">
+                                <option></option>
+                                <option value="true">Aktif</option>
+                                <option value="false">Pasif</option>
+                            </select>
+                        </div>
 
-                                                        </select>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!--end::Step 1-->
-                                            <!--begin::Step 2-->
-                                            <div data-kt-stepper-element="content">
-                                                <div class="w-100">
-                                                    <!--begin::Input group-->
-                                                    <div class="fv-row">
-                                                        <!--begin::Label-->
-                                                        <label class="d-flex align-items-center fs-5 fw-bold mb-4">
-                                                            <span class="required">Sektör Seçiniz</span>
-                                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Projenin Sektör bilgisini seçiniz"></i>
-                                                        </label>
-                                                        <label class="d-flex flex-stack cursor-pointer mb-5">
-                                                            <span class="d-flex align-items-center me-2">
-                                                                <span class="d-flex flex-column">
-                                                                    <span class="fw-bolder fs-6">FMCG</span>
-                                                                </span>
-                                                            </span>
-                                                            <span class="form-check form-check-custom form-check-solid">
-                                                                <input class="form-check-input" type="radio" checked="checked" name="ProjectSector" value="FMCG" />
-                                                            </span>
-                                                        </label>
-                                                        <label class="d-flex flex-stack cursor-pointer mb-5">
-                                                            <span class="d-flex align-items-center me-2">
-
-                                                                <span class="d-flex flex-column">
-                                                                    <span class="fw-bolder fs-6">Toptan & Perakende</span>
-                                                                </span>
-                                                            </span>
-                                                            <span class="form-check form-check-custom form-check-solid">
-                                                                <input class="form-check-input" type="radio" name="ProjectSector" value="ToptanvePerakende" />
-                                                            </span>
-                                                        </label>
-                                                        <label class="d-flex flex-stack cursor-pointer mb-5">
-                                                            <span class="d-flex align-items-center me-2">
-
-                                                                <span class="d-flex flex-column">
-                                                                    <span class="fw-bolder fs-6">Medikal</span>
-                                                                </span>
-                                                            </span>
-                                                            <span class="form-check form-check-custom form-check-solid">
-                                                                <input class="form-check-input" type="radio" name="ProjectSector" value="Medikal" />
-                                                            </span>
-                                                        </label>
-                                                        <label class="d-flex flex-stack cursor-pointer mb-5">
-                                                            <span class="d-flex align-items-center me-2">
-
-                                                                <span class="d-flex flex-column">
-                                                                    <span class="fw-bolder fs-6">Dayanıklı Tüketim</span>
-                                                                </span>
-                                                            </span>
-                                                            <span class="form-check form-check-custom form-check-solid">
-                                                                <input class="form-check-input" type="radio" name="ProjectSector" value="DayanikliTuketim" />
-                                                            </span>
-                                                        </label>
-                                                        <label class="d-flex flex-stack cursor-pointer mb-5">
-                                                            <span class="d-flex align-items-center me-2">
-
-                                                                <span class="d-flex flex-column">
-                                                                    <span class="fw-bolder fs-6">Otomotiv</span>
-                                                                </span>
-                                                            </span>
-                                                            <span class="form-check form-check-custom form-check-solid">
-                                                                <input class="form-check-input" type="radio" name="ProjectSector" value="Otomotiv" />
-                                                            </span>
-                                                        </label>
-                                                        <label class="d-flex flex-stack cursor-pointer mb-5">
-                                                            <span class="d-flex align-items-center me-2">
-
-                                                                <span class="d-flex flex-column">
-                                                                    <span class="fw-bolder fs-6">Finans</span>
-                                                                </span>
-                                                            </span>
-                                                            <span class="form-check form-check-custom form-check-solid">
-                                                                <input class="form-check-input" type="radio" name="ProjectSector" value="Finans" />
-                                                            </span>
-                                                        </label>
-                                                        <label class="d-flex flex-stack cursor-pointer mb-5">
-                                                            <span class="d-flex align-items-center me-2">
-
-                                                                <span class="d-flex flex-column">
-                                                                    <span class="fw-bolder fs-6">Enerji</span>
-                                                                </span>
-                                                            </span>
-                                                            <span class="form-check form-check-custom form-check-solid">
-                                                                <input class="form-check-input" type="radio" name="ProjectSector" value="Enerji" />
-                                                            </span>
-                                                        </label>
-                                                        <label class="d-flex flex-stack cursor-pointer mb-5">
-                                                            <span class="d-flex align-items-center me-2">
-
-                                                                <span class="d-flex flex-column">
-                                                                    <span class="fw-bolder fs-6">Diğer</span>
-                                                                </span>
-                                                            </span>
-                                                            <span class="form-check form-check-custom form-check-solid">
-                                                                <input id="other-option" class="form-check-input" type="radio" name="ProjectSector"  />
-                                                            </span>
-                                                        </label>
-                                                        <div id="other-text-field" class="d-none">
-                                                            <input type="text"   class="form-control" name="ProjectSectorInput" placeholder="Lütfen belirtiniz" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!--end::Step 2-->
-                                            <!--begin::Step 3-->
-                                            <div data-kt-stepper-element="content">
-                                                <div class="w-100">
-
-                                                    <div class="fv-row">
-                                                        <label class="d-flex align-items-center fs-5 fw-bold mb-4">
-                                                            <span class="required">Metot Seçiniz</span>
-                                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Projenin metodunu seçiniz"></i>
-                                                        </label>
-                                                        <label class="d-flex flex-stack cursor-pointer mb-5">
-                                                            <span class="d-flex align-items-center me-2">
-                                                                <span class="symbol symbol-50px me-6">
-                                                                    <span class="symbol-label bg-light-success">
-                                                                        <i class="fab fa-chrome text-success fs-2x"></i>
-                                                                    </span>
-                                                                </span>
-                                                                <span class="d-flex flex-column">
-                                                                    <span class="fw-bolder fs-6">Cawi</span>
-                                                                    <span class="fs-7 text-muted">Cawi proje metodu</span>
-                                                                </span>
-                                                            </span>
-                                                            <span class="form-check form-check-custom form-check-solid">
-                                                                <input class="form-check-input" type="checkbox" name="ProjectMethod" value="Cawi" onclick="toggleInput('Cawi')" />
-                                                            </span>
-
-                                                        </label>
-
-                                                        <div class="mb-10 d-none col-12 " id="Cawi-input">
-                                                            <input type="text" class="form-control" placeholder="Örneklem büyüklüğünü giriniz" name="CawiSize" />
-                                                        </div>
-
-                                                        <label class="d-flex flex-stack cursor-pointer mb-5">
-                                                            <span class="d-flex align-items-center me-2">
-                                                                <span class="symbol symbol-50px me-6">
-                                                                    <span class="symbol-label bg-light-primary">
-                                                                        <i class="fa fa-user-clock text-primary fs-2x"></i>
-                                                                    </span>
-                                                                </span>
-                                                                <span class="d-flex flex-column">
-                                                                    <span class="fw-bolder fs-6">Capi</span>
-                                                                    <span class="fs-7 text-muted">Capi proje metodu</span>
-                                                                </span>
-                                                            </span>
-                                                            <span class="form-check form-check-custom form-check-solid">
-                                                                <input class="form-check-input" type="checkbox" name="ProjectMethod" value="Capi" onclick="toggleInput('Capi')" />
-                                                            </span>
-                                                        </label>
-                                                        <div class="mb-10 d-none col-12 " id="Capi-input">
-                                                            <input type="text" class="form-control" placeholder="Örneklem büyüklüğünü giriniz" name="CapiSize" />
-                                                        </div>
-                                                        <label class="d-flex flex-stack cursor-pointer mb-5">
-                                                            <span class="d-flex align-items-center me-2">
-                                                                <span class="symbol symbol-50px me-6">
-                                                                    <span class="symbol-label bg-light-danger">
-                                                                        <i class="fa fa-phone text-danger fs-2x"></i>
-                                                                    </span>
-                                                                </span>
-                                                                <span class="d-flex flex-column">
-                                                                    <span class="fw-bolder fs-6">Cati</span>
-                                                                    <span class="fs-7 text-muted">Cati proje metodu</span>
-                                                                </span>
-                                                            </span>
-                                                            <span class="form-check form-check-custom form-check-solid">
-                                                                <input class="form-check-input" type="checkbox" name="ProjectMethod" value="Cati" onclick="toggleInput('Cati')" />
-                                                            </span>
-                                                        </label>
-                                                        <div class="mb-10 d-none col-12 " id="Cati-input">
-                                                            <input type="text" class="form-control" placeholder="Örneklem büyüklüğünü giriniz" name="CatiSize" />
-                                                        </div>
-                                                        <label class="d-flex flex-stack cursor-pointer mb-5">
-                                                            <span class="d-flex align-items-center me-2">
-                                                                <span class="symbol symbol-50px me-6">
-                                                                    <span class="symbol-label bg-light-info">
-                                                                        <i class="fa fa-envelope text-info fs-2x"></i>
-                                                                    </span>
-                                                                </span>
-                                                                <span class="d-flex flex-column">
-                                                                    <span class="fw-bolder fs-6">Mailing</span>
-                                                                    <span class="fs-7 text-muted">Mailing proje metodu</span>
-                                                                </span>
-                                                            </span>
-                                                            <span class="form-check form-check-custom form-check-solid">
-                                                                <input class="form-check-input" type="checkbox" name="ProjectMethod" value="Mailing" onclick="toggleInput('Mailing')" />
-                                                            </span>
-                                                        </label>
-                                                        <div class="mb-10 d-none col-12 " id="Mailing-input">
-                                                            <input type="text" class="form-control" placeholder="Örneklem büyüklüğünü giriniz" name="MailingSize" />
-                                                        </div>
-                                                        <label class="d-flex flex-stack cursor-pointer mb-5">
-                                                            <span class="d-flex align-items-center me-2">
-                                                                <span class="symbol symbol-50px me-6">
-                                                                    <span class="symbol-label bg-light-dark">
-                                                                        <i class="fa fa-qrcode text-dark fs-2x"></i>
-                                                                    </span>
-                                                                </span>
-                                                                <span class="d-flex flex-column">
-                                                                    <span class="fw-bolder fs-6">Hibrid/QR</span>
-                                                                    <span class="fs-7 text-muted">Hibrid/QR proje metodu</span>
-                                                                </span>
-                                                            </span>
-                                                            <span class="form-check form-check-custom form-check-solid">
-                                                                <input class="form-check-input" type="checkbox" name="ProjectMethod" value="HibridveyaQR" onclick="toggleInput('Hibrid')" />
-                                                            </span>
-                                                        </label>
-                                                        <div class="mb-10 d-none col-12 " id="Hibrid-input">
-                                                            <input type="text" class="form-control" placeholder="Örneklem büyüklüğünü giriniz" name="HibridSize" />
-                                                        </div>
-                                                        <label class="d-flex flex-stack cursor-pointer mb-5">
-                                                            <span class="d-flex align-items-center me-2">
-                                                                <span class="symbol symbol-50px me-6">
-                                                                    <span class="symbol-label bg-light-dark">
-                                                                        <i class="fa fa-keyboard text-warning fs-2x"></i>
-                                                                    </span>
-                                                                </span>
-                                                                <span class="d-flex flex-column">
-                                                                    <span class="fw-bolder fs-6">Diğer</span>
-                                                                    <span class="fs-7 text-muted">Diğer proje metodu yazınız</span>
-                                                                </span>
-                                                            </span>
-                                                            <span class="form-check form-check-custom form-check-solid">
-                                                                <input class="form-check-input" id="other-option-method" type="radio" name="ProjectMethod" value="OtherMethod" onclick="toggleInput('Other')" />
-                                                            </span>
-
-                                                        </label>
-                                                        <div id="other-option-method-field" class="d-none">
-                                                            <input type="text" class="form-control" name="ProjectMethod" placeholder="Lütfen Metot Adını Giriniz" />
-                                                        </div>
-                                                        <div class="mb-10 mt-3 d-none col-12 " id="Other-input">
-                                                            <input type="text" class="form-control" placeholder="Örneklem büyüklüğünü giriniz" name="OtherSize" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!--end::Step 3-->
-                                            <!--begin::Step 4-->
-                                            <div data-kt-stepper-element="content">
-                                                <div class="w-100">
-                                                    <div class="d-flex flex-column mb-7 fv-row">
-                                                        <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-                                                            <span class="required">Saha Firması Bilgisi</span>
-                                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Proje için uygun saha firması seçiniz"></i>
-                                                        </label>
-                                                        <select class="form-select form-select-solid" id="sahaSelect" name="ScmId" data-control="select2" data-placeholder="Lütfen en az bir SAHA firması seçiniz" data-allow-clear="true" multiple="multiple">
-                                                            <option></option>
-                                                        </select>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                            <!--end::Step 4-->
-                                            <div data-kt-stepper-element="content">
-                                                <div class="w-200">
-                                                    <div class="row">
-                                                        <div class="col-6">
-                                                            <div class="d-flex flex-column mb-7 fv-row">
-                                                                <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-                                                                    <span>Planlanan Soru Formu Teslim </span>
-                                                                </label>
-                                                                <input class="form-control flatpickr-input" placeholder="Planlanan Soru Formu Teslim tarihini seçiniz" name="PlanlananSoruFormuTeslim" id="planlanan_soruformu_teslim" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-6">
-                                                            <div class="d-flex flex-column mb-7 fv-row">
-                                                                <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-                                                                    <span>Planlanan Script Teslim </span>
-                                                                </label>
-                                                                <input class="form-control flatpickr-input" placeholder="Planlanan Script Teslim tarihini seçiniz" name="PlanlananScriptTeslim" id="planlanan_scrpt_teslim" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-6">
-                                                            <div class="d-flex flex-column mb-7 fv-row">
-                                                                <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-                                                                    <span>Planlanan Script Kontrol </span>
-                                                                </label>
-                                                                <input class="form-control flatpickr-input" placeholder="Planlanan Script Kontrol tarihini seçiniz" name="PlanlananScriptKontrol" id="planlanan_scrpt_kontrol" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-6">
-                                                            <div class="d-flex flex-column mb-7 fv-row">
-                                                                <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-                                                                    <span>Planlanan Script Revizyon</span>
-                                                                </label>
-                                                                <input class="form-control flatpickr-input" placeholder="Planlanan Script Revizyon tarihini seçiniz" name="PlanlananScriptRevizyon" id="planlanan_scrpt_revizyon" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-6">
-                                                            <div class="d-flex flex-column mb-7 fv-row">
-                                                                <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-                                                                    <span>Planlanan Saha Başlangıç</span>
-                                                                </label>
-                                                                <input class="form-control flatpickr-input" placeholder="Planlanan Saha Başlangıç tarihini seçiniz" name="PlanlananSahaBaslangic" id="planlanan_saha_baslangic" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-6">
-                                                            <div class="d-flex flex-column mb-7 fv-row">
-                                                                <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-                                                                    <span>Planlanan Saha Bitiş </span>
-                                                                </label>
-                                                                <input class="form-control flatpickr-input" placeholder="Planlanan Saha Bitiş tarihini seçiniz" name="PlanlananSahaBitis" id="planlanan_saha_bitis" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-6">
-                                                            <div class="d-flex flex-column mb-7 fv-row">
-                                                                <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-                                                                    <span>Planlanan Kodlama Teslim </span>
-                                                                </label>
-                                                                <input class="form-control flatpickr-input" placeholder="Planlanan Kodlama Teslim tarihini seçiniz" name="PlanlananKodlamaTeslim" id="planlanan_kodlama_teslim" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-6">
-                                                            <div class="d-flex flex-column mb-7 fv-row">
-                                                                <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-                                                                    <span>Planlanan Tablolama Teslim </span>
-                                                                </label>
-                                                                <input class="form-control flatpickr-input" placeholder="Planlanan Tablolama Teslim tarihini seçiniz" name="PlanlananTablolamaTeslim" id="planlanan_tablolama_teslim" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-6">
-                                                            <div class="d-flex flex-column mb-7 fv-row">
-                                                                <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-                                                                    <span>Planlanan Rapor Teslim </span>
-                                                                </label>
-                                                                <input class="form-control flatpickr-input" placeholder="Planlanan Rapor Teslim tarihini seçiniz" name="PlanlananRaporTeslim" id="planlanan_rapor_teslim" />
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                            <div data-kt-stepper-element="content">
-                                                <div class="w-100">
-                                                    <div class="d-flex flex-column mb-7 fv-row">
-                                                        <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-                                                            <span class="required">Ekip Yöneticisi </span>
-
-                                                        </label>
-                                                        <select class="form-select form-select-lg form-select-solid" id="userManagerSelect" name="ProjectManager" data-control="select2" data-placeholder="Lütfen Ekip Yöneticisi Seçiniz" data-allow-clear="true" multiple="multiple">
-                                                            <option></option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="d-flex flex-column mb-7 fv-row">
-                                                        <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-                                                            <span class="required">Ekip Üyeleri</span>
-                                                        </label>
-                                                        <select class="form-select form-select-lg form-select-solid" id="userSelect" name="ProjectOfficers" data-control="select2" data-placeholder="Lütfen Ekip Üyelerini Seçiniz" data-dropdown-parent="#kt_modal_create_app" data-allow-clear="true" multiple="multiple">
-                                                            <option></option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="d-flex flex-column mb-7 fv-row">
-                                                        <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-                                                            <span class="required">Proje Durumu</span>
-                                                        </label>
-                                                        <select class="form-select form-select-lg form-select-solid" name="ProjectStatus" data-control="select2" data-placeholder="Lütfen Proje Durumu Seçiniz" data-dropdown-parent="#kt_modal_create_app" data-allow-clear="true" >
-                                                            <option></option>
-                                                            <option value="1">Onay Toplantısı</option>
-                                                            <option value="2">Soru Formu Paylaşımı</option>
-                                                            <option value="3">Script Yazımı</option>
-                                                            <option value="4">Script Onayı</option>
-                                                            <option value="5">Kota Dosyası</option>
-                                                            <option value="6">Saha Başlangıç</option>
-                                                            <option value="7">Saha Bitiş</option>
-                                                            <option value="8">Kodlama</option>
-                                                            <option value="9">Tablolama</option>
-                                                            <option value="10">MS Analizleri</option>
-                                                            <option value="11">Ek İstekler</option>
-                                                            <option value="12">Raporlama</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="d-flex flex-column mb-7 fv-row">
-                                                        <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-                                                            <span class="required">Proje Notları</span>
-                                                        </label>
-                                                        <div class="form-floating mb-7">
-                                                            <textarea class="form-control" placeholder="Proje Notları varsa buraya yazınız!" id="floatingTextarea" name="ProjectNotes"></textarea> 
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!--begin::Step 5-->
-                                            <div data-kt-stepper-element="content">
-                                                <div class="w-100 text-center">
-                                                    <h1 class="fw-bolder text-dark mb-3">Projeyi Oluştur!</h1>
-                                                    <div class="text-muted fw-bold fs-3">Projenizi oluşturmak için kaydedin.</div>
-                                                    <div class="text-center px-4 py-15">
-                                                        <img src="assets/media/illustrations/sketchy-1/9.png" alt="" class="mw-100 mh-300px" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex flex-stack pt-10">
-                                                <div class="me-2">
-                                                    <button type="button" class="btn btn-lg btn-light-primary me-3" data-kt-stepper-action="previous">
-                                                        <span class="svg-icon svg-icon-3 me-1">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                                <rect opacity="0.5" x="6" y="11" width="13" height="2" rx="1" fill="currentColor"></rect>
-                                                                <path d="M8.56569 11.4343L12.75 7.25C13.1642 6.83579 13.1642 6.16421 12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75L5.70711 11.2929C5.31658 11.6834 5.31658 12.3166 5.70711 12.7071L11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25C13.1642 17.8358 13.1642 17.1642 12.75 16.75L8.56569 12.5657C8.25327 12.2533 8.25327 11.7467 8.56569 11.4343Z" fill="currentColor"></path>
-                                                            </svg>
-                                                        </span>
-                                                        <!--end::Svg Icon-->Geri
-                                                    </button>
-                                                </div>
-                                                <div>
-                                                    <button type="button" class="btn btn-lg btn-primary" data-kt-stepper-action="submit">
-                                                        <span class="indicator-label">
-                                                            Kaydet
-                                                            <span class="svg-icon svg-icon-3 ms-2 me-0">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                                    <rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="currentColor"></rect>
-                                                                    <path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="currentColor"></path>
-                                                                </svg>
-                                                            </span>
-                                                            <!--end::Svg Icon-->
-                                                        </span>
-                                                        <span class="indicator-progress">
-                                                            Lütfen Bekleyiniz...
-                                                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                                        </span>
-                                                    </button>
-                                                    <button type="button" class="btn btn-lg btn-primary" data-kt-stepper-action="next">
-                                                        Devam Et
-                                                        <span class="svg-icon svg-icon-3 ms-1 me-0">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                                <rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="currentColor"></rect>
-                                                                <path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="currentColor"></path>
-                                                            </svg>
-                                                        </span>
-                                                        <!--end::Svg Icon-->
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="d-flex justify-content-end">
+                            <button type="reset" class="btn btn-light btn-active-light-danger fw-bold me-2 px-6" data-kt-menu-dismiss="true" data-kt-project-table-filter="reset">Sıfırla</button>
+                            <button type="submit" class="btn btn-active-light-success fw-bold px-6" data-kt-menu-dismiss="true" data-kt-project-table-filter="filter">Uygula</button>
                         </div>
                     </div>
                 </div>
-            </div>
-        }
-        else
-        {
-        }
-    
 
+                
+            </div>
         </div>
-    <div class="card-body py-4">
-        <table class="table align-middle table-row-dashed fs-6 gy-5" id="table_projectList">
-            <thead>
-                <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
-                    <th class="min-w-50px">Id</th>
-                    <th class="min-w-125px">Proje Kodu</th>
-                    <th class="min-w-125px">Proje Adı</th>
-                    <th class="min-w-125px">Proje Ekibi</th>
-                    <th class="min-w-125px">Proje Durumu</th>
-                    <th class="min-w-125px">Saha Bitiş</th>
-                    <th class="min-w-125px">Rapor Tarihi</th>
-                    <th class="min-w-75px"> </th>
-                    <th class="min-w-75px"></th>
-                </tr>
-            </thead>
-            <tbody class="text-gray-600 fw-bold">
-            </tbody>
-        </table>
+    </div>
+
+    <!-- Durum Sekmeleri -->
+    <div class="card-body">
+        <ul class="nav nav-tabs card-tabs" id="projectTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true">
+                    Tüm Projeler
+                </button>
+            </li>
+          
+        </ul>
+
+        <div class="tab-content" id="projectTabsContent">
+            <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+                <!-- Grid Görünümü -->
+                <div id="grid-view" class="active">
+                    <div class="row g-6 g-xl-9 mt-5">
+                    
+                    </div>
+                </div>
+
+                <!-- Liste Görünümü -->
+                <div id="list-view">
+                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="table_projectList">
+                        <thead>
+                            <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
+                                <th class="min-w-50px">Id</th>
+                                <th class="min-w-125px">Proje Kodu</th>
+                                <th class="min-w-125px">Proje Adı</th>
+                                <th class="min-w-125px">Proje Ekibi</th>
+                                <th class="min-w-125px">Proje Durumu</th>
+                                <th class="min-w-125px">Saha Bitiş</th>
+                                <th class="min-w-125px">Rapor Tarihi</th>
+                                <th class="min-w-150px">Detay</th>
+                                <th class="min-w-150px">Sil</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-600 fw-bold">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+ 
+        </div>
     </div>
 </div>
 
+ 
 @section js {
-    <script src="https://npmcdn.com/flatpickr/dist/l10n/tr.js"></script>
-    <script src="~/js/project/TarihFlatPickr.js"></script>
-    <script src="~/assets/plugins/custom/datatables/datatables.bundle.js"></script>
-    <script src="~/js/project/createproject.js"></script>
+    <script src="~/assets/plugins/custom/datatables/datatables.bundle.js"></script> 
     <script src="~/js/project/projectlist.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            const otherOption = document.getElementById('other-option');
-            const otherTextField = document.getElementById('other-text-field');
-            const otherOptionMethod=document.getElementById('other-option-method');
-            const otherOptionTextMethod=document.getElementById('other-option-method-field');
-
-            otherOption.addEventListener('change', (event) => {
-                if (event.target.checked) {
-                    otherTextField.classList.remove('d-none');
-                }
+        // Görünüm değiştirme fonksiyonları
+        $(document).ready(function() {
+            // Grid ve Liste görünümü düğmeleri
+            $("#grid-view-btn").click(function() {
+                $("#grid-view").addClass("active");
+                $("#list-view").removeClass("active");
+                $(this).addClass("active-view");
+                $("#list-view-btn").removeClass("active-view");
             });
 
-            document.querySelectorAll('input[name="ProjectSector"]').forEach((input) => {
-                if (input !== otherOption) {
-                    input.addEventListener('change', (event) => {
-                        if (event.target.checked) {
-                            otherTextField.classList.add('d-none');
-                        }
-                    });
-                }
+            $("#list-view-btn").click(function() {
+                $("#list-view").addClass("active");
+                $("#grid-view").removeClass("active");
+                $(this).addClass("active-view");
+                $("#grid-view-btn").removeClass("active-view");
             });
 
-              otherOptionMethod.addEventListener('change', (event) => {
-                
-                if (event.target.checked) {
-                    otherOptionTextMethod.classList.remove('d-none'); 
-                }
-            });
-
-            document.querySelectorAll('input[name="ProjectMethod"]').forEach((input) => {
-                if (input !== otherOptionMethod) {
-                    input.addEventListener('change', (event) => {
-                             if (event.target.checked) {
-                input.classList.add('checked');
-            } else {
-                input.classList.remove('checked');
-            }
-
-            if (input !== otherOptionMethod) {
-                otherOptionTextMethod.classList.add('d-none');
-            }
-                    });
-                }
+            // Bootstrap Tooltip'leri etkinleştir
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
             });
         });
+
     </script>
-    <script>
-                       $(document).ready(function () {
-
-                   $("#sahaSelect").select2();
-                  $.ajax({
-                    url: "@Url.Action("GetAllList", "Scm")",
-
-                    method: "GET",
-                    success: function (data) {
-                        console.log(data)
-                      data.forEach(function (firma) {
-                        $("#sahaSelect").append(new Option(firma.scmName, firma.id));
-                      });
-                    },
-                    error: function (xhr, status, error) {
-                      console.error("Firma verileri yüklenirken hata oluştu:", error);
-                    },
-                  });
-                });
-
-                    $(document).ready(function () {
-                  $("#userSelect").select2();
-                  $("#userManagerSelect").select2();
-
-                  $.ajax({
-                    url: "@Url.Action("GetAllUserGroupByDepartman", "User")",
-
-                    method: "GET",
-                    success: function (data) {
-                        console.log(data)
-                      data.forEach(function (group) {
-                        var optgroup = $('<optgroup>').attr('label', group.departmanName);
-                       group.users.forEach(function(user)
-                       {
-                           optgroup.append(new Option(user.fullName, user.userId)); });
-                            $('#userSelect').append(optgroup);
-                            $('#userManagerSelect').append(optgroup.clone());
-                      });
-
-                    },
-                    error: function (xhr, status, error) {
-                      console.error("Kullanıcı verileri yüklenirken hata oluştu:", error);
-                    },
-                  });
-
-                });
-             function toggleInput(method) {
-            const inputField = document.getElementById(`${method}-input`);
-            if (inputField) {
-                inputField.classList.toggle('d-none');
-            }
+    <script> 
+        $(document).ready(function() { 
+            function loadGridViewData() { 
+                const gridContainer = $('#grid-view .row');
+                 
+                gridContainer.empty();
+                 
+                $.ajax({
+                    url: 'project-list/get-projects',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(response) { 
+                let projects = [];
+                 
+                if (Array.isArray(response)) { 
+                    projects = response;
+                } else if (response.data && Array.isArray(response.data)) { 
+                    projects = response.data;
+                } else if (typeof response === 'object') { 
+                    for (const key in response) {
+                        if (Array.isArray(response[key])) {
+                            projects = response[key];
+                            break;
+                        }
+                    }
                 }
+                 
+                if (projects.length === 0) {
+                    gridContainer.html('<div class="col-12 text-center p-10"><div class="text-muted">Henüz proje bulunmamaktadır.</div></div>');
+                    return;
+                }
+                 
+                        projects.forEach(function(project) { 
+                            let statusClass = '';
+                            let statusText = '';
 
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('input[name="ProjectMethod"]:checked').forEach(el => {
-                toggleInput(el.value);
+                            switch(project.projectStatus) {
+                                case 1: statusClass = 'badge-light-warning'; statusText = 'Onay Toplantısı'; break;
+                                case 2: statusClass = 'badge-light-info'; statusText = 'Soru Formu Paylaşımı'; break;
+                                case 3: statusClass = 'badge-light-dark'; statusText = 'Script Yazımı'; break;
+                                case 4: statusClass = 'badge-light-primary'; statusText = 'Script Onayı'; break;
+                                case 5: statusClass = 'badge-light-danger'; statusText = 'Kota Dosyası'; break;
+                                case 6: statusClass = 'badge-light-success'; statusText = 'Saha Başlangıç'; break;
+                                case 7: statusClass = 'badge-secondary'; statusText = 'Sahada'; break;
+                                case 8: statusClass = 'badge-warning'; statusText = 'Saha Bitiş'; break;
+                                case 9: statusClass = 'badge-info'; statusText = 'Kodlama'; break;
+                                case 10: statusClass = 'badge-dark'; statusText = 'Tablolama'; break;
+                                case 11: statusClass = 'badge-primary'; statusText = 'MS Analizleri'; break;
+                                case 12: statusClass = 'badge-danger'; statusText = 'Ek İstekler'; break;
+                                case 13: statusClass = 'badge-light'; statusText = 'Raporlama'; break;
+                                default: statusClass = 'badge-light-secondary'; statusText = 'Belirsiz'; break;
+                            }
+                             
+                            let progressPercent = 0;
+                            if (project.projectStatus >= 1 && project.projectStatus <= 13) {
+                                progressPercent = Math.round((project.projectStatus / 13) * 100);
+                            }
+                             
+                            let teamMembers = '';
+                            if (project.projectOfficers && project.projectOfficers.length > 0) { 
+                                const colors = [
+                                    'bg-primary text-inverse-primary',
+                                    'bg-success text-inverse-success',
+                                    'bg-danger text-inverse-danger',
+                                    'bg-warning text-inverse-warning',
+                                    'bg-info text-inverse-info',
+                                    'bg-dark text-inverse-dark'
+                                ];
+                                 
+                                teamMembers = '<div class="project-team">';
+                                project.projectOfficers.forEach((member, index) => { 
+                                    const initials = member.split(' ').map(n => n[0]).join('');
+                                    const colorClass = colors[index % colors.length];
+
+                                    teamMembers += `
+                                        <div class="symbol symbol-30px symbol-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="${member}">
+                                            <span class="symbol-label ${colorClass} fw-bolder">${initials}</span>
+                                        </div>
+                                    `;
+                                });
+                                teamMembers += '</div>';
+                            }
+                             
+                            const sahaBaslangic = project.planlananSahaBaslangic ? moment(project.planlananSahaBaslangic).format('DD.MM.YYYY') : '-';
+                            const sahaBitis = project.planlananSahaBitis ? moment(project.planlananSahaBitis).format('DD.MM.YYYY') : '-';
+                            const raporTeslim = project.planlananRaporTeslim ? moment(project.planlananRaporTeslim).format('DD.MM.YYYY') : '-';
+
+                            // Proje kartını oluştur
+                            const projectCard = `
+                                <div class="col-md-6 col-xl-4">
+                                    <div class="card project-card h-md-100">
+                                        <div class="card-body d-flex flex-column p-9">
+                                            <div class="project-card-header">
+                                                <div>
+                                                    <div class="fs-3 fw-bolder text-dark">${project.projectHeader}</div>
+                                                    <div class="fs-7 fw-bold text-gray-600">${project.projectName}</div>
+                                                </div>
+                                                <div class="project-status-badge badge ${statusClass}">${statusText}</div>
+                                            </div>
+
+                                            <div class="d-flex flex-wrap mt-3">
+                                                ${teamMembers}
+                                            </div>
+
+                                            <div class="d-flex justify-content-between mt-5">
+                                                <div class="project-dates">
+                                                    <div class="mb-1">
+                                                        <i class="bi bi-calendar3 me-1"></i> Saha Başlangıç:
+                                                        <span class="text-dark fw-bold">${sahaBaslangic}</span>
+                                                    </div>
+                                                    <div>
+                                                        <i class="bi bi-calendar3-week me-1"></i> Saha Bitiş:
+                                                        <span class="text-dark fw-bold">${sahaBitis}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="project-dates">
+                                                    <div class="mb-1">
+                                                        <i class="bi bi-file-earmark-text me-1"></i> Rapor Teslim:
+                                                        <span class="text-dark fw-bold">${raporTeslim}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="mt-5">
+                                                <div class="d-flex justify-content-between mb-2">
+                                                    <span class="fs-7 fw-bold text-gray-600">Proje İlerlemesi</span>
+                                                    <span class="fs-7 fw-bold text-primary">${progressPercent}%</span>
+                                                </div>
+                                                <div class="timeline-progress">
+                                                    <div class="timeline-progress-bar" style="width: ${progressPercent}%"></div>
+                                                </div>
+                                            </div>
+
+                                            <div class="d-flex justify-content-between mt-auto pt-4">
+                                                <a href="#" onclick="showDetailsProject(${project.projectId})" class="btn btn-sm btn-light-primary">
+                                                    <i class="bi bi-eye me-1"></i> Detaylar
+                                                </a>
+                                                ${(project.canDelete) ?
+                                                    `<a href="#" onclick="deleteProject(${project.projectId})" class="btn btn-sm btn-light-danger">
+                                                        <i class="bi bi-trash me-1"></i> Sil
+                                                    </a>` : ''
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+
+                            // Kartı grid konteynerine ekle
+                            gridContainer.append(projectCard);
+                        });
+
+                        // Tooltips'leri etkinleştir
+                        $('[data-bs-toggle="tooltip"]').tooltip();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Projeler yüklenirken hata oluştu:", error);
+                        gridContainer.html('<div class="col-12 text-center p-10"><div class="text-danger">Projeler yüklenirken bir hata oluştu.</div></div>');
+                    }
+                });
+            }
+             
+            $("#grid-view-btn").click(function() {
+                $("#grid-view").addClass("active");
+                $("#list-view").removeClass("active");
+                $(this).addClass("active-view");
+                $("#list-view-btn").removeClass("active-view");
+                 
+                loadGridViewData();
+            });
+
+            $("#list-view-btn").click(function() {
+                $("#list-view").addClass("active");
+                $("#grid-view").removeClass("active");
+                $(this).addClass("active-view");
+                $("#grid-view-btn").removeClass("active-view");
+
+                // Eğer datatable henüz başlatılmamışsa
+                if (!$.fn.DataTable.isDataTable('#table_projectList')) {
+                    initDataTable();
+                } else {
+                    // Tabloyu yenile
+                    $('#table_projectList').DataTable().ajax.reload();
+                }
+            });
+             
+            loadGridViewData();
+             
+            $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) { 
+                if ($('#grid-view').hasClass('active')) {
+                    loadGridViewData();
+                } else { 
+                    if (!$.fn.DataTable.isDataTable('#table_projectList')) {
+                        initDataTable();
+                    } else { 
+                        $('#table_projectList').DataTable().ajax.reload();
+                    }
+                }
             });
         });
-                 
     </script>
 }

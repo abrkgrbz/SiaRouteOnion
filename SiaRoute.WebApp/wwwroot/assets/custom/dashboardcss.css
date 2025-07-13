@@ -1,0 +1,36 @@
+﻿ 
+.project-card {
+    transition: all 0.3s ease;
+    border-radius: 8px;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.dashboard-widget {
+    border-radius: 8px;
+    padding: 20px;
+    height: 100%;
+}
+
+.status-badge {
+    border-radius: 20px;
+    padding: 6px 12px;
+    font-weight: 500;
+}
+
+.progress-bar-vertical {
+    height: 200px;
+    width: 30px;
+    margin-right: 15px;
+    display: inline-block;
+}
+
+    .progress-bar-vertical .progress-bar {
+        width: 100%;
+        height: 0;
+        transition: height 0.6s ease;
+    }
+ 

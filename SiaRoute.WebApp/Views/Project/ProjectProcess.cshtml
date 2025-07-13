@@ -1,0 +1,380 @@
+﻿@{
+    ViewData["Title"] = "ProjectProcess";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    Html.RenderPartial("_ProjectDetailPartialView");
+}
+<style>
+    .timeline-label {
+        position: relative;
+        margin-bottom: 3rem;
+    }
+
+        .timeline-label:before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            width: 2px;
+            top: 0;
+            bottom: 0;
+            background-color: #E4E6EF;
+        }
+
+    .timeline-item {
+        display: flex;
+        position: relative;
+        margin-bottom: 1.7rem;
+    }
+
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+
+    .timeline-content {
+        width: 100%;
+        padding-left: 0.5rem;
+    }
+
+    .timeline-icon {
+        z-index: 1;
+    }
+
+    /* Tablo ve Badge Stilleri */
+    .table-responsive {
+        margin-bottom: 2rem;
+    }
+
+    .badge {
+        padding: 0.55em 0.85em;
+    }
+
+    .progress {
+        height: 15px;
+        border-radius: 0.475rem;
+    }
+
+    .progress-bar {
+        border-radius: 0.475rem;
+    }
+</style>
+<div class="col-lg-12 pb-10">
+    <div class="card card-flush h-lg-100">
+        <div class="card-header">
+            <h3 class="card-title align-items-start flex-column">
+                <span class="card-label fw-bold text-dark">Proje Zaman Çizelgesi</span>
+                <span class="text-muted mt-1 fw-semibold fs-7">Planlanan ve gerçekleşen proje süreçleri</span>
+            </h3>
+            <div class="card-toolbar">
+                <div class="d-flex align-items-center position-relative">
+                    <span class="svg-icon svg-icon-1 position-absolute ms-4">
+                        <i class="bi bi-search fs-2"></i>
+                    </span>
+                    <input type="text" id="process-search" class="form-control form-control-solid w-250px ps-12" placeholder="Süreç ara...">
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body p-9">
+            <!-- Yükleniyor göstergesi -->
+            <div id="process-loading" class="text-center py-10">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Yükleniyor...</span>
+                </div>
+            </div>
+
+            <!-- Proje ilerleme özeti -->
+            <div id="project-progress-summary" class="mb-9 d-none">
+                <div class="d-flex flex-stack flex-wrap mb-5">
+                    <div class="d-flex flex-column">
+                        <span class="text-dark fw-bolder fs-3">Proje İlerleme Durumu</span>
+                        <span class="text-muted fw-semibold fs-7" id="process-completion-text">Tamamlanan Süreçler: 0/0</span>
+                    </div>
+                    <div>
+                        <span class="badge badge-lg" id="process-status-badge"></span>
+                    </div>
+                </div>
+
+                <div class="h-20px mx-5">
+                    <div class="progress h-20px bg-light-primary">
+                        <div class="progress-bar bg-primary" id="process-progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Görselleştirilmiş Zaman Çizelgesi -->
+            <div class="timeline-label d-none" id="project-timeline">
+                <!-- Timeline içeriği JavaScript ile doldurulacak -->
+            </div>
+
+            <!-- Süreç Tablosu (Geliştirilmiş tasarım) -->
+            <div class="table-responsive d-none" id="process-table-container">
+                <table class="table table-rounded table-striped border gy-7 gs-7" id="process-table">
+                    <thead>
+                        <tr class="fw-bold fs-6 text-gray-800 border-bottom border-gray-200">
+                            <th>Süreç</th>
+                            <th>Planlanan Tarih</th>
+                            <th>Gerçekleşen Tarih</th>
+                            <th>Durum</th>
+                            <th>Gecikme</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Veri yok mesajı -->
+            <div id="no-data-message" class="d-none">
+                <div class="alert alert-primary d-flex align-items-center p-5 mb-10">
+                    <span class="svg-icon svg-icon-2hx svg-icon-primary me-4">
+                        <i class="bi bi-info-circle-fill fs-1"></i>
+                    </span>
+                    <div class="d-flex flex-column">
+                        <h5 class="mb-1">Veri Bulunamadı</h5>
+                        <span>Bu proje için henüz süreç bilgisi girilmemiş.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bilgi Notu -->
+            <div class="notice d-flex bg-light-primary rounded border-primary border border-dashed p-6 mt-8">
+                <span class="svg-icon svg-icon-2tx svg-icon-primary me-4">
+                    <i class="bi bi-info-circle fs-1"></i>
+                </span>
+                <div class="d-flex flex-stack flex-grow-1">
+                    <div>
+                        <h4 class="text-dark fw-bold mb-0">Proje Zaman Yönetimi</h4>
+                        <div class="fs-6 text-gray-700 mt-1">
+                            <p class="mb-0">
+                                Bu bölümde, projenizdeki aşamaların planlanan ve gerçekleşen tarihleri yer almaktadır.
+                                <span class="badge badge-light-success me-1">Zamanında</span>
+                                <span class="badge badge-light-warning me-1">Beklemede</span>
+                                <span class="badge badge-light-danger">Gecikmeli</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section js {
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const projectId = urlParams.get('id');
+
+        $(document).ready(function() {
+            function loadProcessData(projectId) {
+                // Yükleniyor göstergesini göster
+                $('#process-loading').removeClass('d-none');
+                $('#project-timeline, #process-table-container, #project-progress-summary, #no-data-message').addClass('d-none');
+
+                $.ajax({
+                    url: 'get-project-process',
+                    type: 'GET',
+                    data: { projectId: projectId },
+                    success: function(response) {
+                        // Yükleniyor göstergesini gizle
+                        $('#process-loading').addClass('d-none');
+
+                        if (response.data && response.data.length > 0) {
+                            // Proje süreçlerini planlanan tarihe göre sırala
+                            response.data.sort(function(a, b) {
+                                // Soru Formu Teslim her zaman en üstte
+                                if (a.processName === "Soru Formu Teslim") return -1;
+                                if (b.processName === "Soru Formu Teslim") return 1;
+
+                                // Diğer süreçleri planlanan tarihe göre sırala
+                                var dateA = a.plannedDate ? new Date(a.plannedDate) : new Date(0);
+                                var dateB = b.plannedDate ? new Date(b.plannedDate) : new Date(0);
+                                return dateA - dateB;
+                            });
+
+                            // Süreç tamamlanma oranını hesapla
+                            const totalProcesses = response.data.length;
+                            const completedProcesses = response.data.filter(p => p.realizedDate).length;
+                            const completionPercentage = totalProcesses > 0 ? Math.round((completedProcesses / totalProcesses) * 100) : 0;
+
+                            // İlerleme özetini güncelle
+                            $('#process-completion-text').text(`Tamamlanan Süreçler: ${completedProcesses}/${totalProcesses}`);
+                            $('#process-progress-bar').css('width', `${completionPercentage}%`).attr('aria-valuenow', completionPercentage);
+
+                            // Proje durum rozeti
+                            let projectStatus, badgeClass;
+                            if (completionPercentage === 100) {
+                                projectStatus = "Tamamlandı";
+                                badgeClass = "badge-light-success";
+                            } else if (response.data.some(p => p.status === 'Gecikmeli')) {
+                                projectStatus = "Gecikmeli";
+                                badgeClass = "badge-light-danger";
+                            } else {
+                                projectStatus = "Devam Ediyor";
+                                badgeClass = "badge-light-primary";
+                            }
+                            $('#process-status-badge').text(projectStatus).removeClass().addClass(`badge badge-lg ${badgeClass}`);
+
+                            // Tabloyu ve zaman çizelgesini doldur
+                            populateTable(response.data);
+                            populateTimeline(response.data);
+
+                            // Özet, tablo ve zaman çizelgesini göster
+                            $('#project-progress-summary, #project-timeline, #process-table-container').removeClass('d-none');
+                        } else {
+                            // Veri yoksa mesaj göster
+                            $('#no-data-message').removeClass('d-none');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // Hata durumunda
+                        $('#process-loading').addClass('d-none');
+                        console.error("Veri çekme hatası: ", error);
+
+                        // Hata mesajı
+                        $('#no-data-message').removeClass('d-none')
+                            .find('.alert')
+                            .removeClass('alert-primary')
+                            .addClass('alert-danger')
+                            .find('h5').text('Veri Yükleme Hatası');
+                        $('#no-data-message .alert span').text('Süreç verileri yüklenirken bir hata oluştu. Lütfen sayfayı yenileyin.');
+                    }
+                });
+            }
+
+            function populateTable(processes) {
+                var tbody = $('#process-table tbody');
+                tbody.empty();
+                moment.locale('tr')
+                processes.forEach(function(process) {
+                    const plannedDate = process.plannedDate ? moment(process.plannedDate).format('DD MMM YYYY') : '-';
+                    const realizedDate = process.realizedDate ? moment(process.realizedDate).format('DD MMM YYYY') : '-';
+
+                    let statusClass, delayText = '';
+
+                    if (process.status === 'Zamanında') {
+                        statusClass = 'success';
+                        delayText = '<span class="text-success">Yok</span>';
+                    } else if (process.status === 'Gecikmeli') {
+                        statusClass = 'danger';
+
+                        // Gecikme hesapla
+                        if (process.plannedDate && process.realizedDate) {
+                            const planned = moment(process.plannedDate);
+                            const realized = moment(process.realizedDate);
+                            const delayDays = realized.diff(planned, 'days');
+                            delayText = `<span class="text-danger">${delayDays} gün</span>`;
+                        } else {
+                            delayText = '<span class="text-danger">Hesaplanamadı</span>';
+                        }
+                    } else {
+                        statusClass = 'warning'; // Beklemede
+                        delayText = '<span class="text-warning">-</span>';
+                    }
+
+                    var row = `
+                        <tr>
+                            <td class="fw-bold">${process.processName}</td>
+                            <td>${plannedDate}</td>
+                            <td>${realizedDate}</td>
+                            <td><div class="badge badge-light-${statusClass} fs-7 fw-bold">${process.status}</div></td>
+                            <td>${delayText}</td>
+                        </tr>
+                    `;
+                    tbody.append(row);
+                });
+            }
+
+            function populateTimeline(processes) {
+                var timeline = $('#project-timeline');
+                timeline.empty();
+                moment.locale('tr')
+                processes.forEach(function(process, index) {
+                    const plannedDate = process.plannedDate ? moment(process.plannedDate).format('DD MMM YYYY') : '-';
+                    const realizedDate = process.realizedDate ? moment(process.realizedDate).format('DD MMM YYYY') : 'Beklemede';
+
+                    let timelineClass;
+                    if (process.status === 'Zamanında') {
+                        timelineClass = 'success';
+                    } else if (process.status === 'Gecikmeli') {
+                        timelineClass = 'danger';
+                    } else {
+                        timelineClass = 'warning'; // Beklemede
+                    }
+
+                    const today = moment();
+                    const planned = process.plannedDate ? moment(process.plannedDate) : null;
+
+                    let labelClass = '';
+                    if (planned && planned.isBefore(today) && !process.realizedDate) {
+                        labelClass = 'text-danger fw-bold'; // Gecikmiş süreç
+                    }
+
+                    var timelineItem = `
+                        <div class="timeline-item">
+                            <div class="timeline-line w-40px"></div>
+
+                            <div class="timeline-icon symbol symbol-circle symbol-40px me-4">
+                                <div class="symbol-label bg-light">
+                                    <i class="ki-duotone ki-abstract-${index + 1} fs-2 text-${timelineClass}"></i>
+                                </div>
+                            </div>
+
+                            <div class="timeline-content mb-10 mt-n2">
+                                <div class="overflow-auto pe-3">
+                                    <div class="fs-5 fw-bold mb-2 ${labelClass}">${process.processName}</div>
+
+                                    <div class="d-flex align-items-center mt-1 fs-6">
+                                        <div class="text-muted me-2 fs-7">Planlanan:</div>
+                                        <div class="text-gray-800 fs-7 fw-bold">${plannedDate}</div>
+                                    </div>
+
+                                    <div class="d-flex align-items-center mt-1 fs-6">
+                                        <div class="text-muted me-2 fs-7">Gerçekleşen:</div>
+                                        <div class="fs-7 fw-bold ${!process.realizedDate ? 'text-warning' : 'text-gray-800'}">${realizedDate}</div>
+                                    </div>
+
+                                    <div class="mt-2">
+                                        <span class="badge badge-light-${timelineClass}">${process.status}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    timeline.append(timelineItem);
+                });
+            }
+
+            // Arama işlevi
+            $('#process-search').on('keyup', function() {
+                var searchText = $(this).val().toLowerCase();
+
+                $('#process-table tbody tr').each(function() {
+                    const processName = $(this).find('td:first').text().toLowerCase();
+
+                    if (processName.includes(searchText)) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+
+                // Timeline elementlerinde de arama yap
+                $('#project-timeline .timeline-item').each(function() {
+                    const processName = $(this).find('.fs-5.fw-bold').text().toLowerCase();
+
+                    if (processName.includes(searchText)) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            });
+
+            // Verileri yükle
+            loadProcessData(projectId);
+        });
+    </script>
+ }

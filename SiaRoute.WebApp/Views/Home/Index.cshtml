@@ -1,6 +1,130 @@
-﻿@{
-    ViewData["Title"] = "Home Page";  
+﻿ 
+@{
+    ViewData["Title"] = "SiaRoute Proje Yönetimi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section css {
+    <link href="~/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
+     
 
 }
+<!-- Dashboard Özet Kartları -->
+<div class="row g-5 g-xl-8">
+    <div class="col-xl-3">
+        <div class="card bg-primary dashboard-widget">
+            <div class="card-body p-5">
+                <div class="d-flex flex-column"> 
+                    <span id="active-projects-counter" class="text-white fs-1 fw-bold mb-1" data-kt-countup="true"   data-kt-countup-separator="true" data-kt-countup-decimal="0" >0</span>
+                    <span class="text-white fs-6 fw-semibold">Aktif Proje</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3">
+        <div class="card bg-success dashboard-widget">
+            <div class="card-body p-5">
+                <div class="d-flex flex-column"> 
+                    <span id="field-projects-counter" class="text-white fs-1 fw-bold mb-1" data-kt-countup="true"   data-kt-countup-separator="true" data-kt-countup-decimal="0" >0</span>
+                    <span class="text-white fs-6 fw-semibold">Sahada Devam Eden</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3">
+        <div class="card bg-warning dashboard-widget">
+            <div class="card-body p-5">
+                <div class="d-flex flex-column"> 
+                    <span id="planning-projects-counter" class="text-white fs-1 fw-bold mb-1" data-kt-countup="true"  data-kt-countup-separator="true" data-kt-countup-decimal="0" >0</span>
+                    <span class="text-white fs-6 fw-semibold">Planlama Aşamasında</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3">
+        <div class="card bg-info dashboard-widget">
+            <div class="card-body p-5">
+                <div class="d-flex flex-column">
+                    <!-- Metronic countup kullanımı - 5 değeri API'den gelecek -->
+                    <span id="completed-projects-counter" class="text-white fs-1 fw-bold mb-1" data-kt-countup="true"   data-kt-countup-separator="true" data-kt-countup-decimal="0" >0</span>
+                    <span class="text-white fs-6 fw-semibold">Bu Ay Tamamlanan</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Proje Durumu Grafiği ve Hızlı Erişim Kartları -->
+<div class="row g-5 g-xl-8 mt-5">
+    <!-- Proje Durumu Grafiği -->
+    <div class="col-xl-9">
+        <div class="card">
+            <div class="card-header border-0 pt-5">
+                <h3 class="card-title align-items-start flex-column">
+                    <span class="card-label fw-bold fs-3 mb-1">Proje Durumları</span>
+                    <span class="text-muted mt-1 fw-semibold fs-7">Projelerin aşamalara göre durumu</span>
+                </h3>
+                <div class="card-toolbar">
+                    <button type="button" class="btn btn-sm btn-light-primary" id="download-chart-report">
+                        <i class="bi bi-download me-2"></i>Rapor İndir
+                    </button>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <!-- AmCharts 5 grafik alanı -->
+                <div id="kt_amcharts_1" style="height: 500px;"></div>
+
+                <!-- Grup açıklamaları buraya dinamik eklenecek -->
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Hızlı Erişim Kartları -->
+    <div class="col-xl-3">
+        <div class="card">
+            <div class="card-header border-0 pt-5">
+                <h3 class="card-title align-items-start flex-column">
+                    <span class="card-label fw-bold fs-3 mb-1">Hızlı Erişim</span>
+                    <span class="text-muted mt-1 fw-semibold fs-7">Sık kullanılan işlemler</span>
+                </h3>
+            </div>
+            <div class="card-body pt-5">
+                <div class="row g-3">
+                    <div class="col-6">
+                        <a href="@Url.Action("ProjectCreate","Project")" class="card bg-light-primary project-card text-center p-5">
+                            <div class="text-primary fs-1 mb-2">
+                                <i class="bi bi-plus-circle"></i>
+                            </div>
+                            <div class="fs-6 fw-bold">Yeni Proje</div>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="@Url.Action("ProjectList","Project")" class="card bg-light-success project-card text-center p-5">
+                            <div class="text-success fs-1 mb-2">
+                                <i class="bi bi-search"></i>
+                            </div>
+                            <div class="fs-6 fw-bold">Proje Ara</div>
+                        </a>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
  
- 
+
+@section js {
+    <script src="~/assets/plugins/custom/datatables/datatables.bundle.js"></script>
+
+    <!-- AmCharts 5 Kütüphanesi -->
+    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/radar.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+    <!-- CountUp.js - Sayaç animasyonları için --> 
+    <script src="~/js/dashboard/dashboard.js"></script>
+}

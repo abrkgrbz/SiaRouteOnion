@@ -1,885 +1,1059 @@
 ﻿@{
-    ViewData["Title"] = "ProjectSettings";
+    ViewData["Title"] = "Proje Ayarları";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @{
     Html.RenderPartial("_ProjectDetailPartialView");
 }
+
 @using Application.Enums
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model Application.Features.Queries.Project.GetProjectDetails.ProjectDetailsViewModel
-<div class="row">
-    <div class="col-6">
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title fs-3 fw-bolder">Proje Ayarları</div>
-            </div>
-            <form id="kt_project_settings_form" class="form fv-plugins-bootstrap5 fv-plugins-framework" novalidate="novalidate" method="post" asp-action="UpdateProject">
-                <div class="card-body p-9">
 
-                    <!--begin::Row-->
-                    <div class="row mb-8">
-
-                        <!--begin::Col-->
-                        <div class="col-xl-3">
-                            <div class="fs-6 fw-bold mt-2 mb-3">Proje Adı</div>
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <div class="post d-flex flex-column-fluid" id="kt_post">
+        <div id="kt_content_container" class="container-xxl">
+            <!-- Başlık ve İlerleme Bölümü -->
+            <div class="card mb-8 bg-light-primary">
+                <div class="card-body py-4">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <div class="d-flex align-items-center">
+                            <span class="svg-icon svg-icon-primary svg-icon-2x me-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path opacity="0.3" d="M19 22H5C4.4 22 4 21.6 4 21V3C4 2.4 4.4 2 5 2H14L20 8V21C20 21.6 19.6 22 19 22Z" fill="currentColor"/>
+                                    <path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8Z" fill="currentColor"/>
+                                </svg>
+                            </span>
+                            <h2 class="fs-1 fw-bolder text-dark mb-0">@Model.ProjectName</h2>
                         </div>
-                        <!--end::Col-->
-                        <!--begin::Col-->
-                        <div class="col-xl-9 fv-row fv-plugins-icon-container">
-                            <input type="text" class="form-control form-control-solid text-warning" disabled="disabled" value="@Model.ProjectName">
-                            <div class="fv-plugins-message-container invalid-feedback"></div>
-                        </div>
-                        <div class="col-xl-3">
-                            <div class="fs-6 fw-bold mt-2 mb-3">Proje Link</div>
-                        </div>
-                        <!--end::Col-->
-                        <!--begin::Col-->
-                        <div class="col-xl-9 fv-row fv-plugins-icon-container">
-                            <input type="text" class="form-control form-control-solid text-info" name="ProjectLink" value="@Model.ProjectLink">
-                            <div class="fv-plugins-message-container invalid-feedback"></div>
-                        </div>
-                        <div class="col-xl-3">
-                            <div class="fs-6 fw-bold mt-2 mb-3">Anket ID</div>
-                        </div>
-                        <!--end::Col-->
-                        <!--begin::Col-->
-                        <div class="col-xl-9 fv-row fv-plugins-icon-container">
-                            <input type="text" class="form-control form-control-solid text-danger" name="SurveyId" id="surveyId" maxlength="4" pattern="[1-9][0-9]{3}" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0/, '')" value="@Model.SurveyId">
-
-
-                            <div class="fv-plugins-message-container invalid-feedback"></div>
+                        <div class="badge badge-lg @(Model.IsActive ? "badge-light-success" : "badge-light-danger") d-inline">
+                            @(Model.IsActive ? "Aktif" : "Pasif")
                         </div>
                     </div>
-                    <!--begin::Row-->
-                    <div class="row mb-8">
-                        <!--begin::Col-->
-                        <div class="col-xl-3">
-                            <div class="fs-6 fw-bold mt-2 mb-3">Proje Durumu</div>
+                    <div class="d-flex flex-column">
+                        <div class="d-flex align-items-center mt-2">
+                            <span class="text-muted fs-6 fw-bold me-2">Proje Durumu:</span>
+                            <span class="badge badge-light-primary fs-7">@Model.ProjectStatus.ToString()</span>
                         </div>
-                        <!--end::Col-->
-                        <!--begin::Col-->
-                        <div class="col-xl-9 fv-row fv-plugins-icon-container">
-
-                            <div class="fv-row mb-7">
-                                <select class="form-select" data-control="select2" asp-for="ProjectStatus" asp-items="Html.GetEnumSelectList<ProjectStatus>()" id="projectStatus">
-                                </select>
-
-                            </div>
-                            <div class="fv-plugins-message-container invalid-feedback"></div>
+                        <div class="d-flex align-items-center mt-2">
+                            <span class="text-muted fs-6 fw-bold me-2">Anket ID:</span>
+                            <span class="badge badge-light-warning fs-7">@Model.SurveyId</span>
+                        </div>
+                        <div class="d-flex align-items-center mt-2">
+                            <span class="text-muted fs-6 fw-bold me-2">Link:</span>
+                            <a href="@Model.ProjectLink" target="_blank" class="text-primary fs-7">@Model.ProjectLink</a>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-xl-3">
-                            <div class="fs-6 fw-bold mt-2 mb-3">Durum</div>
-                        </div>
-                        <div class="col-xl-9">
-                            <div class="form-check form-switch form-check-custom form-check-solid">
-                                <input class="form-check-input" type="checkbox" value="true" id="status" name="isActive" @(Model.IsActive ? "checked=\"checked\"" : "")>
-                                <label class="form-check-label fw-bold text-gray-400 ms-3" for="status">Aktif</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer d-flex justify-content-end py-6 px-9">
-                    <button type="submit" class="btn btn-primary" id="project_update">Güncelle</button>
-                </div>
-                <input type="hidden" value="@Model.Id" name="ProjectId"><div></div>
-            </form>
-
-
-        </div>
-    </div>
-    <div class="col-6">
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title fs-3 fw-bolder">Proje Kota Ayarları</div>
-                <div class="card-toolbar">
-                    <!--begin::Menu-->
-                    <button type="button" class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-                        <!--begin::Svg Icon | path: icons/duotune/general/gen024.svg-->
-                        <span class="svg-icon svg-icon-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
-                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                    <rect x="5" y="5" width="5" height="5" rx="1" fill="currentColor"></rect>
-                                    <rect x="14" y="5" width="5" height="5" rx="1" fill="currentColor" opacity="0.3"></rect>
-                                    <rect x="5" y="14" width="5" height="5" rx="1" fill="currentColor" opacity="0.3"></rect>
-                                    <rect x="14" y="14" width="5" height="5" rx="1" fill="currentColor" opacity="0.3"></rect>
-                                </g>
-                            </svg>
-                        </span>
-                        <!--end::Svg Icon-->
-                    </button>
-                    <!--begin::Menu 3-->
-                    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-bold w-200px py-3" data-kt-menu="true" style="">
-                      
-                        <div class="menu-item px-3">
-                            <a href="#" class="menu-link px-3" data-bs-toggle="modal" data-bs-target="#kt_modal_1">Kota Ekle</a>
-                        </div>
-                
-                    
-                    </div> 
                 </div>
             </div>
-            <div class="modal fade" tabindex="-1" id="kt_modal_1">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Kota Oluştur</h5>
-                             
-                            <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
-                                <span class="svg-icon svg-icon-2x"></span>
-                            </div>
-                         
-                        </div>
 
-                        <div class="modal-body">
-                            <form id="add_project_methods" class="form" action="#" autocomplete="off">
-                                <div class="fv-row mb-5">
-                                    <label class="required form-label">Kota Adı</label>
-                                    <input type="text" class="form-control form-control-solid" name="MethodName" placeholder="Kota Adı Giriniz"/>
+            <!-- Ana Düzen -->
+            <div class="row gx-5 gx-xl-8">
+                <!-- Sol Kolon: Proje ve Kota Ayarları -->
+                <div class="col-xl-6">
+                    <!-- Proje Ayarları Kartı -->
+                    <div class="card card-custom card-stretch-half mb-5 mb-xl-8 shadow-sm border-0 gutter-b">
+                        <div class="card-header border-0 py-5 bg-light-primary">
+                            <h3 class="card-title align-items-start flex-column">
+                                <span class="card-label fw-bolder fs-2 mb-1 text-dark">Proje Ayarları</span>
+                                <span class="text-muted mt-1 fw-bold fs-7">Temel proje bilgilerini düzenleyin</span>
+                            </h3>
+                        </div>
+                        <form id="kt_project_settings_form" class="form" method="post" asp-action="UpdateProject">
+                            <div class="card-body">
+                                <!-- Proje Adı -->
+                                <div class="d-flex flex-wrap align-items-center mb-7">
+                                    <div class="flex-shrink-0 me-5 w-150px">
+                                        <div class="fs-6 fw-bold">Proje Adı</div>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <input type="text" class="form-control form-control-lg form-control-solid bg-light text-dark rounded-pill" disabled="disabled" value="@Model.ProjectName">
+                                    </div>
+                                </div>
+
+                                <!-- Proje Link -->
+                                <div class="d-flex flex-wrap align-items-center mb-7">
+                                    <div class="flex-shrink-0 me-5 w-150px">
+                                        <div class="fs-6 fw-bold">Proje Link</div>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <input type="text" class="form-control form-control-lg form-control-solid rounded-pill" name="ProjectLink" value="@Model.ProjectLink" placeholder="https://ornek.com">
+                                    </div>
+                                </div>
+
+                                <!-- Anket ID -->
+                                <div class="d-flex flex-wrap align-items-center mb-7">
+                                    <div class="flex-shrink-0 me-5 w-150px">
+                                        <div class="fs-6 fw-bold">Anket ID</div>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <input type="text" class="form-control form-control-lg form-control-solid rounded-pill" name="SurveyId" id="surveyId" maxlength="4" pattern="[1-9][0-9]{3}" inputmode="numeric" oninput="validateSurveyId(this)" value="@Model.SurveyId" placeholder="4 haneli ID">
+                                    </div>
+                                </div>
+
+                                <!-- Proje Durumu -->
+                                <div class="d-flex flex-wrap align-items-center mb-7">
+                                    <div class="flex-shrink-0 me-5 w-150px">
+                                        <div class="fs-6 fw-bold">Proje Durumu</div>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <select class="form-select form-select-lg form-select-solid rounded-pill" data-control="select2" data-dropdown-parent="#kt_project_settings_form" asp-for="ProjectStatus" asp-items="Html.GetEnumSelectList<ProjectStatus>()" id="projectStatus">
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Aktif/Pasif -->
+                                <div class="d-flex flex-wrap align-items-center mb-7">
+                                    <div class="flex-shrink-0 me-5 w-150px">
+                                        <div class="fs-6 fw-bold">Durum</div>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="form-check form-switch form-check-custom form-check-solid">
+                                            <input class="form-check-input h-30px w-50px" type="checkbox" value="true" id="status" name="isActive" @(Model.IsActive ? "checked=\"checked\"" : "")>
+                                            <label class="form-check-label fw-bold fs-6 text-gray-600 ms-3" for="status" id="statusLabel">
+                                                <span class="badge badge-light-success" id="statusText">Aktif</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer d-flex justify-content-end py-6">
+                                <button type="reset" class="btn btn-light btn-active-light-primary me-2 rounded-pill px-6">Sıfırla</button>
+                                <button type="submit" class="btn btn-primary rounded-pill px-6" id="project_update">
+                                    <span class="indicator-label">Güncelle</span>
+                                    <span class="indicator-progress">
+                                        Lütfen bekleyin... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                    </span>
+                                </button>
+                            </div>
+                            <input type="hidden" value="@Model.Id" name="ProjectId">
+                        </form>
+                    </div>
+
+                    <!-- Kota Ayarları Kartı -->
+                    <div class="card card-custom card-stretch-half shadow-sm border-0">
+                        <div class="card-header border-0 py-5 bg-light-info">
+                            <h3 class="card-title align-items-start flex-column">
+                                <span class="card-label fw-bolder fs-2 mb-1 text-dark">Proje Kota Ayarları</span>
+                                <span class="text-muted mt-1 fw-bold fs-7">Kotalarınızı yönetin</span>
+                            </h3>
+                            <div class="card-toolbar">
+                                <button type="button" class="btn btn-sm btn-info rounded-pill" data-bs-toggle="modal" data-bs-target="#kt_modal_add_quota">
+                                    <span class="svg-icon svg-icon-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                            <rect opacity="0.5" x="11" y="18" width="12" height="2" rx="1" transform="rotate(-90 11 18)" fill="currentColor"/>
+                                            <rect x="6" y="11" width="12" height="2" rx="1" fill="currentColor"/>
+                                        </svg>
+                                    </span>
+                                    Kota Ekle
+                                </button>
+                            </div>
+                        </div>
+                        <form id="project_methods" class="form">
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4 mb-0">
+                                        <thead>
+                                            <tr class="border-0 fw-bolder text-muted bg-light">
+                                                <th class="ps-4 min-w-200px rounded-start">Kota Adı</th>
+                                                <th class="min-w-100px text-center">Büyüklük</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.GetProjectMethodViewModels)
+                                            {
+                                                <tr>
+                                                    <td class="ps-4">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="symbol symbol-40px me-3">
+                                                                <div class="symbol-label bg-light-info text-info fw-bold">
+                                                                    @(item.MethodName[0])
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex flex-column">
+                                                                <span class="text-gray-800 fw-bold">@item.MethodName</span>
+                                                                <input type="hidden" value="@item.Id" name="Ids[]">
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" class="form-control form-control-lg form-control-solid text-center rounded-pill w-100px mx-auto" name="Sizes[]" value="@item.Size" oninput="validateInput(this)">
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="card-footer d-flex justify-content-end py-6">
+                                <button type="submit" class="btn btn-info rounded-pill px-6" id="project_update_methods">
+                                    <span class="indicator-label">Kotaları Güncelle</span>
+                                    <span class="indicator-progress">
+                                        Lütfen bekleyin... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                    </span>
+                                </button>
+                            </div>
+                            <input type="hidden" value="@Model.Id" name="ProjectId">
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Sağ Kolon: Tarih Bölümleri -->
+                <div class="col-xl-6 col-6">
+                    <!-- Planlanan Tarihler Kartı -->
+                    <div class="card card-custom card-stretch-half mb-5 mb-xl-8 shadow-sm border-0">
+                        <div class="card-header border-0 py-5 bg-light-success">
+                            <h3 class="card-title align-items-start flex-column">
+                                <span class="card-label fw-bolder fs-2 mb-1 text-dark">Planlanan Tarihler</span>
+                                <span class="text-muted mt-1 fw-bold fs-7">Proje için planlanan süreç tarihleri</span>
+                            </h3>
+                        </div>
+                        <form id="project_planlanan" class="form">
+                            <div class="card-body p-5">
+                                <div class="timeline-label">
+                                    <!-- Planlanan Soru Formu Teslim Tarihi -->
+                                    <div class="timeline-item py-4">
+                                        <i class="fa fa-genderless text-success fs-1"></i>
+                                        <div class="timeline-content ps-3">
+                                            <div class="d-flex flex-wrap align-items-center">
+                                                <div class="flex-grow-1 me-3">
+                                                    <span class="text-dark fw-bolder fs-5">Soru Formu Teslim Tarihi</span>
+                                                    <div class="position-relative mt-2">
+                                                        <input class="form-control form-control-solid date-input rounded-pill" name="PlanlananSoruFormuTeslim" id="planlanan_soruformu_teslim" value="@Model.ProcessDetails.PlanlananSoruFormuTeslim?.ToString("yyyy-MM-ddTHH:mm:ss")" placeholder="Tarih seçin">
+                                                        <span class="position-absolute top-50 end-0 translate-middle-y me-2 text-gray-500">
+                                                            <i class="fas fa-calendar-alt fs-4"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Planlanan Script Teslim Tarihi -->
+                                    <div class="timeline-item py-4">
+                                        <div class="timeline-badge">
+                                            <i class="fa fa-genderless text-success fs-1"></i>
+                                        </div>
+                                        <div class="timeline-content ps-3">
+                                            <div class="d-flex flex-wrap align-items-center">
+                                                <div class="flex-grow-1 me-3">
+                                                    <span class="text-dark fw-bolder fs-5">Script Teslim Tarihi</span>
+                                                    <div class="position-relative mt-2">
+                                                        <input class="form-control form-control-solid date-input rounded-pill" name="PlanlananScriptTeslim" id="planlanan_scrpt_teslim" value="@Model.ProcessDetails.PlanlananScriptTeslim?.ToString("yyyy-MM-ddTHH:mm:ss")" placeholder="Tarih seçin">
+                                                        <span class="position-absolute top-50 end-0 translate-middle-y me-2 text-gray-500">
+                                                            <i class="fas fa-calendar-alt fs-4"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Planlanan Script Kontrol Tarihi -->
+                                    <div class="timeline-item py-4">
+                                        <div class="timeline-badge">
+                                            <i class="fa fa-genderless text-success fs-1"></i>
+                                        </div>
+                                        <div class="timeline-content ps-3">
+                                            <div class="d-flex flex-wrap align-items-center">
+                                                <div class="flex-grow-1 me-3">
+                                                    <span class="text-dark fw-bolder fs-5">Script Kontrol Tarihi</span>
+                                                    <div class="position-relative mt-2">
+                                                        <input class="form-control form-control-solid date-input rounded-pill" name="PlanlananScriptKontrol" id="planlanan_scrpt_kontrol" value="@Model.ProcessDetails.PlanlananScriptKontrol?.ToString("yyyy-MM-ddTHH:mm:ss")" placeholder="Tarih seçin">
+                                                        <span class="position-absolute top-50 end-0 translate-middle-y me-2 text-gray-500">
+                                                            <i class="fas fa-calendar-alt fs-4"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Diğer Tarih Alanları için benzer şekilde devam edilebilir -->
+                                    <div class="timeline-item py-4">
+                                        <div class="timeline-badge">
+                                            <i class="fa fa-genderless text-success fs-1"></i>
+                                        </div>
+                                        <div class="timeline-content ps-3">
+                                            <div class="d-flex flex-wrap align-items-center">
+                                                <div class="flex-grow-1 me-3">
+                                                    <span class="text-dark fw-bolder fs-5">Script Revizyon Tarihi</span>
+                                                    <div class="position-relative mt-2">
+                                                        <input class="form-control form-control-solid date-input rounded-pill" name="PlanlananScriptRevizyon" id="planlanan_scrpt_revizyon" value="@Model.ProcessDetails.PlanlananScriptRevizyon?.ToString("yyyy-MM-ddTHH:mm:ss")" placeholder="Tarih seçin">
+                                                        <span class="position-absolute top-50 end-0 translate-middle-y me-2 text-gray-500">
+                                                            <i class="fas fa-calendar-alt fs-4"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     
-                              
-                                </div>
-                                <div class="fv-row  ">
-                                    <label class="required form-label">Kota Büyüklüğü</label>
-                                    <input type="text" class="form-control form-control-solid" oninput="validateInput(this)" name="Size" placeholder="Kota Büyüklüğü Giriniz" />
-                                </div>
-                                <input type="text" class="form-control form-control-solid" name="ProjectId" value="@Model.Id" hidden="hidden"  /> 
 
-                                </form>
-                        </div>
+                                    <div class="timeline-item py-4">
+                                        <div class="timeline-badge">
+                                            <i class="fa fa-genderless text-success fs-1"></i>
+                                        </div>
+                                        <div class="timeline-content ps-3">
+                                            <div class="d-flex flex-wrap align-items-center">
+                                                <div class="flex-grow-1 me-3">
+                                                    <span class="text-dark fw-bolder fs-5">Saha Başlangıç Tarihi</span>
+                                                    <div class="position-relative mt-2">
+                                                        <input class="form-control form-control-solid date-input rounded-pill" name="PlanlananSahaBaslangic" id="planlanan_saha_baslangic" value="@Model.ProcessDetails.PlanlananSahaBaslangic?.ToString("yyyy-MM-ddTHH:mm:ss")" placeholder="Tarih seçin">
+                                                        <span class="position-absolute top-50 end-0 translate-middle-y me-2 text-gray-500">
+                                                            <i class="fas fa-calendar-alt fs-4"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item py-4">
+                                        <div class="timeline-badge">
+                                            <i class="fa fa-genderless text-success fs-1"></i>
+                                        </div>
+                                        <div class="timeline-content ps-3">
+                                            <div class="d-flex flex-wrap align-items-center">
+                                                <div class="flex-grow-1 me-3">
+                                                    <span class="text-dark fw-bolder fs-5">Saha Bitiş Tarihi</span>
+                                                    <div class="position-relative mt-2">
+                                                        <input class="form-control form-control-solid date-input rounded-pill" name="PlanlananSahaBitis" id="planlanan_saha_bitis" value="@Model.ProcessDetails.PlanlananSahaBitis?.ToString("yyyy-MM-ddTHH:mm:ss")" placeholder="Tarih seçin">
+                                                        <span class="position-absolute top-50 end-0 translate-middle-y me-2 text-gray-500">
+                                                            <i class="fas fa-calendar-alt fs-4"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item py-4">
+                                        <div class="timeline-badge">
+                                            <i class="fa fa-genderless text-success fs-1"></i>
+                                        </div>
+                                        <div class="timeline-content ps-3">
+                                            <div class="d-flex flex-wrap align-items-center">
+                                                <div class="flex-grow-1 me-3">
+                                                    <span class="text-dark fw-bolder fs-5">Script Kontrol Tarihi</span>
+                                                    <div class="position-relative mt-2">
+                                                        <input class="form-control form-control-solid date-input rounded-pill" name="PlanlananScriptKontrol" id="scprt_kontrol_tarihi" value="@Model.ProcessDetails.PlanlananScriptKontrol?.ToString("yyyy-MM-ddTHH:mm:ss")" placeholder="Tarih seçin">
+                                                        <span class="position-absolute top-50 end-0 translate-middle-y me-2 text-gray-500">
+                                                            <i class="fas fa-calendar-alt fs-4"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="timeline-item py-4">
+                                        <div class="timeline-badge">
+                                            <i class="fa fa-genderless text-success fs-1"></i>
+                                        </div>
+                                        <div class="timeline-content ps-3">
+                                            <div class="d-flex flex-wrap align-items-center">
+                                                <div class="flex-grow-1 me-3">
+                                                    <span class="text-dark fw-bolder fs-5">Kodlama Teslim Tarihi</span>
+                                                    <div class="position-relative mt-2">
+                                                        <input class="form-control form-control-solid date-input rounded-pill" name="PlanlananKodlamaTeslim" id="planlanan_kodlama_teslim" value="@Model.ProcessDetails.PlanlananKodlamaTeslim?.ToString("yyyy-MM-ddTHH:mm:ss")" placeholder="Tarih seçin">
+                                                        <span class="position-absolute top-50 end-0 translate-middle-y me-2 text-gray-500">
+                                                            <i class="fas fa-calendar-alt fs-4"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="timeline-item py-4">
+                                        <div class="timeline-badge">
+                                            <i class="fa fa-genderless text-success fs-1"></i>
+                                        </div>
+                                        <div class="timeline-content ps-3">
+                                            <div class="d-flex flex-wrap align-items-center">
+                                                <div class="flex-grow-1 me-3">
+                                                    <span class="text-dark fw-bolder fs-5">Tablolama Teslim Tarihi</span>
+                                                    <div class="position-relative mt-2">
+                                                        <input class="form-control form-control-solid date-input rounded-pill" name="PlanlananTablolamaTeslim" id="planlanan_tablolama_teslim" value="@Model.ProcessDetails.PlanlananTablolamaTeslim?.ToString("yyyy-MM-ddTHH:mm:ss")" placeholder="Tarih seçin">
+                                                        <span class="position-absolute top-50 end-0 translate-middle-y me-2 text-gray-500">
+                                                            <i class="fas fa-calendar-alt fs-4"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                  
+                                    <!-- Planlanan Rapor Teslim Tarihi -->
+                                    <div class="timeline-item py-4">
+                                        <div class="timeline-badge">
+                                            <i class="fa fa-genderless text-primary fs-1"></i>
+                                        </div>
+                                        <div class="timeline-content ps-3">
+                                            <div class="d-flex flex-wrap align-items-center">
+                                                <div class="flex-grow-1 me-3">
+                                                    <span class="text-dark fw-bolder fs-5">Rapor Teslim Tarihi</span>
+                                                    <div class="position-relative mt-2">
+                                                        <input class="form-control form-control-solid date-input rounded-pill" name="PlanlananRaporTeslim" id="planlanan_rapor_teslim" value="@Model.ProcessDetails.PlanlananRaporTeslim?.ToString("yyyy-MM-ddTHH:mm:ss")" placeholder="Tarih seçin">
+                                                        <span class="position-absolute top-50 end-0 translate-middle-y me-2 text-gray-500">
+                                                            <i class="fas fa-calendar-alt fs-4"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer d-flex justify-content-end py-6">
+                                <button type="button" class="btn btn-success rounded-pill px-6" id="project_process_update">
+                                    <span class="indicator-label">Tarihleri Güncelle</span>
+                                    <span class="indicator-progress">
+                                        Lütfen bekleyin... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                    </span>
+                                </button>
+                            </div>
+                            <input type="hidden" value="@Model.Id" name="ProjectId">
+                        </form>
+                    </div>
 
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Çık</button>
-                            <button id="add_project_methods_submit" type="submit" class="btn btn-primary">
-                                <span class="indicator-label">
-                                    Kaydet
-                                </span>
-                                <span class="indicator-progress">
-                                    Lütfen bekleyiniz... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                </span>
-                            </button>
+                    <!-- Gerçekleşen Tarihler Kartı -->
+                    <div class="card card-custom card-stretch-half shadow-sm border-0">
+                        <div class="card-header border-0 py-5 bg-light-danger">
+                            <h3 class="card-title align-items-start flex-column">
+                                <span class="card-label fw-bolder fs-2 mb-1 text-dark">Gerçekleşen Tarihler</span>
+                                <span class="text-muted mt-1 fw-bold fs-7">Projede gerçekleşen süreç tarihleri</span>
+                            </h3>
                         </div>
+                        <form id="project_gerceklesen" class="form">
+                            <div class="card-body p-5">
+                                <div class="timeline-label">
+                                    <!-- Gerçekleşen Soru Formu Teslim Tarihi -->
+                                    <div class="timeline-item py-4">
+                                        <i class="fa fa-genderless text-danger fs-1"></i>
+                                        <div class="timeline-content ps-3">
+                                            <div class="d-flex flex-wrap align-items-center">
+                                                <div class="flex-grow-1 me-3">
+                                                    <span class="text-dark fw-bolder fs-5">Soru Formu Teslim Tarihi</span>
+                                                    <div class="position-relative mt-2">
+                                                        <input class="form-control form-control-solid date-input rounded-pill" name="GerceklesenSoruFormuTeslim" id="gerceklesen_soruformu_teslim" value="@Model.ProcessDetails.GerceklesenSoruFormuTeslim?.ToString("yyyy-MM-ddTHH:mm:ss")" placeholder="Tarih seçin">
+                                                        <span class="position-absolute top-50 end-0 translate-middle-y me-2 text-gray-500">
+                                                            <i class="fas fa-calendar-alt fs-4"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Gerçekleşen Script Teslim Tarihi -->
+                                    <div class="timeline-item py-4">
+                                        <div class="timeline-badge">
+                                            <i class="fa fa-genderless text-danger fs-1"></i>
+                                        </div>
+                                        <div class="timeline-content ps-3">
+                                            <div class="d-flex flex-wrap align-items-center">
+                                                <div class="flex-grow-1 me-3">
+                                                    <span class="text-dark fw-bolder fs-5">Script Teslim Tarihi</span>
+                                                    <div class="position-relative mt-2">
+                                                        <input class="form-control form-control-solid date-input rounded-pill" name="GerceklesenScriptTeslim" id="gerceklesen_scrpt_teslim" value="@Model.ProcessDetails.GerceklesenScriptTeslim?.ToString("yyyy-MM-ddTHH:mm:ss")" placeholder="Tarih seçin">
+                                                        <span class="position-absolute top-50 end-0 translate-middle-y me-2 text-gray-500">
+                                                            <i class="fas fa-calendar-alt fs-4"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Diğer Tarih Alanları için benzer şekilde devam edilebilir -->
+                                    <div class="timeline-item py-4">
+                                        <div class="timeline-badge">
+                                            <i class="fa fa-genderless text-danger fs-1"></i>
+                                        </div>
+                                        <div class="timeline-content ps-3">
+                                            <div class="d-flex flex-wrap align-items-center">
+                                                <div class="flex-grow-1 me-3">
+                                                    <span class="text-dark fw-bolder fs-5">Script Kontrol Tarihi</span>
+                                                    <div class="position-relative mt-2">
+                                                        <input class="form-control form-control-solid date-input rounded-pill" name="GerceklesenScriptKontrol" id="gerceklesen_scrpt_kontrol" value="@Model.ProcessDetails.GerceklesenScriptKontrol?.ToString("yyyy-MM-ddTHH:mm:ss")" placeholder="Tarih seçin">
+                                                        <span class="position-absolute top-50 end-0 translate-middle-y me-2 text-gray-500">
+                                                            <i class="fas fa-calendar-alt fs-4"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item py-4">
+                                        <div class="timeline-badge">
+                                            <i class="fa fa-genderless text-danger fs-1"></i>
+                                        </div>
+                                        <div class="timeline-content ps-3">
+                                            <div class="d-flex flex-wrap align-items-center">
+                                                <div class="flex-grow-1 me-3">
+                                                    <span class="text-dark fw-bolder fs-5">Script Revizyon Tarihi</span>
+                                                    <div class="position-relative mt-2">
+                                                        <input class="form-control form-control-solid date-input rounded-pill" name="GerceklesenScriptRevizyon" id="gerceklesen_scrpt_revizyon" value="@Model.ProcessDetails.GerceklesenScriptRevizyon?.ToString("yyyy-MM-ddTHH:mm:ss")" placeholder="Tarih seçin">
+                                                        <span class="position-absolute top-50 end-0 translate-middle-y me-2 text-gray-500">
+                                                            <i class="fas fa-calendar-alt fs-4"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item py-4">
+                                        <div class="timeline-badge">
+                                            <i class="fa fa-genderless text-danger fs-1"></i>
+                                        </div>
+                                        <div class="timeline-content ps-3">
+                                            <div class="d-flex flex-wrap align-items-center">
+                                                <div class="flex-grow-1 me-3">
+                                                    <span class="text-dark fw-bolder fs-5">Saha Başlangıç Tarihi</span>
+                                                    <div class="position-relative mt-2">
+                                                        <input class="form-control form-control-solid date-input rounded-pill" name="GerceklesenSahaBaslangic" id="gerceklesen_saha_baslangic" value="@Model.ProcessDetails.GerceklesenSahaBaslangic?.ToString("yyyy-MM-ddTHH:mm:ss")" placeholder="Tarih seçin">
+                                                        <span class="position-absolute top-50 end-0 translate-middle-y me-2 text-gray-500">
+                                                            <i class="fas fa-calendar-alt fs-4"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item py-4">
+                                        <div class="timeline-badge">
+                                            <i class="fa fa-genderless text-danger fs-1"></i>
+                                        </div>
+                                        <div class="timeline-content ps-3">
+                                            <div class="d-flex flex-wrap align-items-center">
+                                                <div class="flex-grow-1 me-3">
+                                                    <span class="text-dark fw-bolder fs-5">Saha Bitiş Tarihi</span>
+                                                    <div class="position-relative mt-2">
+                                                        <input class="form-control form-control-solid date-input rounded-pill" name="GerceklesenSahaBitis" id="gerceklesen_saha_bitis" value="@Model.ProcessDetails.GerceklesenSahaBitis?.ToString("yyyy-MM-ddTHH:mm:ss")" placeholder="Tarih seçin">
+                                                        <span class="position-absolute top-50 end-0 translate-middle-y me-2 text-gray-500">
+                                                            <i class="fas fa-calendar-alt fs-4"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item py-4">
+                                        <div class="timeline-badge">
+                                            <i class="fa fa-genderless text-danger fs-1"></i>
+                                        </div>
+                                        <div class="timeline-content ps-3">
+                                            <div class="d-flex flex-wrap align-items-center">
+                                                <div class="flex-grow-1 me-3">
+                                                    <span class="text-dark fw-bolder fs-5">Script Kontrol Tarihi</span>
+                                                    <div class="position-relative mt-2">
+                                                        <input class="form-control form-control-solid date-input rounded-pill" name="GerceklesenScriptKontrol" id="gerceklesen_scrpt_kontrol" value="@Model.ProcessDetails.GerceklesenScriptKontrol?.ToString("yyyy-MM-ddTHH:mm:ss")" placeholder="Tarih seçin">
+                                                        <span class="position-absolute top-50 end-0 translate-middle-y me-2 text-gray-500">
+                                                            <i class="fas fa-calendar-alt fs-4"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item py-4">
+                                        <div class="timeline-badge">
+                                            <i class="fa fa-genderless text-danger fs-1"></i>
+                                        </div>
+                                        <div class="timeline-content ps-3">
+                                            <div class="d-flex flex-wrap align-items-center">
+                                                <div class="flex-grow-1 me-3">
+                                                    <span class="text-dark fw-bolder fs-5">Kodlama Teslim Tarihi</span>
+                                                    <div class="position-relative mt-2">
+                                                        <input class="form-control form-control-solid date-input rounded-pill" name="GerceklesenKodlamaTeslim" id="gerceklesen_kodlama_teslim" value="@Model.ProcessDetails.GerceklesenKodlamaTeslim?.ToString("yyyy-MM-ddTHH:mm:ss")" placeholder="Tarih seçin">
+                                                        <span class="position-absolute top-50 end-0 translate-middle-y me-2 text-gray-500">
+                                                            <i class="fas fa-calendar-alt fs-4"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item py-4">
+                                        <div class="timeline-badge">
+                                            <i class="fa fa-genderless text-danger fs-1"></i>
+                                        </div>
+                                        <div class="timeline-content ps-3">
+                                            <div class="d-flex flex-wrap align-items-center">
+                                                <div class="flex-grow-1 me-3">
+                                                    <span class="text-dark fw-bolder fs-5">Tablolama Teslim Tarihi</span>
+                                                    <div class="position-relative mt-2">
+                                                        <input class="form-control form-control-solid date-input rounded-pill" name="GerceklesenTablolamaTeslim" id="gerceklesen_tablolama_teslim" value="@Model.ProcessDetails.GerceklesenTablolamaTeslim?.ToString("yyyy-MM-ddTHH:mm:ss")" placeholder="Tarih seçin">
+                                                        <span class="position-absolute top-50 end-0 translate-middle-y me-2 text-gray-500">
+                                                            <i class="fas fa-calendar-alt fs-4"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Gerçekleşen Rapor Teslim Tarihi -->
+                                    <div class="timeline-item py-4">
+                                        <div class="timeline-badge">
+                                            <i class="fa fa-genderless text-primary fs-1"></i>
+                                        </div>
+                                        <div class="timeline-content ps-3">
+                                            <div class="d-flex flex-wrap align-items-center">
+                                                <div class="flex-grow-1 me-3">
+                                                    <span class="text-dark fw-bolder fs-5">Rapor Teslim Tarihi</span>
+                                                    <div class="position-relative mt-2">
+                                                        <input class="form-control form-control-solid date-input rounded-pill" name="GerceklesenRaporTeslim" id="gerceklesen_rapor_teslim" value="@Model.ProcessDetails.GerceklesenRaporTeslim?.ToString("yyyy-MM-ddTHH:mm:ss")" placeholder="Tarih seçin">
+                                                        <span class="position-absolute top-50 end-0 translate-middle-y me-2 text-gray-500">
+                                                            <i class="fas fa-calendar-alt fs-4"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer d-flex justify-content-end py-6">
+                                <button type="submit" class="btn btn-danger rounded-pill px-6" id="project_update_completed">
+                                    <span class="indicator-label">Tarihleri Güncelle</span>
+                                    <span class="indicator-progress">
+                                        Lütfen bekleyin... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                    </span>
+                                </button>
+                            </div>
+                            <input type="hidden" value="@Model.Id" name="ProjectId">
+                        </form>
                     </div>
                 </div>
             </div>
-
-            <form id="project_methods" class="form fv-plugins-bootstrap5 fv-plugins-framework"  >
-                <div class="card-body p-9">
-                     
-                  @foreach (var item in Model.GetProjectMethodViewModels)
-                  {
-                      <div class="row mb-3">
-
-                          <!--begin::Col-->
-                          <div class="col-xl-3">
-                              <div class="fs-6 fw-bold mt-2 mb-3">@item.MethodName</div>
-                          </div>
-                          <div class="col-6"></div>
-                          <div class="col-3  fv-row  ">
-                              <input type="text" class="form-control form-control-solid text-danger" name="Sizes[]"  value="@item.Size"> 
-                          </div> 
-                           
-                          <input type="hidden" value="@item.Id" name="Ids[]">
-                      </div>
-                  }
-                    
-                </div>
-                <div class="card-footer d-flex justify-content-end py-6 px-9">
-                    <button type="submit" class="btn btn-primary" id="project_update_methods">Güncelle</button>
-                </div>
-                <input type="hidden" value="@Model.Id" name="ProjectId"><div></div>
-                
-            </form>
-
-
         </div>
     </div>
 </div>
 
-<div class="row">
-<div class="col-6">
-        <div class="card mt-5">
-            <!--begin::Card header-->
-            <div class="card-header">
-                <!--begin::Card title-->
-                <div class="card-title fs-3 fw-bolder  ">Proje Planlanan Tarihler</div>
-                <!--end::Card title-->
+<!-- Kota Ekleme Modalı -->
+<div class="modal fade" tabindex="-1" id="kt_modal_add_quota">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header py-5 bg-light-info">
+                <h3 class="modal-title fs-2 fw-bolder text-dark">Kota Oluştur</h3>
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <span class="svg-icon svg-icon-2x">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor"/>
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor"/>
+                        </svg>
+                    </span>
+                </div>
             </div>
-            <!--end::Card header-->
-            <!--begin::Form-->
-            <form id="project_planlanan" class="form fv-plugins-bootstrap5 fv-plugins-framework">
-
-                <div class="card-body ">
-                    <div class="row ">
-                        <div class="col-xl-3">
-                            <div class="fs-6 fw-bold mt-2 mb-3">Soru Formu Teslim Tarihi</div>
-                        </div>
-                        <div class="col-xl-9 fv-row fv-plugins-icon-container">
-                            <div class="position-relative d-flex align-items-center">
-                                <span class="svg-icon position-absolute ms-4 mb-1 svg-icon-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path opacity="0.3" d="M21 22H3C2.4 22 2 21.6 2 21V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5V21C22 21.6 21.6 22 21 22Z" fill="currentColor"></path>
-                                        <path d="M6 6C5.4 6 5 5.6 5 5V3C5 2.4 5.4 2 6 2C6.6 2 7 2.4 7 3V5C7 5.6 6.6 6 6 6ZM11 5V3C11 2.4 10.6 2 10 2C9.4 2 9 2.4 9 3V5C9 5.6 9.4 6 10 6C10.6 6 11 5.6 11 5ZM15 5V3C15 2.4 14.6 2 14 2C13.4 2 13 2.4 13 3V5C13 5.6 13.4 6 14 6C14.6 6 15 5.6 15 5ZM19 5V3C19 2.4 18.6 2 18 2C17.4 2 17 2.4 17 3V5C17 5.6 17.4 6 18 6C18.6 6 19 5.6 19 5Z" fill="currentColor"></path>
-                                        <path d="M8.8 13.1C9.2 13.1 9.5 13 9.7 12.8C9.9 12.6 10.1 12.3 10.1 11.9C10.1 11.6 10 11.3 9.8 11.1C9.6 10.9 9.3 10.8 9 10.8C8.8 10.8 8.59999 10.8 8.39999 10.9C8.19999 11 8.1 11.1 8 11.2C7.9 11.3 7.8 11.4 7.7 11.6C7.6 11.8 7.5 11.9 7.5 12.1C7.5 12.2 7.4 12.2 7.3 12.3C7.2 12.4 7.09999 12.4 6.89999 12.4C6.69999 12.4 6.6 12.3 6.5 12.2C6.4 12.1 6.3 11.9 6.3 11.7C6.3 11.5 6.4 11.3 6.5 11.1C6.6 10.9 6.8 10.7 7 10.5C7.2 10.3 7.49999 10.1 7.89999 10C8.29999 9.90003 8.60001 9.80003 9.10001 9.80003C9.50001 9.80003 9.80001 9.90003 10.1 10C10.4 10.1 10.7 10.3 10.9 10.4C11.1 10.5 11.3 10.8 11.4 11.1C11.5 11.4 11.6 11.6 11.6 11.9C11.6 12.3 11.5 12.6 11.3 12.9C11.1 13.2 10.9 13.5 10.6 13.7C10.9 13.9 11.2 14.1 11.4 14.3C11.6 14.5 11.8 14.7 11.9 15C12 15.3 12.1 15.5 12.1 15.8C12.1 16.2 12 16.5 11.9 16.8C11.8 17.1 11.5 17.4 11.3 17.7C11.1 18 10.7 18.2 10.3 18.3C9.9 18.4 9.5 18.5 9 18.5C8.5 18.5 8.1 18.4 7.7 18.2C7.3 18 7 17.8 6.8 17.6C6.6 17.4 6.4 17.1 6.3 16.8C6.2 16.5 6.10001 16.3 6.10001 16.1C6.10001 15.9 6.2 15.7 6.3 15.6C6.4 15.5 6.6 15.4 6.8 15.4C6.9 15.4 7.00001 15.4 7.10001 15.5C7.20001 15.6 7.3 15.6 7.3 15.7C7.5 16.2 7.7 16.6 8 16.9C8.3 17.2 8.6 17.3 9 17.3C9.2 17.3 9.5 17.2 9.7 17.1C9.9 17 10.1 16.8 10.3 16.6C10.5 16.4 10.5 16.1 10.5 15.8C10.5 15.3 10.4 15 10.1 14.7C9.80001 14.4 9.50001 14.3 9.10001 14.3C9.00001 14.3 8.9 14.3 8.7 14.3C8.5 14.3 8.39999 14.3 8.39999 14.3C8.19999 14.3 7.99999 14.2 7.89999 14.1C7.79999 14 7.7 13.8 7.7 13.7C7.7 13.5 7.79999 13.4 7.89999 13.2C7.99999 13 8.2 13 8.5 13H8.8V13.1ZM15.3 17.5V12.2C14.3 13 13.6 13.3 13.3 13.3C13.1 13.3 13 13.2 12.9 13.1C12.8 13 12.7 12.8 12.7 12.6C12.7 12.4 12.8 12.3 12.9 12.2C13 12.1 13.2 12 13.6 11.8C14.1 11.6 14.5 11.3 14.7 11.1C14.9 10.9 15.2 10.6 15.5 10.3C15.8 10 15.9 9.80003 15.9 9.70003C15.9 9.60003 16.1 9.60004 16.3 9.60004C16.5 9.60004 16.7 9.70003 16.8 9.80003C16.9 9.90003 17 10.2 17 10.5V17.2C17 18 16.7 18.4 16.2 18.4C16 18.4 15.8 18.3 15.6 18.2C15.4 18.1 15.3 17.8 15.3 17.5Z" fill="currentColor"></path>
-                                    </svg>
-                                </span>
-                                <input class="form-control form-control-solid ps-12 flatpickr-input  " name="PlanlananSoruFormuTeslim" id="planlanan_soruformu_teslim" value="@Model.ProcessDetails.PlanlananSoruFormuTeslim?.ToString("yyyy-MM-ddTHH:mm:ss")">
-                            </div>
-                            <div class="fv-plugins-message-container invalid-feedback"></div>
-                        </div>
+            <div class="modal-body pt-0">
+                <form id="add_project_methods" class="form" action="#" autocomplete="off">
+                    <div class="fv-row mb-7">
+                        <label class="required fs-5 fw-bold mb-2">Kota Adı</label>
+                        <input type="text" class="form-control form-control-lg form-control-solid rounded-pill" name="MethodName" placeholder="Kota adını giriniz"/>
                     </div>
-
-                </div>
-                <div class="card-body ">
-                    <div class="row ">
-                        <div class="col-xl-3">
-                            <div class="fs-6 fw-bold mt-2 mb-3">Script Teslim Tarihi</div>
-                        </div>
-                        <div class="col-xl-9 fv-row fv-plugins-icon-container">
-                            <div class="position-relative d-flex align-items-center">
-                                <span class="svg-icon position-absolute ms-4 mb-1 svg-icon-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path opacity="0.3" d="M21 22H3C2.4 22 2 21.6 2 21V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5V21C22 21.6 21.6 22 21 22Z" fill="currentColor"></path>
-                                        <path d="M6 6C5.4 6 5 5.6 5 5V3C5 2.4 5.4 2 6 2C6.6 2 7 2.4 7 3V5C7 5.6 6.6 6 6 6ZM11 5V3C11 2.4 10.6 2 10 2C9.4 2 9 2.4 9 3V5C9 5.6 9.4 6 10 6C10.6 6 11 5.6 11 5ZM15 5V3C15 2.4 14.6 2 14 2C13.4 2 13 2.4 13 3V5C13 5.6 13.4 6 14 6C14.6 6 15 5.6 15 5ZM19 5V3C19 2.4 18.6 2 18 2C17.4 2 17 2.4 17 3V5C17 5.6 17.4 6 18 6C18.6 6 19 5.6 19 5Z" fill="currentColor"></path>
-                                        <path d="M8.8 13.1C9.2 13.1 9.5 13 9.7 12.8C9.9 12.6 10.1 12.3 10.1 11.9C10.1 11.6 10 11.3 9.8 11.1C9.6 10.9 9.3 10.8 9 10.8C8.8 10.8 8.59999 10.8 8.39999 10.9C8.19999 11 8.1 11.1 8 11.2C7.9 11.3 7.8 11.4 7.7 11.6C7.6 11.8 7.5 11.9 7.5 12.1C7.5 12.2 7.4 12.2 7.3 12.3C7.2 12.4 7.09999 12.4 6.89999 12.4C6.69999 12.4 6.6 12.3 6.5 12.2C6.4 12.1 6.3 11.9 6.3 11.7C6.3 11.5 6.4 11.3 6.5 11.1C6.6 10.9 6.8 10.7 7 10.5C7.2 10.3 7.49999 10.1 7.89999 10C8.29999 9.90003 8.60001 9.80003 9.10001 9.80003C9.50001 9.80003 9.80001 9.90003 10.1 10C10.4 10.1 10.7 10.3 10.9 10.4C11.1 10.5 11.3 10.8 11.4 11.1C11.5 11.4 11.6 11.6 11.6 11.9C11.6 12.3 11.5 12.6 11.3 12.9C11.1 13.2 10.9 13.5 10.6 13.7C10.9 13.9 11.2 14.1 11.4 14.3C11.6 14.5 11.8 14.7 11.9 15C12 15.3 12.1 15.5 12.1 15.8C12.1 16.2 12 16.5 11.9 16.8C11.8 17.1 11.5 17.4 11.3 17.7C11.1 18 10.7 18.2 10.3 18.3C9.9 18.4 9.5 18.5 9 18.5C8.5 18.5 8.1 18.4 7.7 18.2C7.3 18 7 17.8 6.8 17.6C6.6 17.4 6.4 17.1 6.3 16.8C6.2 16.5 6.10001 16.3 6.10001 16.1C6.10001 15.9 6.2 15.7 6.3 15.6C6.4 15.5 6.6 15.4 6.8 15.4C6.9 15.4 7.00001 15.4 7.10001 15.5C7.20001 15.6 7.3 15.6 7.3 15.7C7.5 16.2 7.7 16.6 8 16.9C8.3 17.2 8.6 17.3 9 17.3C9.2 17.3 9.5 17.2 9.7 17.1C9.9 17 10.1 16.8 10.3 16.6C10.5 16.4 10.5 16.1 10.5 15.8C10.5 15.3 10.4 15 10.1 14.7C9.80001 14.4 9.50001 14.3 9.10001 14.3C9.00001 14.3 8.9 14.3 8.7 14.3C8.5 14.3 8.39999 14.3 8.39999 14.3C8.19999 14.3 7.99999 14.2 7.89999 14.1C7.79999 14 7.7 13.8 7.7 13.7C7.7 13.5 7.79999 13.4 7.89999 13.2C7.99999 13 8.2 13 8.5 13H8.8V13.1ZM15.3 17.5V12.2C14.3 13 13.6 13.3 13.3 13.3C13.1 13.3 13 13.2 12.9 13.1C12.8 13 12.7 12.8 12.7 12.6C12.7 12.4 12.8 12.3 12.9 12.2C13 12.1 13.2 12 13.6 11.8C14.1 11.6 14.5 11.3 14.7 11.1C14.9 10.9 15.2 10.6 15.5 10.3C15.8 10 15.9 9.80003 15.9 9.70003C15.9 9.60003 16.1 9.60004 16.3 9.60004C16.5 9.60004 16.7 9.70003 16.8 9.80003C16.9 9.90003 17 10.2 17 10.5V17.2C17 18 16.7 18.4 16.2 18.4C16 18.4 15.8 18.3 15.6 18.2C15.4 18.1 15.3 17.8 15.3 17.5Z" fill="currentColor"></path>
-                                    </svg>
-                                </span>
-                                <input class="form-control form-control-solid ps-12 flatpickr-input  " name="PlanlananScriptTeslim" id="planlanan_scrpt_teslim" value="@Model.ProcessDetails.PlanlananScriptTeslim?.ToString("yyyy-MM-ddTHH:mm:ss")">
-                            </div>
-                            <div class="fv-plugins-message-container invalid-feedback"></div>
-                        </div>
+                    <div class="fv-row mb-7">
+                        <label class="required fs-5 fw-bold mb-2">Kota Büyüklüğü</label>
+                        <input type="text" class="form-control form-control-lg form-control-solid rounded-pill" oninput="validateInput(this)" name="Size" placeholder="Kota büyüklüğünü giriniz" />
                     </div>
-
-                </div>
-
-                <div class="card-body ">
-                    <div class="row  ">
-                        <div class="col-xl-3">
-                            <div class="fs-6 fw-bold mt-2 mb-3">Script Kontrol Tarihi</div>
-                        </div>
-                        <div class="col-xl-9 fv-row fv-plugins-icon-container">
-                            <div class="position-relative d-flex align-items-center">
-                                <span class="svg-icon position-absolute ms-4 mb-1 svg-icon-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path opacity="0.3" d="M21 22H3C2.4 22 2 21.6 2 21V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5V21C22 21.6 21.6 22 21 22Z" fill="currentColor"></path>
-                                        <path d="M6 6C5.4 6 5 5.6 5 5V3C5 2.4 5.4 2 6 2C6.6 2 7 2.4 7 3V5C7 5.6 6.6 6 6 6ZM11 5V3C11 2.4 10.6 2 10 2C9.4 2 9 2.4 9 3V5C9 5.6 9.4 6 10 6C10.6 6 11 5.6 11 5ZM15 5V3C15 2.4 14.6 2 14 2C13.4 2 13 2.4 13 3V5C13 5.6 13.4 6 14 6C14.6 6 15 5.6 15 5ZM19 5V3C19 2.4 18.6 2 18 2C17.4 2 17 2.4 17 3V5C17 5.6 17.4 6 18 6C18.6 6 19 5.6 19 5Z" fill="currentColor"></path>
-                                        <path d="M8.8 13.1C9.2 13.1 9.5 13 9.7 12.8C9.9 12.6 10.1 12.3 10.1 11.9C10.1 11.6 10 11.3 9.8 11.1C9.6 10.9 9.3 10.8 9 10.8C8.8 10.8 8.59999 10.8 8.39999 10.9C8.19999 11 8.1 11.1 8 11.2C7.9 11.3 7.8 11.4 7.7 11.6C7.6 11.8 7.5 11.9 7.5 12.1C7.5 12.2 7.4 12.2 7.3 12.3C7.2 12.4 7.09999 12.4 6.89999 12.4C6.69999 12.4 6.6 12.3 6.5 12.2C6.4 12.1 6.3 11.9 6.3 11.7C6.3 11.5 6.4 11.3 6.5 11.1C6.6 10.9 6.8 10.7 7 10.5C7.2 10.3 7.49999 10.1 7.89999 10C8.29999 9.90003 8.60001 9.80003 9.10001 9.80003C9.50001 9.80003 9.80001 9.90003 10.1 10C10.4 10.1 10.7 10.3 10.9 10.4C11.1 10.5 11.3 10.8 11.4 11.1C11.5 11.4 11.6 11.6 11.6 11.9C11.6 12.3 11.5 12.6 11.3 12.9C11.1 13.2 10.9 13.5 10.6 13.7C10.9 13.9 11.2 14.1 11.4 14.3C11.6 14.5 11.8 14.7 11.9 15C12 15.3 12.1 15.5 12.1 15.8C12.1 16.2 12 16.5 11.9 16.8C11.8 17.1 11.5 17.4 11.3 17.7C11.1 18 10.7 18.2 10.3 18.3C9.9 18.4 9.5 18.5 9 18.5C8.5 18.5 8.1 18.4 7.7 18.2C7.3 18 7 17.8 6.8 17.6C6.6 17.4 6.4 17.1 6.3 16.8C6.2 16.5 6.10001 16.3 6.10001 16.1C6.10001 15.9 6.2 15.7 6.3 15.6C6.4 15.5 6.6 15.4 6.8 15.4C6.9 15.4 7.00001 15.4 7.10001 15.5C7.20001 15.6 7.3 15.6 7.3 15.7C7.5 16.2 7.7 16.6 8 16.9C8.3 17.2 8.6 17.3 9 17.3C9.2 17.3 9.5 17.2 9.7 17.1C9.9 17 10.1 16.8 10.3 16.6C10.5 16.4 10.5 16.1 10.5 15.8C10.5 15.3 10.4 15 10.1 14.7C9.80001 14.4 9.50001 14.3 9.10001 14.3C9.00001 14.3 8.9 14.3 8.7 14.3C8.5 14.3 8.39999 14.3 8.39999 14.3C8.19999 14.3 7.99999 14.2 7.89999 14.1C7.79999 14 7.7 13.8 7.7 13.7C7.7 13.5 7.79999 13.4 7.89999 13.2C7.99999 13 8.2 13 8.5 13H8.8V13.1ZM15.3 17.5V12.2C14.3 13 13.6 13.3 13.3 13.3C13.1 13.3 13 13.2 12.9 13.1C12.8 13 12.7 12.8 12.7 12.6C12.7 12.4 12.8 12.3 12.9 12.2C13 12.1 13.2 12 13.6 11.8C14.1 11.6 14.5 11.3 14.7 11.1C14.9 10.9 15.2 10.6 15.5 10.3C15.8 10 15.9 9.80003 15.9 9.70003C15.9 9.60003 16.1 9.60004 16.3 9.60004C16.5 9.60004 16.7 9.70003 16.8 9.80003C16.9 9.90003 17 10.2 17 10.5V17.2C17 18 16.7 18.4 16.2 18.4C16 18.4 15.8 18.3 15.6 18.2C15.4 18.1 15.3 17.8 15.3 17.5Z" fill="currentColor"></path>
-                                    </svg>
-                                </span>
-                                <input class="form-control form-control-solid ps-12 flatpickr-input  " name="PlanlananScriptKontrol" value="@Model.ProcessDetails.PlanlananScriptKontrol?.ToString("yyyy-MM-ddTHH:mm:ss")" id="planlanan_scrpt_kontrol">
-                            </div>
-                            <div class="fv-plugins-message-container invalid-feedback"></div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="card-body ">
-                    <div class="row  ">
-                        <div class="col-xl-3">
-                            <div class="fs-6 fw-bold mt-2 mb-3">Script Revizyon Tarihi</div>
-                        </div>
-                        <div class="col-xl-9 fv-row fv-plugins-icon-container">
-                            <div class="position-relative d-flex align-items-center">
-                                <span class="svg-icon position-absolute ms-4 mb-1 svg-icon-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path opacity="0.3" d="M21 22H3C2.4 22 2 21.6 2 21V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5V21C22 21.6 21.6 22 21 22Z" fill="currentColor"></path>
-                                        <path d="M6 6C5.4 6 5 5.6 5 5V3C5 2.4 5.4 2 6 2C6.6 2 7 2.4 7 3V5C7 5.6 6.6 6 6 6ZM11 5V3C11 2.4 10.6 2 10 2C9.4 2 9 2.4 9 3V5C9 5.6 9.4 6 10 6C10.6 6 11 5.6 11 5ZM15 5V3C15 2.4 14.6 2 14 2C13.4 2 13 2.4 13 3V5C13 5.6 13.4 6 14 6C14.6 6 15 5.6 15 5ZM19 5V3C19 2.4 18.6 2 18 2C17.4 2 17 2.4 17 3V5C17 5.6 17.4 6 18 6C18.6 6 19 5.6 19 5Z" fill="currentColor"></path>
-                                        <path d="M8.8 13.1C9.2 13.1 9.5 13 9.7 12.8C9.9 12.6 10.1 12.3 10.1 11.9C10.1 11.6 10 11.3 9.8 11.1C9.6 10.9 9.3 10.8 9 10.8C8.8 10.8 8.59999 10.8 8.39999 10.9C8.19999 11 8.1 11.1 8 11.2C7.9 11.3 7.8 11.4 7.7 11.6C7.6 11.8 7.5 11.9 7.5 12.1C7.5 12.2 7.4 12.2 7.3 12.3C7.2 12.4 7.09999 12.4 6.89999 12.4C6.69999 12.4 6.6 12.3 6.5 12.2C6.4 12.1 6.3 11.9 6.3 11.7C6.3 11.5 6.4 11.3 6.5 11.1C6.6 10.9 6.8 10.7 7 10.5C7.2 10.3 7.49999 10.1 7.89999 10C8.29999 9.90003 8.60001 9.80003 9.10001 9.80003C9.50001 9.80003 9.80001 9.90003 10.1 10C10.4 10.1 10.7 10.3 10.9 10.4C11.1 10.5 11.3 10.8 11.4 11.1C11.5 11.4 11.6 11.6 11.6 11.9C11.6 12.3 11.5 12.6 11.3 12.9C11.1 13.2 10.9 13.5 10.6 13.7C10.9 13.9 11.2 14.1 11.4 14.3C11.6 14.5 11.8 14.7 11.9 15C12 15.3 12.1 15.5 12.1 15.8C12.1 16.2 12 16.5 11.9 16.8C11.8 17.1 11.5 17.4 11.3 17.7C11.1 18 10.7 18.2 10.3 18.3C9.9 18.4 9.5 18.5 9 18.5C8.5 18.5 8.1 18.4 7.7 18.2C7.3 18 7 17.8 6.8 17.6C6.6 17.4 6.4 17.1 6.3 16.8C6.2 16.5 6.10001 16.3 6.10001 16.1C6.10001 15.9 6.2 15.7 6.3 15.6C6.4 15.5 6.6 15.4 6.8 15.4C6.9 15.4 7.00001 15.4 7.10001 15.5C7.20001 15.6 7.3 15.6 7.3 15.7C7.5 16.2 7.7 16.6 8 16.9C8.3 17.2 8.6 17.3 9 17.3C9.2 17.3 9.5 17.2 9.7 17.1C9.9 17 10.1 16.8 10.3 16.6C10.5 16.4 10.5 16.1 10.5 15.8C10.5 15.3 10.4 15 10.1 14.7C9.80001 14.4 9.50001 14.3 9.10001 14.3C9.00001 14.3 8.9 14.3 8.7 14.3C8.5 14.3 8.39999 14.3 8.39999 14.3C8.19999 14.3 7.99999 14.2 7.89999 14.1C7.79999 14 7.7 13.8 7.7 13.7C7.7 13.5 7.79999 13.4 7.89999 13.2C7.99999 13 8.2 13 8.5 13H8.8V13.1ZM15.3 17.5V12.2C14.3 13 13.6 13.3 13.3 13.3C13.1 13.3 13 13.2 12.9 13.1C12.8 13 12.7 12.8 12.7 12.6C12.7 12.4 12.8 12.3 12.9 12.2C13 12.1 13.2 12 13.6 11.8C14.1 11.6 14.5 11.3 14.7 11.1C14.9 10.9 15.2 10.6 15.5 10.3C15.8 10 15.9 9.80003 15.9 9.70003C15.9 9.60003 16.1 9.60004 16.3 9.60004C16.5 9.60004 16.7 9.70003 16.8 9.80003C16.9 9.90003 17 10.2 17 10.5V17.2C17 18 16.7 18.4 16.2 18.4C16 18.4 15.8 18.3 15.6 18.2C15.4 18.1 15.3 17.8 15.3 17.5Z" fill="currentColor"></path>
-                                    </svg>
-                                </span>
-                                <input class="form-control form-control-solid ps-12 flatpickr-input  " name="PlanlananScriptRevizyon" value="@Model.ProcessDetails.PlanlananScriptRevizyon?.ToString("yyyy-MM-ddTHH:mm:ss")" id="planlanan_scrpt_revizyon">
-                            </div>
-                            <div class="fv-plugins-message-container invalid-feedback"></div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="card-body  ">
-                    <div class="row  ">
-                        <div class="col-xl-3">
-                            <div class="fs-6 fw-bold mt-2 mb-3">Saha Başlangıç Tarihi</div>
-                        </div>
-                        <div class="col-xl-9 fv-row fv-plugins-icon-container">
-                            <div class="position-relative d-flex align-items-center">
-                                <span class="svg-icon position-absolute ms-4 mb-1 svg-icon-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path opacity="0.3" d="M21 22H3C2.4 22 2 21.6 2 21V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5V21C22 21.6 21.6 22 21 22Z" fill="currentColor"></path>
-                                        <path d="M6 6C5.4 6 5 5.6 5 5V3C5 2.4 5.4 2 6 2C6.6 2 7 2.4 7 3V5C7 5.6 6.6 6 6 6ZM11 5V3C11 2.4 10.6 2 10 2C9.4 2 9 2.4 9 3V5C9 5.6 9.4 6 10 6C10.6 6 11 5.6 11 5ZM15 5V3C15 2.4 14.6 2 14 2C13.4 2 13 2.4 13 3V5C13 5.6 13.4 6 14 6C14.6 6 15 5.6 15 5ZM19 5V3C19 2.4 18.6 2 18 2C17.4 2 17 2.4 17 3V5C17 5.6 17.4 6 18 6C18.6 6 19 5.6 19 5Z" fill="currentColor"></path>
-                                        <path d="M8.8 13.1C9.2 13.1 9.5 13 9.7 12.8C9.9 12.6 10.1 12.3 10.1 11.9C10.1 11.6 10 11.3 9.8 11.1C9.6 10.9 9.3 10.8 9 10.8C8.8 10.8 8.59999 10.8 8.39999 10.9C8.19999 11 8.1 11.1 8 11.2C7.9 11.3 7.8 11.4 7.7 11.6C7.6 11.8 7.5 11.9 7.5 12.1C7.5 12.2 7.4 12.2 7.3 12.3C7.2 12.4 7.09999 12.4 6.89999 12.4C6.69999 12.4 6.6 12.3 6.5 12.2C6.4 12.1 6.3 11.9 6.3 11.7C6.3 11.5 6.4 11.3 6.5 11.1C6.6 10.9 6.8 10.7 7 10.5C7.2 10.3 7.49999 10.1 7.89999 10C8.29999 9.90003 8.60001 9.80003 9.10001 9.80003C9.50001 9.80003 9.80001 9.90003 10.1 10C10.4 10.1 10.7 10.3 10.9 10.4C11.1 10.5 11.3 10.8 11.4 11.1C11.5 11.4 11.6 11.6 11.6 11.9C11.6 12.3 11.5 12.6 11.3 12.9C11.1 13.2 10.9 13.5 10.6 13.7C10.9 13.9 11.2 14.1 11.4 14.3C11.6 14.5 11.8 14.7 11.9 15C12 15.3 12.1 15.5 12.1 15.8C12.1 16.2 12 16.5 11.9 16.8C11.8 17.1 11.5 17.4 11.3 17.7C11.1 18 10.7 18.2 10.3 18.3C9.9 18.4 9.5 18.5 9 18.5C8.5 18.5 8.1 18.4 7.7 18.2C7.3 18 7 17.8 6.8 17.6C6.6 17.4 6.4 17.1 6.3 16.8C6.2 16.5 6.10001 16.3 6.10001 16.1C6.10001 15.9 6.2 15.7 6.3 15.6C6.4 15.5 6.6 15.4 6.8 15.4C6.9 15.4 7.00001 15.4 7.10001 15.5C7.20001 15.6 7.3 15.6 7.3 15.7C7.5 16.2 7.7 16.6 8 16.9C8.3 17.2 8.6 17.3 9 17.3C9.2 17.3 9.5 17.2 9.7 17.1C9.9 17 10.1 16.8 10.3 16.6C10.5 16.4 10.5 16.1 10.5 15.8C10.5 15.3 10.4 15 10.1 14.7C9.80001 14.4 9.50001 14.3 9.10001 14.3C9.00001 14.3 8.9 14.3 8.7 14.3C8.5 14.3 8.39999 14.3 8.39999 14.3C8.19999 14.3 7.99999 14.2 7.89999 14.1C7.79999 14 7.7 13.8 7.7 13.7C7.7 13.5 7.79999 13.4 7.89999 13.2C7.99999 13 8.2 13 8.5 13H8.8V13.1ZM15.3 17.5V12.2C14.3 13 13.6 13.3 13.3 13.3C13.1 13.3 13 13.2 12.9 13.1C12.8 13 12.7 12.8 12.7 12.6C12.7 12.4 12.8 12.3 12.9 12.2C13 12.1 13.2 12 13.6 11.8C14.1 11.6 14.5 11.3 14.7 11.1C14.9 10.9 15.2 10.6 15.5 10.3C15.8 10 15.9 9.80003 15.9 9.70003C15.9 9.60003 16.1 9.60004 16.3 9.60004C16.5 9.60004 16.7 9.70003 16.8 9.80003C16.9 9.90003 17 10.2 17 10.5V17.2C17 18 16.7 18.4 16.2 18.4C16 18.4 15.8 18.3 15.6 18.2C15.4 18.1 15.3 17.8 15.3 17.5Z" fill="currentColor"></path>
-                                    </svg>
-                                </span>
-                                <input class="form-control form-control-solid ps-12 flatpickr-input  " name="PlanlananSahaBaslangic" value="@Model.ProcessDetails.PlanlananSahaBaslangic?.ToString("yyyy-MM-ddTHH:mm:ss")" id="planlanan_saha_baslangic">
-                            </div>
-                            <div class="fv-plugins-message-container invalid-feedback"></div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="card-body  ">
-                    <div class="row  ">
-                        <div class="col-xl-3">
-                            <div class="fs-6 fw-bold mt-2 mb-3">Saha Bitiş Tarihi</div>
-                        </div>
-                        <div class="col-xl-9 fv-row fv-plugins-icon-container">
-                            <div class="position-relative d-flex align-items-center">
-                                <span class="svg-icon position-absolute ms-4 mb-1 svg-icon-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path opacity="0.3" d="M21 22H3C2.4 22 2 21.6 2 21V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5V21C22 21.6 21.6 22 21 22Z" fill="currentColor"></path>
-                                        <path d="M6 6C5.4 6 5 5.6 5 5V3C5 2.4 5.4 2 6 2C6.6 2 7 2.4 7 3V5C7 5.6 6.6 6 6 6ZM11 5V3C11 2.4 10.6 2 10 2C9.4 2 9 2.4 9 3V5C9 5.6 9.4 6 10 6C10.6 6 11 5.6 11 5ZM15 5V3C15 2.4 14.6 2 14 2C13.4 2 13 2.4 13 3V5C13 5.6 13.4 6 14 6C14.6 6 15 5.6 15 5ZM19 5V3C19 2.4 18.6 2 18 2C17.4 2 17 2.4 17 3V5C17 5.6 17.4 6 18 6C18.6 6 19 5.6 19 5Z" fill="currentColor"></path>
-                                        <path d="M8.8 13.1C9.2 13.1 9.5 13 9.7 12.8C9.9 12.6 10.1 12.3 10.1 11.9C10.1 11.6 10 11.3 9.8 11.1C9.6 10.9 9.3 10.8 9 10.8C8.8 10.8 8.59999 10.8 8.39999 10.9C8.19999 11 8.1 11.1 8 11.2C7.9 11.3 7.8 11.4 7.7 11.6C7.6 11.8 7.5 11.9 7.5 12.1C7.5 12.2 7.4 12.2 7.3 12.3C7.2 12.4 7.09999 12.4 6.89999 12.4C6.69999 12.4 6.6 12.3 6.5 12.2C6.4 12.1 6.3 11.9 6.3 11.7C6.3 11.5 6.4 11.3 6.5 11.1C6.6 10.9 6.8 10.7 7 10.5C7.2 10.3 7.49999 10.1 7.89999 10C8.29999 9.90003 8.60001 9.80003 9.10001 9.80003C9.50001 9.80003 9.80001 9.90003 10.1 10C10.4 10.1 10.7 10.3 10.9 10.4C11.1 10.5 11.3 10.8 11.4 11.1C11.5 11.4 11.6 11.6 11.6 11.9C11.6 12.3 11.5 12.6 11.3 12.9C11.1 13.2 10.9 13.5 10.6 13.7C10.9 13.9 11.2 14.1 11.4 14.3C11.6 14.5 11.8 14.7 11.9 15C12 15.3 12.1 15.5 12.1 15.8C12.1 16.2 12 16.5 11.9 16.8C11.8 17.1 11.5 17.4 11.3 17.7C11.1 18 10.7 18.2 10.3 18.3C9.9 18.4 9.5 18.5 9 18.5C8.5 18.5 8.1 18.4 7.7 18.2C7.3 18 7 17.8 6.8 17.6C6.6 17.4 6.4 17.1 6.3 16.8C6.2 16.5 6.10001 16.3 6.10001 16.1C6.10001 15.9 6.2 15.7 6.3 15.6C6.4 15.5 6.6 15.4 6.8 15.4C6.9 15.4 7.00001 15.4 7.10001 15.5C7.20001 15.6 7.3 15.6 7.3 15.7C7.5 16.2 7.7 16.6 8 16.9C8.3 17.2 8.6 17.3 9 17.3C9.2 17.3 9.5 17.2 9.7 17.1C9.9 17 10.1 16.8 10.3 16.6C10.5 16.4 10.5 16.1 10.5 15.8C10.5 15.3 10.4 15 10.1 14.7C9.80001 14.4 9.50001 14.3 9.10001 14.3C9.00001 14.3 8.9 14.3 8.7 14.3C8.5 14.3 8.39999 14.3 8.39999 14.3C8.19999 14.3 7.99999 14.2 7.89999 14.1C7.79999 14 7.7 13.8 7.7 13.7C7.7 13.5 7.79999 13.4 7.89999 13.2C7.99999 13 8.2 13 8.5 13H8.8V13.1ZM15.3 17.5V12.2C14.3 13 13.6 13.3 13.3 13.3C13.1 13.3 13 13.2 12.9 13.1C12.8 13 12.7 12.8 12.7 12.6C12.7 12.4 12.8 12.3 12.9 12.2C13 12.1 13.2 12 13.6 11.8C14.1 11.6 14.5 11.3 14.7 11.1C14.9 10.9 15.2 10.6 15.5 10.3C15.8 10 15.9 9.80003 15.9 9.70003C15.9 9.60003 16.1 9.60004 16.3 9.60004C16.5 9.60004 16.7 9.70003 16.8 9.80003C16.9 9.90003 17 10.2 17 10.5V17.2C17 18 16.7 18.4 16.2 18.4C16 18.4 15.8 18.3 15.6 18.2C15.4 18.1 15.3 17.8 15.3 17.5Z" fill="currentColor"></path>
-                                    </svg>
-                                </span>
-                                <input class="form-control form-control-solid ps-12 flatpickr-input  " name="PlanlananSahaBitis" value="@Model.ProcessDetails.PlanlananSahaBitis?.ToString("yyyy-MM-ddTHH:mm:ss")" id="planlanan_saha_bitis">
-                            </div>
-                            <div class="fv-plugins-message-container invalid-feedback"></div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="card-body  ">
-                    <div class="row  ">
-                        <div class="col-xl-3">
-                            <div class="fs-6 fw-bold mt-2 mb-3">Kodlama Teslim Tarihi</div>
-                        </div>
-                        <div class="col-xl-9 fv-row fv-plugins-icon-container">
-                            <div class="position-relative d-flex align-items-center">
-                                <span class="svg-icon position-absolute ms-4 mb-1 svg-icon-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path opacity="0.3" d="M21 22H3C2.4 22 2 21.6 2 21V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5V21C22 21.6 21.6 22 21 22Z" fill="currentColor"></path>
-                                        <path d="M6 6C5.4 6 5 5.6 5 5V3C5 2.4 5.4 2 6 2C6.6 2 7 2.4 7 3V5C7 5.6 6.6 6 6 6ZM11 5V3C11 2.4 10.6 2 10 2C9.4 2 9 2.4 9 3V5C9 5.6 9.4 6 10 6C10.6 6 11 5.6 11 5ZM15 5V3C15 2.4 14.6 2 14 2C13.4 2 13 2.4 13 3V5C13 5.6 13.4 6 14 6C14.6 6 15 5.6 15 5ZM19 5V3C19 2.4 18.6 2 18 2C17.4 2 17 2.4 17 3V5C17 5.6 17.4 6 18 6C18.6 6 19 5.6 19 5Z" fill="currentColor"></path>
-                                        <path d="M8.8 13.1C9.2 13.1 9.5 13 9.7 12.8C9.9 12.6 10.1 12.3 10.1 11.9C10.1 11.6 10 11.3 9.8 11.1C9.6 10.9 9.3 10.8 9 10.8C8.8 10.8 8.59999 10.8 8.39999 10.9C8.19999 11 8.1 11.1 8 11.2C7.9 11.3 7.8 11.4 7.7 11.6C7.6 11.8 7.5 11.9 7.5 12.1C7.5 12.2 7.4 12.2 7.3 12.3C7.2 12.4 7.09999 12.4 6.89999 12.4C6.69999 12.4 6.6 12.3 6.5 12.2C6.4 12.1 6.3 11.9 6.3 11.7C6.3 11.5 6.4 11.3 6.5 11.1C6.6 10.9 6.8 10.7 7 10.5C7.2 10.3 7.49999 10.1 7.89999 10C8.29999 9.90003 8.60001 9.80003 9.10001 9.80003C9.50001 9.80003 9.80001 9.90003 10.1 10C10.4 10.1 10.7 10.3 10.9 10.4C11.1 10.5 11.3 10.8 11.4 11.1C11.5 11.4 11.6 11.6 11.6 11.9C11.6 12.3 11.5 12.6 11.3 12.9C11.1 13.2 10.9 13.5 10.6 13.7C10.9 13.9 11.2 14.1 11.4 14.3C11.6 14.5 11.8 14.7 11.9 15C12 15.3 12.1 15.5 12.1 15.8C12.1 16.2 12 16.5 11.9 16.8C11.8 17.1 11.5 17.4 11.3 17.7C11.1 18 10.7 18.2 10.3 18.3C9.9 18.4 9.5 18.5 9 18.5C8.5 18.5 8.1 18.4 7.7 18.2C7.3 18 7 17.8 6.8 17.6C6.6 17.4 6.4 17.1 6.3 16.8C6.2 16.5 6.10001 16.3 6.10001 16.1C6.10001 15.9 6.2 15.7 6.3 15.6C6.4 15.5 6.6 15.4 6.8 15.4C6.9 15.4 7.00001 15.4 7.10001 15.5C7.20001 15.6 7.3 15.6 7.3 15.7C7.5 16.2 7.7 16.6 8 16.9C8.3 17.2 8.6 17.3 9 17.3C9.2 17.3 9.5 17.2 9.7 17.1C9.9 17 10.1 16.8 10.3 16.6C10.5 16.4 10.5 16.1 10.5 15.8C10.5 15.3 10.4 15 10.1 14.7C9.80001 14.4 9.50001 14.3 9.10001 14.3C9.00001 14.3 8.9 14.3 8.7 14.3C8.5 14.3 8.39999 14.3 8.39999 14.3C8.19999 14.3 7.99999 14.2 7.89999 14.1C7.79999 14 7.7 13.8 7.7 13.7C7.7 13.5 7.79999 13.4 7.89999 13.2C7.99999 13 8.2 13 8.5 13H8.8V13.1ZM15.3 17.5V12.2C14.3 13 13.6 13.3 13.3 13.3C13.1 13.3 13 13.2 12.9 13.1C12.8 13 12.7 12.8 12.7 12.6C12.7 12.4 12.8 12.3 12.9 12.2C13 12.1 13.2 12 13.6 11.8C14.1 11.6 14.5 11.3 14.7 11.1C14.9 10.9 15.2 10.6 15.5 10.3C15.8 10 15.9 9.80003 15.9 9.70003C15.9 9.60003 16.1 9.60004 16.3 9.60004C16.5 9.60004 16.7 9.70003 16.8 9.80003C16.9 9.90003 17 10.2 17 10.5V17.2C17 18 16.7 18.4 16.2 18.4C16 18.4 15.8 18.3 15.6 18.2C15.4 18.1 15.3 17.8 15.3 17.5Z" fill="currentColor"></path>
-                                    </svg>
-                                </span>
-                                <input class="form-control form-control-solid ps-12 flatpickr-input active" name="PlanlananKodlamaTeslim" value="@Model.ProcessDetails.PlanlananKodlamaTeslim?.ToString("yyyy-MM-ddTHH:mm:ss")" id="planlanan_kodlama_teslim">
-                            </div>
-                            <div class="fv-plugins-message-container invalid-feedback"></div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="card-body  ">
-                    <div class="row  ">
-                        <div class="col-xl-3">
-                            <div class="fs-6 fw-bold mt-2 mb-3">Tablolama Tarihi</div>
-                        </div>
-                        <div class="col-xl-9 fv-row fv-plugins-icon-container">
-                            <div class="position-relative d-flex align-items-center">
-                                <span class="svg-icon position-absolute ms-4 mb-1 svg-icon-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path opacity="0.3" d="M21 22H3C2.4 22 2 21.6 2 21V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5V21C22 21.6 21.6 22 21 22Z" fill="currentColor"></path>
-                                        <path d="M6 6C5.4 6 5 5.6 5 5V3C5 2.4 5.4 2 6 2C6.6 2 7 2.4 7 3V5C7 5.6 6.6 6 6 6ZM11 5V3C11 2.4 10.6 2 10 2C9.4 2 9 2.4 9 3V5C9 5.6 9.4 6 10 6C10.6 6 11 5.6 11 5ZM15 5V3C15 2.4 14.6 2 14 2C13.4 2 13 2.4 13 3V5C13 5.6 13.4 6 14 6C14.6 6 15 5.6 15 5ZM19 5V3C19 2.4 18.6 2 18 2C17.4 2 17 2.4 17 3V5C17 5.6 17.4 6 18 6C18.6 6 19 5.6 19 5Z" fill="currentColor"></path>
-                                        <path d="M8.8 13.1C9.2 13.1 9.5 13 9.7 12.8C9.9 12.6 10.1 12.3 10.1 11.9C10.1 11.6 10 11.3 9.8 11.1C9.6 10.9 9.3 10.8 9 10.8C8.8 10.8 8.59999 10.8 8.39999 10.9C8.19999 11 8.1 11.1 8 11.2C7.9 11.3 7.8 11.4 7.7 11.6C7.6 11.8 7.5 11.9 7.5 12.1C7.5 12.2 7.4 12.2 7.3 12.3C7.2 12.4 7.09999 12.4 6.89999 12.4C6.69999 12.4 6.6 12.3 6.5 12.2C6.4 12.1 6.3 11.9 6.3 11.7C6.3 11.5 6.4 11.3 6.5 11.1C6.6 10.9 6.8 10.7 7 10.5C7.2 10.3 7.49999 10.1 7.89999 10C8.29999 9.90003 8.60001 9.80003 9.10001 9.80003C9.50001 9.80003 9.80001 9.90003 10.1 10C10.4 10.1 10.7 10.3 10.9 10.4C11.1 10.5 11.3 10.8 11.4 11.1C11.5 11.4 11.6 11.6 11.6 11.9C11.6 12.3 11.5 12.6 11.3 12.9C11.1 13.2 10.9 13.5 10.6 13.7C10.9 13.9 11.2 14.1 11.4 14.3C11.6 14.5 11.8 14.7 11.9 15C12 15.3 12.1 15.5 12.1 15.8C12.1 16.2 12 16.5 11.9 16.8C11.8 17.1 11.5 17.4 11.3 17.7C11.1 18 10.7 18.2 10.3 18.3C9.9 18.4 9.5 18.5 9 18.5C8.5 18.5 8.1 18.4 7.7 18.2C7.3 18 7 17.8 6.8 17.6C6.6 17.4 6.4 17.1 6.3 16.8C6.2 16.5 6.10001 16.3 6.10001 16.1C6.10001 15.9 6.2 15.7 6.3 15.6C6.4 15.5 6.6 15.4 6.8 15.4C6.9 15.4 7.00001 15.4 7.10001 15.5C7.20001 15.6 7.3 15.6 7.3 15.7C7.5 16.2 7.7 16.6 8 16.9C8.3 17.2 8.6 17.3 9 17.3C9.2 17.3 9.5 17.2 9.7 17.1C9.9 17 10.1 16.8 10.3 16.6C10.5 16.4 10.5 16.1 10.5 15.8C10.5 15.3 10.4 15 10.1 14.7C9.80001 14.4 9.50001 14.3 9.10001 14.3C9.00001 14.3 8.9 14.3 8.7 14.3C8.5 14.3 8.39999 14.3 8.39999 14.3C8.19999 14.3 7.99999 14.2 7.89999 14.1C7.79999 14 7.7 13.8 7.7 13.7C7.7 13.5 7.79999 13.4 7.89999 13.2C7.99999 13 8.2 13 8.5 13H8.8V13.1ZM15.3 17.5V12.2C14.3 13 13.6 13.3 13.3 13.3C13.1 13.3 13 13.2 12.9 13.1C12.8 13 12.7 12.8 12.7 12.6C12.7 12.4 12.8 12.3 12.9 12.2C13 12.1 13.2 12 13.6 11.8C14.1 11.6 14.5 11.3 14.7 11.1C14.9 10.9 15.2 10.6 15.5 10.3C15.8 10 15.9 9.80003 15.9 9.70003C15.9 9.60003 16.1 9.60004 16.3 9.60004C16.5 9.60004 16.7 9.70003 16.8 9.80003C16.9 9.90003 17 10.2 17 10.5V17.2C17 18 16.7 18.4 16.2 18.4C16 18.4 15.8 18.3 15.6 18.2C15.4 18.1 15.3 17.8 15.3 17.5Z" fill="currentColor"></path>
-                                    </svg>
-                                </span>
-                                <input class="form-control form-control-solid ps-12 flatpickr-input active" name="PlanlananTablolamaTeslim" value="@Model.ProcessDetails.PlanlananTablolamaTeslim?.ToString("yyyy-MM-ddTHH:mm:ss")" id="planlanan_tablolama_teslim">
-                            </div>
-                            <div class="fv-plugins-message-container invalid-feedback"></div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="card-body  ">
-                    <div class="row  ">
-                        <div class="col-xl-3">
-                            <div class="fs-6 fw-bold mt-2 mb-3">Rapor Teslim Tarihi</div>
-                        </div>
-                        <div class="col-xl-9 fv-row fv-plugins-icon-container">
-                            <div class="position-relative d-flex align-items-center">
-                                <span class="svg-icon position-absolute ms-4 mb-1 svg-icon-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path opacity="0.3" d="M21 22H3C2.4 22 2 21.6 2 21V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5V21C22 21.6 21.6 22 21 22Z" fill="currentColor"></path>
-                                        <path d="M6 6C5.4 6 5 5.6 5 5V3C5 2.4 5.4 2 6 2C6.6 2 7 2.4 7 3V5C7 5.6 6.6 6 6 6ZM11 5V3C11 2.4 10.6 2 10 2C9.4 2 9 2.4 9 3V5C9 5.6 9.4 6 10 6C10.6 6 11 5.6 11 5ZM15 5V3C15 2.4 14.6 2 14 2C13.4 2 13 2.4 13 3V5C13 5.6 13.4 6 14 6C14.6 6 15 5.6 15 5ZM19 5V3C19 2.4 18.6 2 18 2C17.4 2 17 2.4 17 3V5C17 5.6 17.4 6 18 6C18.6 6 19 5.6 19 5Z" fill="currentColor"></path>
-                                        <path d="M8.8 13.1C9.2 13.1 9.5 13 9.7 12.8C9.9 12.6 10.1 12.3 10.1 11.9C10.1 11.6 10 11.3 9.8 11.1C9.6 10.9 9.3 10.8 9 10.8C8.8 10.8 8.59999 10.8 8.39999 10.9C8.19999 11 8.1 11.1 8 11.2C7.9 11.3 7.8 11.4 7.7 11.6C7.6 11.8 7.5 11.9 7.5 12.1C7.5 12.2 7.4 12.2 7.3 12.3C7.2 12.4 7.09999 12.4 6.89999 12.4C6.69999 12.4 6.6 12.3 6.5 12.2C6.4 12.1 6.3 11.9 6.3 11.7C6.3 11.5 6.4 11.3 6.5 11.1C6.6 10.9 6.8 10.7 7 10.5C7.2 10.3 7.49999 10.1 7.89999 10C8.29999 9.90003 8.60001 9.80003 9.10001 9.80003C9.50001 9.80003 9.80001 9.90003 10.1 10C10.4 10.1 10.7 10.3 10.9 10.4C11.1 10.5 11.3 10.8 11.4 11.1C11.5 11.4 11.6 11.6 11.6 11.9C11.6 12.3 11.5 12.6 11.3 12.9C11.1 13.2 10.9 13.5 10.6 13.7C10.9 13.9 11.2 14.1 11.4 14.3C11.6 14.5 11.8 14.7 11.9 15C12 15.3 12.1 15.5 12.1 15.8C12.1 16.2 12 16.5 11.9 16.8C11.8 17.1 11.5 17.4 11.3 17.7C11.1 18 10.7 18.2 10.3 18.3C9.9 18.4 9.5 18.5 9 18.5C8.5 18.5 8.1 18.4 7.7 18.2C7.3 18 7 17.8 6.8 17.6C6.6 17.4 6.4 17.1 6.3 16.8C6.2 16.5 6.10001 16.3 6.10001 16.1C6.10001 15.9 6.2 15.7 6.3 15.6C6.4 15.5 6.6 15.4 6.8 15.4C6.9 15.4 7.00001 15.4 7.10001 15.5C7.20001 15.6 7.3 15.6 7.3 15.7C7.5 16.2 7.7 16.6 8 16.9C8.3 17.2 8.6 17.3 9 17.3C9.2 17.3 9.5 17.2 9.7 17.1C9.9 17 10.1 16.8 10.3 16.6C10.5 16.4 10.5 16.1 10.5 15.8C10.5 15.3 10.4 15 10.1 14.7C9.80001 14.4 9.50001 14.3 9.10001 14.3C9.00001 14.3 8.9 14.3 8.7 14.3C8.5 14.3 8.39999 14.3 8.39999 14.3C8.19999 14.3 7.99999 14.2 7.89999 14.1C7.79999 14 7.7 13.8 7.7 13.7C7.7 13.5 7.79999 13.4 7.89999 13.2C7.99999 13 8.2 13 8.5 13H8.8V13.1ZM15.3 17.5V12.2C14.3 13 13.6 13.3 13.3 13.3C13.1 13.3 13 13.2 12.9 13.1C12.8 13 12.7 12.8 12.7 12.6C12.7 12.4 12.8 12.3 12.9 12.2C13 12.1 13.2 12 13.6 11.8C14.1 11.6 14.5 11.3 14.7 11.1C14.9 10.9 15.2 10.6 15.5 10.3C15.8 10 15.9 9.80003 15.9 9.70003C15.9 9.60003 16.1 9.60004 16.3 9.60004C16.5 9.60004 16.7 9.70003 16.8 9.80003C16.9 9.90003 17 10.2 17 10.5V17.2C17 18 16.7 18.4 16.2 18.4C16 18.4 15.8 18.3 15.6 18.2C15.4 18.1 15.3 17.8 15.3 17.5Z" fill="currentColor"></path>
-                                    </svg>
-                                </span>
-                                <input class="form-control form-control-solid ps-12 flatpickr-input active" name="PlanlananRaporTeslim" value="@Model.ProcessDetails.PlanlananRaporTeslim?.ToString("yyyy-MM-ddTHH:mm:ss")" id="planlanan_rapor_teslim">
-                            </div>
-                            <div class="fv-plugins-message-container invalid-feedback"></div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="card-footer d-flex justify-content-end py-6 px-9">
-                    <button type="button" class="btn btn-primary" id="project_process_update">Güncelle</button>
-                </div>
-                <input type="hidden" value="@Model.Id" name="ProjectId"><div></div>
-            </form>
-
-
-        </div>
-
-</div> 
-<div class="col-6">
-        <div class="card mt-5 ">
-
-            <div class="card-header">
-                <!--begin::Card title-->
-                <div class="card-title fs-3 fw-bolder  ">Proje Gerçekleşen Tarihler</div>
-                <!--end::Card title-->
+                    <input type="hidden" class="form-control" name="ProjectId" value="@Model.Id" />
+                </form>
             </div>
-            <form id="project_gerceklesen" class="form fv-plugins-bootstrap5 fv-plugins-framework"  >
-                <div class="card-body ">
-                    <div class="row ">
-                        <div class="col-xl-3">
-                            <div class="fs-6 fw-bold mt-2 mb-3">Soru Formu Teslim Tarihi</div>
-                        </div>
-                        <div class="col-xl-9 fv-row fv-plugins-icon-container">
-                            <div class="position-relative d-flex align-items-center">
-                                <span class="svg-icon position-absolute ms-4 mb-1 svg-icon-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path opacity="0.3" d="M21 22H3C2.4 22 2 21.6 2 21V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5V21C22 21.6 21.6 22 21 22Z" fill="currentColor"></path>
-                                        <path d="M6 6C5.4 6 5 5.6 5 5V3C5 2.4 5.4 2 6 2C6.6 2 7 2.4 7 3V5C7 5.6 6.6 6 6 6ZM11 5V3C11 2.4 10.6 2 10 2C9.4 2 9 2.4 9 3V5C9 5.6 9.4 6 10 6C10.6 6 11 5.6 11 5ZM15 5V3C15 2.4 14.6 2 14 2C13.4 2 13 2.4 13 3V5C13 5.6 13.4 6 14 6C14.6 6 15 5.6 15 5ZM19 5V3C19 2.4 18.6 2 18 2C17.4 2 17 2.4 17 3V5C17 5.6 17.4 6 18 6C18.6 6 19 5.6 19 5Z" fill="currentColor"></path>
-                                        <path d="M8.8 13.1C9.2 13.1 9.5 13 9.7 12.8C9.9 12.6 10.1 12.3 10.1 11.9C10.1 11.6 10 11.3 9.8 11.1C9.6 10.9 9.3 10.8 9 10.8C8.8 10.8 8.59999 10.8 8.39999 10.9C8.19999 11 8.1 11.1 8 11.2C7.9 11.3 7.8 11.4 7.7 11.6C7.6 11.8 7.5 11.9 7.5 12.1C7.5 12.2 7.4 12.2 7.3 12.3C7.2 12.4 7.09999 12.4 6.89999 12.4C6.69999 12.4 6.6 12.3 6.5 12.2C6.4 12.1 6.3 11.9 6.3 11.7C6.3 11.5 6.4 11.3 6.5 11.1C6.6 10.9 6.8 10.7 7 10.5C7.2 10.3 7.49999 10.1 7.89999 10C8.29999 9.90003 8.60001 9.80003 9.10001 9.80003C9.50001 9.80003 9.80001 9.90003 10.1 10C10.4 10.1 10.7 10.3 10.9 10.4C11.1 10.5 11.3 10.8 11.4 11.1C11.5 11.4 11.6 11.6 11.6 11.9C11.6 12.3 11.5 12.6 11.3 12.9C11.1 13.2 10.9 13.5 10.6 13.7C10.9 13.9 11.2 14.1 11.4 14.3C11.6 14.5 11.8 14.7 11.9 15C12 15.3 12.1 15.5 12.1 15.8C12.1 16.2 12 16.5 11.9 16.8C11.8 17.1 11.5 17.4 11.3 17.7C11.1 18 10.7 18.2 10.3 18.3C9.9 18.4 9.5 18.5 9 18.5C8.5 18.5 8.1 18.4 7.7 18.2C7.3 18 7 17.8 6.8 17.6C6.6 17.4 6.4 17.1 6.3 16.8C6.2 16.5 6.10001 16.3 6.10001 16.1C6.10001 15.9 6.2 15.7 6.3 15.6C6.4 15.5 6.6 15.4 6.8 15.4C6.9 15.4 7.00001 15.4 7.10001 15.5C7.20001 15.6 7.3 15.6 7.3 15.7C7.5 16.2 7.7 16.6 8 16.9C8.3 17.2 8.6 17.3 9 17.3C9.2 17.3 9.5 17.2 9.7 17.1C9.9 17 10.1 16.8 10.3 16.6C10.5 16.4 10.5 16.1 10.5 15.8C10.5 15.3 10.4 15 10.1 14.7C9.80001 14.4 9.50001 14.3 9.10001 14.3C9.00001 14.3 8.9 14.3 8.7 14.3C8.5 14.3 8.39999 14.3 8.39999 14.3C8.19999 14.3 7.99999 14.2 7.89999 14.1C7.79999 14 7.7 13.8 7.7 13.7C7.7 13.5 7.79999 13.4 7.89999 13.2C7.99999 13 8.2 13 8.5 13H8.8V13.1ZM15.3 17.5V12.2C14.3 13 13.6 13.3 13.3 13.3C13.1 13.3 13 13.2 12.9 13.1C12.8 13 12.7 12.8 12.7 12.6C12.7 12.4 12.8 12.3 12.9 12.2C13 12.1 13.2 12 13.6 11.8C14.1 11.6 14.5 11.3 14.7 11.1C14.9 10.9 15.2 10.6 15.5 10.3C15.8 10 15.9 9.80003 15.9 9.70003C15.9 9.60003 16.1 9.60004 16.3 9.60004C16.5 9.60004 16.7 9.70003 16.8 9.80003C16.9 9.90003 17 10.2 17 10.5V17.2C17 18 16.7 18.4 16.2 18.4C16 18.4 15.8 18.3 15.6 18.2C15.4 18.1 15.3 17.8 15.3 17.5Z" fill="currentColor"></path>
-                                    </svg>
-                                </span>
-                                <input class="form-control form-control-solid ps-12 flatpickr-input active" name="GerceklesenSoruFormuTeslim" id="gerceklesen_soruformu_teslim" value="@Model.ProcessDetails.GerceklesenSoruFormuTeslim?.ToString("yyyy-MM-ddTHH:mm:ss")">
-                            </div>
-                            <div class="fv-plugins-message-container invalid-feedback"></div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="card-body ">
-                    <div class="row ">
-                        <div class="col-xl-3">
-                            <div class="fs-6 fw-bold mt-2 mb-3">Script Teslim Tarihi</div>
-                        </div>
-                        <div class="col-xl-9 fv-row fv-plugins-icon-container">
-                            <div class="position-relative d-flex align-items-center">
-                                <span class="svg-icon position-absolute ms-4 mb-1 svg-icon-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path opacity="0.3" d="M21 22H3C2.4 22 2 21.6 2 21V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5V21C22 21.6 21.6 22 21 22Z" fill="currentColor"></path>
-                                        <path d="M6 6C5.4 6 5 5.6 5 5V3C5 2.4 5.4 2 6 2C6.6 2 7 2.4 7 3V5C7 5.6 6.6 6 6 6ZM11 5V3C11 2.4 10.6 2 10 2C9.4 2 9 2.4 9 3V5C9 5.6 9.4 6 10 6C10.6 6 11 5.6 11 5ZM15 5V3C15 2.4 14.6 2 14 2C13.4 2 13 2.4 13 3V5C13 5.6 13.4 6 14 6C14.6 6 15 5.6 15 5ZM19 5V3C19 2.4 18.6 2 18 2C17.4 2 17 2.4 17 3V5C17 5.6 17.4 6 18 6C18.6 6 19 5.6 19 5Z" fill="currentColor"></path>
-                                        <path d="M8.8 13.1C9.2 13.1 9.5 13 9.7 12.8C9.9 12.6 10.1 12.3 10.1 11.9C10.1 11.6 10 11.3 9.8 11.1C9.6 10.9 9.3 10.8 9 10.8C8.8 10.8 8.59999 10.8 8.39999 10.9C8.19999 11 8.1 11.1 8 11.2C7.9 11.3 7.8 11.4 7.7 11.6C7.6 11.8 7.5 11.9 7.5 12.1C7.5 12.2 7.4 12.2 7.3 12.3C7.2 12.4 7.09999 12.4 6.89999 12.4C6.69999 12.4 6.6 12.3 6.5 12.2C6.4 12.1 6.3 11.9 6.3 11.7C6.3 11.5 6.4 11.3 6.5 11.1C6.6 10.9 6.8 10.7 7 10.5C7.2 10.3 7.49999 10.1 7.89999 10C8.29999 9.90003 8.60001 9.80003 9.10001 9.80003C9.50001 9.80003 9.80001 9.90003 10.1 10C10.4 10.1 10.7 10.3 10.9 10.4C11.1 10.5 11.3 10.8 11.4 11.1C11.5 11.4 11.6 11.6 11.6 11.9C11.6 12.3 11.5 12.6 11.3 12.9C11.1 13.2 10.9 13.5 10.6 13.7C10.9 13.9 11.2 14.1 11.4 14.3C11.6 14.5 11.8 14.7 11.9 15C12 15.3 12.1 15.5 12.1 15.8C12.1 16.2 12 16.5 11.9 16.8C11.8 17.1 11.5 17.4 11.3 17.7C11.1 18 10.7 18.2 10.3 18.3C9.9 18.4 9.5 18.5 9 18.5C8.5 18.5 8.1 18.4 7.7 18.2C7.3 18 7 17.8 6.8 17.6C6.6 17.4 6.4 17.1 6.3 16.8C6.2 16.5 6.10001 16.3 6.10001 16.1C6.10001 15.9 6.2 15.7 6.3 15.6C6.4 15.5 6.6 15.4 6.8 15.4C6.9 15.4 7.00001 15.4 7.10001 15.5C7.20001 15.6 7.3 15.6 7.3 15.7C7.5 16.2 7.7 16.6 8 16.9C8.3 17.2 8.6 17.3 9 17.3C9.2 17.3 9.5 17.2 9.7 17.1C9.9 17 10.1 16.8 10.3 16.6C10.5 16.4 10.5 16.1 10.5 15.8C10.5 15.3 10.4 15 10.1 14.7C9.80001 14.4 9.50001 14.3 9.10001 14.3C9.00001 14.3 8.9 14.3 8.7 14.3C8.5 14.3 8.39999 14.3 8.39999 14.3C8.19999 14.3 7.99999 14.2 7.89999 14.1C7.79999 14 7.7 13.8 7.7 13.7C7.7 13.5 7.79999 13.4 7.89999 13.2C7.99999 13 8.2 13 8.5 13H8.8V13.1ZM15.3 17.5V12.2C14.3 13 13.6 13.3 13.3 13.3C13.1 13.3 13 13.2 12.9 13.1C12.8 13 12.7 12.8 12.7 12.6C12.7 12.4 12.8 12.3 12.9 12.2C13 12.1 13.2 12 13.6 11.8C14.1 11.6 14.5 11.3 14.7 11.1C14.9 10.9 15.2 10.6 15.5 10.3C15.8 10 15.9 9.80003 15.9 9.70003C15.9 9.60003 16.1 9.60004 16.3 9.60004C16.5 9.60004 16.7 9.70003 16.8 9.80003C16.9 9.90003 17 10.2 17 10.5V17.2C17 18 16.7 18.4 16.2 18.4C16 18.4 15.8 18.3 15.6 18.2C15.4 18.1 15.3 17.8 15.3 17.5Z" fill="currentColor"></path>
-                                    </svg>
-                                </span>
-                                <input class="form-control form-control-solid ps-12 flatpickr-input active" name="GerceklesenScriptTeslim" id="gerceklesen_scrpt_teslim" value="@Model.ProcessDetails.GerceklesenScriptTeslim?.ToString("yyyy-MM-ddTHH:mm:ss")">
-                            </div>
-                            <div class="fv-plugins-message-container invalid-feedback"></div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="card-body ">
-                    <div class="row  ">
-                        <div class="col-xl-3">
-                            <div class="fs-6 fw-bold mt-2 mb-3">Script Kontrol Tarihi</div>
-                        </div>
-                        <div class="col-xl-9 fv-row fv-plugins-icon-container">
-                            <div class="position-relative d-flex align-items-center">
-                                <span class="svg-icon position-absolute ms-4 mb-1 svg-icon-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path opacity="0.3" d="M21 22H3C2.4 22 2 21.6 2 21V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5V21C22 21.6 21.6 22 21 22Z" fill="currentColor"></path>
-                                        <path d="M6 6C5.4 6 5 5.6 5 5V3C5 2.4 5.4 2 6 2C6.6 2 7 2.4 7 3V5C7 5.6 6.6 6 6 6ZM11 5V3C11 2.4 10.6 2 10 2C9.4 2 9 2.4 9 3V5C9 5.6 9.4 6 10 6C10.6 6 11 5.6 11 5ZM15 5V3C15 2.4 14.6 2 14 2C13.4 2 13 2.4 13 3V5C13 5.6 13.4 6 14 6C14.6 6 15 5.6 15 5ZM19 5V3C19 2.4 18.6 2 18 2C17.4 2 17 2.4 17 3V5C17 5.6 17.4 6 18 6C18.6 6 19 5.6 19 5Z" fill="currentColor"></path>
-                                        <path d="M8.8 13.1C9.2 13.1 9.5 13 9.7 12.8C9.9 12.6 10.1 12.3 10.1 11.9C10.1 11.6 10 11.3 9.8 11.1C9.6 10.9 9.3 10.8 9 10.8C8.8 10.8 8.59999 10.8 8.39999 10.9C8.19999 11 8.1 11.1 8 11.2C7.9 11.3 7.8 11.4 7.7 11.6C7.6 11.8 7.5 11.9 7.5 12.1C7.5 12.2 7.4 12.2 7.3 12.3C7.2 12.4 7.09999 12.4 6.89999 12.4C6.69999 12.4 6.6 12.3 6.5 12.2C6.4 12.1 6.3 11.9 6.3 11.7C6.3 11.5 6.4 11.3 6.5 11.1C6.6 10.9 6.8 10.7 7 10.5C7.2 10.3 7.49999 10.1 7.89999 10C8.29999 9.90003 8.60001 9.80003 9.10001 9.80003C9.50001 9.80003 9.80001 9.90003 10.1 10C10.4 10.1 10.7 10.3 10.9 10.4C11.1 10.5 11.3 10.8 11.4 11.1C11.5 11.4 11.6 11.6 11.6 11.9C11.6 12.3 11.5 12.6 11.3 12.9C11.1 13.2 10.9 13.5 10.6 13.7C10.9 13.9 11.2 14.1 11.4 14.3C11.6 14.5 11.8 14.7 11.9 15C12 15.3 12.1 15.5 12.1 15.8C12.1 16.2 12 16.5 11.9 16.8C11.8 17.1 11.5 17.4 11.3 17.7C11.1 18 10.7 18.2 10.3 18.3C9.9 18.4 9.5 18.5 9 18.5C8.5 18.5 8.1 18.4 7.7 18.2C7.3 18 7 17.8 6.8 17.6C6.6 17.4 6.4 17.1 6.3 16.8C6.2 16.5 6.10001 16.3 6.10001 16.1C6.10001 15.9 6.2 15.7 6.3 15.6C6.4 15.5 6.6 15.4 6.8 15.4C6.9 15.4 7.00001 15.4 7.10001 15.5C7.20001 15.6 7.3 15.6 7.3 15.7C7.5 16.2 7.7 16.6 8 16.9C8.3 17.2 8.6 17.3 9 17.3C9.2 17.3 9.5 17.2 9.7 17.1C9.9 17 10.1 16.8 10.3 16.6C10.5 16.4 10.5 16.1 10.5 15.8C10.5 15.3 10.4 15 10.1 14.7C9.80001 14.4 9.50001 14.3 9.10001 14.3C9.00001 14.3 8.9 14.3 8.7 14.3C8.5 14.3 8.39999 14.3 8.39999 14.3C8.19999 14.3 7.99999 14.2 7.89999 14.1C7.79999 14 7.7 13.8 7.7 13.7C7.7 13.5 7.79999 13.4 7.89999 13.2C7.99999 13 8.2 13 8.5 13H8.8V13.1ZM15.3 17.5V12.2C14.3 13 13.6 13.3 13.3 13.3C13.1 13.3 13 13.2 12.9 13.1C12.8 13 12.7 12.8 12.7 12.6C12.7 12.4 12.8 12.3 12.9 12.2C13 12.1 13.2 12 13.6 11.8C14.1 11.6 14.5 11.3 14.7 11.1C14.9 10.9 15.2 10.6 15.5 10.3C15.8 10 15.9 9.80003 15.9 9.70003C15.9 9.60003 16.1 9.60004 16.3 9.60004C16.5 9.60004 16.7 9.70003 16.8 9.80003C16.9 9.90003 17 10.2 17 10.5V17.2C17 18 16.7 18.4 16.2 18.4C16 18.4 15.8 18.3 15.6 18.2C15.4 18.1 15.3 17.8 15.3 17.5Z" fill="currentColor"></path>
-                                    </svg>
-                                </span>
-                                <input class="form-control form-control-solid ps-12 flatpickr-input active" name="GerceklesenScriptKontrol" value="@Model.ProcessDetails.GerceklesenScriptKontrol?.ToString("yyyy-MM-ddTHH:mm:ss")" id="gerceklesen_scrpt_kontrol">
-                            </div>
-                            <div class="fv-plugins-message-container invalid-feedback"></div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="card-body ">
-                    <div class="row  ">
-                        <div class="col-xl-3">
-                            <div class="fs-6 fw-bold mt-2 mb-3">Script Revizyon Tarihi</div>
-                        </div>
-                        <div class="col-xl-9 fv-row fv-plugins-icon-container">
-                            <div class="position-relative d-flex align-items-center">
-                                <span class="svg-icon position-absolute ms-4 mb-1 svg-icon-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path opacity="0.3" d="M21 22H3C2.4 22 2 21.6 2 21V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5V21C22 21.6 21.6 22 21 22Z" fill="currentColor"></path>
-                                        <path d="M6 6C5.4 6 5 5.6 5 5V3C5 2.4 5.4 2 6 2C6.6 2 7 2.4 7 3V5C7 5.6 6.6 6 6 6ZM11 5V3C11 2.4 10.6 2 10 2C9.4 2 9 2.4 9 3V5C9 5.6 9.4 6 10 6C10.6 6 11 5.6 11 5ZM15 5V3C15 2.4 14.6 2 14 2C13.4 2 13 2.4 13 3V5C13 5.6 13.4 6 14 6C14.6 6 15 5.6 15 5ZM19 5V3C19 2.4 18.6 2 18 2C17.4 2 17 2.4 17 3V5C17 5.6 17.4 6 18 6C18.6 6 19 5.6 19 5Z" fill="currentColor"></path>
-                                        <path d="M8.8 13.1C9.2 13.1 9.5 13 9.7 12.8C9.9 12.6 10.1 12.3 10.1 11.9C10.1 11.6 10 11.3 9.8 11.1C9.6 10.9 9.3 10.8 9 10.8C8.8 10.8 8.59999 10.8 8.39999 10.9C8.19999 11 8.1 11.1 8 11.2C7.9 11.3 7.8 11.4 7.7 11.6C7.6 11.8 7.5 11.9 7.5 12.1C7.5 12.2 7.4 12.2 7.3 12.3C7.2 12.4 7.09999 12.4 6.89999 12.4C6.69999 12.4 6.6 12.3 6.5 12.2C6.4 12.1 6.3 11.9 6.3 11.7C6.3 11.5 6.4 11.3 6.5 11.1C6.6 10.9 6.8 10.7 7 10.5C7.2 10.3 7.49999 10.1 7.89999 10C8.29999 9.90003 8.60001 9.80003 9.10001 9.80003C9.50001 9.80003 9.80001 9.90003 10.1 10C10.4 10.1 10.7 10.3 10.9 10.4C11.1 10.5 11.3 10.8 11.4 11.1C11.5 11.4 11.6 11.6 11.6 11.9C11.6 12.3 11.5 12.6 11.3 12.9C11.1 13.2 10.9 13.5 10.6 13.7C10.9 13.9 11.2 14.1 11.4 14.3C11.6 14.5 11.8 14.7 11.9 15C12 15.3 12.1 15.5 12.1 15.8C12.1 16.2 12 16.5 11.9 16.8C11.8 17.1 11.5 17.4 11.3 17.7C11.1 18 10.7 18.2 10.3 18.3C9.9 18.4 9.5 18.5 9 18.5C8.5 18.5 8.1 18.4 7.7 18.2C7.3 18 7 17.8 6.8 17.6C6.6 17.4 6.4 17.1 6.3 16.8C6.2 16.5 6.10001 16.3 6.10001 16.1C6.10001 15.9 6.2 15.7 6.3 15.6C6.4 15.5 6.6 15.4 6.8 15.4C6.9 15.4 7.00001 15.4 7.10001 15.5C7.20001 15.6 7.3 15.6 7.3 15.7C7.5 16.2 7.7 16.6 8 16.9C8.3 17.2 8.6 17.3 9 17.3C9.2 17.3 9.5 17.2 9.7 17.1C9.9 17 10.1 16.8 10.3 16.6C10.5 16.4 10.5 16.1 10.5 15.8C10.5 15.3 10.4 15 10.1 14.7C9.80001 14.4 9.50001 14.3 9.10001 14.3C9.00001 14.3 8.9 14.3 8.7 14.3C8.5 14.3 8.39999 14.3 8.39999 14.3C8.19999 14.3 7.99999 14.2 7.89999 14.1C7.79999 14 7.7 13.8 7.7 13.7C7.7 13.5 7.79999 13.4 7.89999 13.2C7.99999 13 8.2 13 8.5 13H8.8V13.1ZM15.3 17.5V12.2C14.3 13 13.6 13.3 13.3 13.3C13.1 13.3 13 13.2 12.9 13.1C12.8 13 12.7 12.8 12.7 12.6C12.7 12.4 12.8 12.3 12.9 12.2C13 12.1 13.2 12 13.6 11.8C14.1 11.6 14.5 11.3 14.7 11.1C14.9 10.9 15.2 10.6 15.5 10.3C15.8 10 15.9 9.80003 15.9 9.70003C15.9 9.60003 16.1 9.60004 16.3 9.60004C16.5 9.60004 16.7 9.70003 16.8 9.80003C16.9 9.90003 17 10.2 17 10.5V17.2C17 18 16.7 18.4 16.2 18.4C16 18.4 15.8 18.3 15.6 18.2C15.4 18.1 15.3 17.8 15.3 17.5Z" fill="currentColor"></path>
-                                    </svg>
-                                </span>
-                                <input class="form-control form-control-solid ps-12 flatpickr-input active" name="GerceklesenScriptRevizyon" value="@Model.ProcessDetails.GerceklesenScriptRevizyon?.ToString("yyyy-MM-ddTHH:mm:ss")" id="gerceklesen_scrpt_revizyon">
-                            </div>
-                            <div class="fv-plugins-message-container invalid-feedback"></div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="card-body  ">
-                    <div class="row  ">
-                        <div class="col-xl-3">
-                            <div class="fs-6 fw-bold mt-2 mb-3">Saha Başlangıç Tarihi</div>
-                        </div>
-                        <div class="col-xl-9 fv-row fv-plugins-icon-container">
-                            <div class="position-relative d-flex align-items-center">
-                                <span class="svg-icon position-absolute ms-4 mb-1 svg-icon-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path opacity="0.3" d="M21 22H3C2.4 22 2 21.6 2 21V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5V21C22 21.6 21.6 22 21 22Z" fill="currentColor"></path>
-                                        <path d="M6 6C5.4 6 5 5.6 5 5V3C5 2.4 5.4 2 6 2C6.6 2 7 2.4 7 3V5C7 5.6 6.6 6 6 6ZM11 5V3C11 2.4 10.6 2 10 2C9.4 2 9 2.4 9 3V5C9 5.6 9.4 6 10 6C10.6 6 11 5.6 11 5ZM15 5V3C15 2.4 14.6 2 14 2C13.4 2 13 2.4 13 3V5C13 5.6 13.4 6 14 6C14.6 6 15 5.6 15 5ZM19 5V3C19 2.4 18.6 2 18 2C17.4 2 17 2.4 17 3V5C17 5.6 17.4 6 18 6C18.6 6 19 5.6 19 5Z" fill="currentColor"></path>
-                                        <path d="M8.8 13.1C9.2 13.1 9.5 13 9.7 12.8C9.9 12.6 10.1 12.3 10.1 11.9C10.1 11.6 10 11.3 9.8 11.1C9.6 10.9 9.3 10.8 9 10.8C8.8 10.8 8.59999 10.8 8.39999 10.9C8.19999 11 8.1 11.1 8 11.2C7.9 11.3 7.8 11.4 7.7 11.6C7.6 11.8 7.5 11.9 7.5 12.1C7.5 12.2 7.4 12.2 7.3 12.3C7.2 12.4 7.09999 12.4 6.89999 12.4C6.69999 12.4 6.6 12.3 6.5 12.2C6.4 12.1 6.3 11.9 6.3 11.7C6.3 11.5 6.4 11.3 6.5 11.1C6.6 10.9 6.8 10.7 7 10.5C7.2 10.3 7.49999 10.1 7.89999 10C8.29999 9.90003 8.60001 9.80003 9.10001 9.80003C9.50001 9.80003 9.80001 9.90003 10.1 10C10.4 10.1 10.7 10.3 10.9 10.4C11.1 10.5 11.3 10.8 11.4 11.1C11.5 11.4 11.6 11.6 11.6 11.9C11.6 12.3 11.5 12.6 11.3 12.9C11.1 13.2 10.9 13.5 10.6 13.7C10.9 13.9 11.2 14.1 11.4 14.3C11.6 14.5 11.8 14.7 11.9 15C12 15.3 12.1 15.5 12.1 15.8C12.1 16.2 12 16.5 11.9 16.8C11.8 17.1 11.5 17.4 11.3 17.7C11.1 18 10.7 18.2 10.3 18.3C9.9 18.4 9.5 18.5 9 18.5C8.5 18.5 8.1 18.4 7.7 18.2C7.3 18 7 17.8 6.8 17.6C6.6 17.4 6.4 17.1 6.3 16.8C6.2 16.5 6.10001 16.3 6.10001 16.1C6.10001 15.9 6.2 15.7 6.3 15.6C6.4 15.5 6.6 15.4 6.8 15.4C6.9 15.4 7.00001 15.4 7.10001 15.5C7.20001 15.6 7.3 15.6 7.3 15.7C7.5 16.2 7.7 16.6 8 16.9C8.3 17.2 8.6 17.3 9 17.3C9.2 17.3 9.5 17.2 9.7 17.1C9.9 17 10.1 16.8 10.3 16.6C10.5 16.4 10.5 16.1 10.5 15.8C10.5 15.3 10.4 15 10.1 14.7C9.80001 14.4 9.50001 14.3 9.10001 14.3C9.00001 14.3 8.9 14.3 8.7 14.3C8.5 14.3 8.39999 14.3 8.39999 14.3C8.19999 14.3 7.99999 14.2 7.89999 14.1C7.79999 14 7.7 13.8 7.7 13.7C7.7 13.5 7.79999 13.4 7.89999 13.2C7.99999 13 8.2 13 8.5 13H8.8V13.1ZM15.3 17.5V12.2C14.3 13 13.6 13.3 13.3 13.3C13.1 13.3 13 13.2 12.9 13.1C12.8 13 12.7 12.8 12.7 12.6C12.7 12.4 12.8 12.3 12.9 12.2C13 12.1 13.2 12 13.6 11.8C14.1 11.6 14.5 11.3 14.7 11.1C14.9 10.9 15.2 10.6 15.5 10.3C15.8 10 15.9 9.80003 15.9 9.70003C15.9 9.60003 16.1 9.60004 16.3 9.60004C16.5 9.60004 16.7 9.70003 16.8 9.80003C16.9 9.90003 17 10.2 17 10.5V17.2C17 18 16.7 18.4 16.2 18.4C16 18.4 15.8 18.3 15.6 18.2C15.4 18.1 15.3 17.8 15.3 17.5Z" fill="currentColor"></path>
-                                    </svg>
-                                </span>
-                                <input class="form-control form-control-solid ps-12 flatpickr-input active" name="GerceklesenSahaBaslangic" id="gerceklesen_saha_baslangic" value="@Model.ProcessDetails.GerceklesenSahaBaslangic?.ToString("yyyy-MM-ddTHH:mm:ss")">
-                            </div>
-                            <div class="fv-plugins-message-container invalid-feedback"></div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="card-body  ">
-                    <div class="row  ">
-                        <div class="col-xl-3">
-                            <div class="fs-6 fw-bold mt-2 mb-3">Saha Bitiş Tarihi</div>
-                        </div>
-                        <div class="col-xl-9 fv-row fv-plugins-icon-container">
-                            <div class="position-relative d-flex align-items-center">
-                                <span class="svg-icon position-absolute ms-4 mb-1 svg-icon-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path opacity="0.3" d="M21 22H3C2.4 22 2 21.6 2 21V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5V21C22 21.6 21.6 22 21 22Z" fill="currentColor"></path>
-                                        <path d="M6 6C5.4 6 5 5.6 5 5V3C5 2.4 5.4 2 6 2C6.6 2 7 2.4 7 3V5C7 5.6 6.6 6 6 6ZM11 5V3C11 2.4 10.6 2 10 2C9.4 2 9 2.4 9 3V5C9 5.6 9.4 6 10 6C10.6 6 11 5.6 11 5ZM15 5V3C15 2.4 14.6 2 14 2C13.4 2 13 2.4 13 3V5C13 5.6 13.4 6 14 6C14.6 6 15 5.6 15 5ZM19 5V3C19 2.4 18.6 2 18 2C17.4 2 17 2.4 17 3V5C17 5.6 17.4 6 18 6C18.6 6 19 5.6 19 5Z" fill="currentColor"></path>
-                                        <path d="M8.8 13.1C9.2 13.1 9.5 13 9.7 12.8C9.9 12.6 10.1 12.3 10.1 11.9C10.1 11.6 10 11.3 9.8 11.1C9.6 10.9 9.3 10.8 9 10.8C8.8 10.8 8.59999 10.8 8.39999 10.9C8.19999 11 8.1 11.1 8 11.2C7.9 11.3 7.8 11.4 7.7 11.6C7.6 11.8 7.5 11.9 7.5 12.1C7.5 12.2 7.4 12.2 7.3 12.3C7.2 12.4 7.09999 12.4 6.89999 12.4C6.69999 12.4 6.6 12.3 6.5 12.2C6.4 12.1 6.3 11.9 6.3 11.7C6.3 11.5 6.4 11.3 6.5 11.1C6.6 10.9 6.8 10.7 7 10.5C7.2 10.3 7.49999 10.1 7.89999 10C8.29999 9.90003 8.60001 9.80003 9.10001 9.80003C9.50001 9.80003 9.80001 9.90003 10.1 10C10.4 10.1 10.7 10.3 10.9 10.4C11.1 10.5 11.3 10.8 11.4 11.1C11.5 11.4 11.6 11.6 11.6 11.9C11.6 12.3 11.5 12.6 11.3 12.9C11.1 13.2 10.9 13.5 10.6 13.7C10.9 13.9 11.2 14.1 11.4 14.3C11.6 14.5 11.8 14.7 11.9 15C12 15.3 12.1 15.5 12.1 15.8C12.1 16.2 12 16.5 11.9 16.8C11.8 17.1 11.5 17.4 11.3 17.7C11.1 18 10.7 18.2 10.3 18.3C9.9 18.4 9.5 18.5 9 18.5C8.5 18.5 8.1 18.4 7.7 18.2C7.3 18 7 17.8 6.8 17.6C6.6 17.4 6.4 17.1 6.3 16.8C6.2 16.5 6.10001 16.3 6.10001 16.1C6.10001 15.9 6.2 15.7 6.3 15.6C6.4 15.5 6.6 15.4 6.8 15.4C6.9 15.4 7.00001 15.4 7.10001 15.5C7.20001 15.6 7.3 15.6 7.3 15.7C7.5 16.2 7.7 16.6 8 16.9C8.3 17.2 8.6 17.3 9 17.3C9.2 17.3 9.5 17.2 9.7 17.1C9.9 17 10.1 16.8 10.3 16.6C10.5 16.4 10.5 16.1 10.5 15.8C10.5 15.3 10.4 15 10.1 14.7C9.80001 14.4 9.50001 14.3 9.10001 14.3C9.00001 14.3 8.9 14.3 8.7 14.3C8.5 14.3 8.39999 14.3 8.39999 14.3C8.19999 14.3 7.99999 14.2 7.89999 14.1C7.79999 14 7.7 13.8 7.7 13.7C7.7 13.5 7.79999 13.4 7.89999 13.2C7.99999 13 8.2 13 8.5 13H8.8V13.1ZM15.3 17.5V12.2C14.3 13 13.6 13.3 13.3 13.3C13.1 13.3 13 13.2 12.9 13.1C12.8 13 12.7 12.8 12.7 12.6C12.7 12.4 12.8 12.3 12.9 12.2C13 12.1 13.2 12 13.6 11.8C14.1 11.6 14.5 11.3 14.7 11.1C14.9 10.9 15.2 10.6 15.5 10.3C15.8 10 15.9 9.80003 15.9 9.70003C15.9 9.60003 16.1 9.60004 16.3 9.60004C16.5 9.60004 16.7 9.70003 16.8 9.80003C16.9 9.90003 17 10.2 17 10.5V17.2C17 18 16.7 18.4 16.2 18.4C16 18.4 15.8 18.3 15.6 18.2C15.4 18.1 15.3 17.8 15.3 17.5Z" fill="currentColor"></path>
-                                    </svg>
-                                </span>
-                                <input class="form-control form-control-solid ps-12 flatpickr-input active" name="GerceklesenSahaBitis" id="gerceklesen_saha_bitis" value="@Model.ProcessDetails.GerceklesenSahaBitis?.ToString("yyyy-MM-ddTHH:mm:ss")">
-                            </div>
-                            <div class="fv-plugins-message-container invalid-feedback"></div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="card-body  ">
-                    <div class="row  ">
-                        <div class="col-xl-3">
-                            <div class="fs-6 fw-bold mt-2 mb-3">Kodlama Teslim Tarihi</div>
-                        </div>
-                        <div class="col-xl-9 fv-row fv-plugins-icon-container">
-                            <div class="position-relative d-flex align-items-center">
-                                <span class="svg-icon position-absolute ms-4 mb-1 svg-icon-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path opacity="0.3" d="M21 22H3C2.4 22 2 21.6 2 21V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5V21C22 21.6 21.6 22 21 22Z" fill="currentColor"></path>
-                                        <path d="M6 6C5.4 6 5 5.6 5 5V3C5 2.4 5.4 2 6 2C6.6 2 7 2.4 7 3V5C7 5.6 6.6 6 6 6ZM11 5V3C11 2.4 10.6 2 10 2C9.4 2 9 2.4 9 3V5C9 5.6 9.4 6 10 6C10.6 6 11 5.6 11 5ZM15 5V3C15 2.4 14.6 2 14 2C13.4 2 13 2.4 13 3V5C13 5.6 13.4 6 14 6C14.6 6 15 5.6 15 5ZM19 5V3C19 2.4 18.6 2 18 2C17.4 2 17 2.4 17 3V5C17 5.6 17.4 6 18 6C18.6 6 19 5.6 19 5Z" fill="currentColor"></path>
-                                        <path d="M8.8 13.1C9.2 13.1 9.5 13 9.7 12.8C9.9 12.6 10.1 12.3 10.1 11.9C10.1 11.6 10 11.3 9.8 11.1C9.6 10.9 9.3 10.8 9 10.8C8.8 10.8 8.59999 10.8 8.39999 10.9C8.19999 11 8.1 11.1 8 11.2C7.9 11.3 7.8 11.4 7.7 11.6C7.6 11.8 7.5 11.9 7.5 12.1C7.5 12.2 7.4 12.2 7.3 12.3C7.2 12.4 7.09999 12.4 6.89999 12.4C6.69999 12.4 6.6 12.3 6.5 12.2C6.4 12.1 6.3 11.9 6.3 11.7C6.3 11.5 6.4 11.3 6.5 11.1C6.6 10.9 6.8 10.7 7 10.5C7.2 10.3 7.49999 10.1 7.89999 10C8.29999 9.90003 8.60001 9.80003 9.10001 9.80003C9.50001 9.80003 9.80001 9.90003 10.1 10C10.4 10.1 10.7 10.3 10.9 10.4C11.1 10.5 11.3 10.8 11.4 11.1C11.5 11.4 11.6 11.6 11.6 11.9C11.6 12.3 11.5 12.6 11.3 12.9C11.1 13.2 10.9 13.5 10.6 13.7C10.9 13.9 11.2 14.1 11.4 14.3C11.6 14.5 11.8 14.7 11.9 15C12 15.3 12.1 15.5 12.1 15.8C12.1 16.2 12 16.5 11.9 16.8C11.8 17.1 11.5 17.4 11.3 17.7C11.1 18 10.7 18.2 10.3 18.3C9.9 18.4 9.5 18.5 9 18.5C8.5 18.5 8.1 18.4 7.7 18.2C7.3 18 7 17.8 6.8 17.6C6.6 17.4 6.4 17.1 6.3 16.8C6.2 16.5 6.10001 16.3 6.10001 16.1C6.10001 15.9 6.2 15.7 6.3 15.6C6.4 15.5 6.6 15.4 6.8 15.4C6.9 15.4 7.00001 15.4 7.10001 15.5C7.20001 15.6 7.3 15.6 7.3 15.7C7.5 16.2 7.7 16.6 8 16.9C8.3 17.2 8.6 17.3 9 17.3C9.2 17.3 9.5 17.2 9.7 17.1C9.9 17 10.1 16.8 10.3 16.6C10.5 16.4 10.5 16.1 10.5 15.8C10.5 15.3 10.4 15 10.1 14.7C9.80001 14.4 9.50001 14.3 9.10001 14.3C9.00001 14.3 8.9 14.3 8.7 14.3C8.5 14.3 8.39999 14.3 8.39999 14.3C8.19999 14.3 7.99999 14.2 7.89999 14.1C7.79999 14 7.7 13.8 7.7 13.7C7.7 13.5 7.79999 13.4 7.89999 13.2C7.99999 13 8.2 13 8.5 13H8.8V13.1ZM15.3 17.5V12.2C14.3 13 13.6 13.3 13.3 13.3C13.1 13.3 13 13.2 12.9 13.1C12.8 13 12.7 12.8 12.7 12.6C12.7 12.4 12.8 12.3 12.9 12.2C13 12.1 13.2 12 13.6 11.8C14.1 11.6 14.5 11.3 14.7 11.1C14.9 10.9 15.2 10.6 15.5 10.3C15.8 10 15.9 9.80003 15.9 9.70003C15.9 9.60003 16.1 9.60004 16.3 9.60004C16.5 9.60004 16.7 9.70003 16.8 9.80003C16.9 9.90003 17 10.2 17 10.5V17.2C17 18 16.7 18.4 16.2 18.4C16 18.4 15.8 18.3 15.6 18.2C15.4 18.1 15.3 17.8 15.3 17.5Z" fill="currentColor"></path>
-                                    </svg>
-                                </span>
-                                <input class="form-control form-control-solid ps-12 flatpickr-input active" name="GerceklesenKodlamaTeslim" id="gerceklesen_kodlama_teslim" value="@Model.ProcessDetails.GerceklesenKodlamaTeslim?.ToString("yyyy-MM-ddTHH:mm:ss")">
-                            </div>
-                            <div class="fv-plugins-message-container invalid-feedback"></div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="card-body  ">
-                    <div class="row  ">
-                        <div class="col-xl-3">
-                            <div class="fs-6 fw-bold mt-2 mb-3">Tablolama Tarihi</div>
-                        </div>
-                        <div class="col-xl-9 fv-row fv-plugins-icon-container">
-                            <div class="position-relative d-flex align-items-center">
-                                <span class="svg-icon position-absolute ms-4 mb-1 svg-icon-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path opacity="0.3" d="M21 22H3C2.4 22 2 21.6 2 21V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5V21C22 21.6 21.6 22 21 22Z" fill="currentColor"></path>
-                                        <path d="M6 6C5.4 6 5 5.6 5 5V3C5 2.4 5.4 2 6 2C6.6 2 7 2.4 7 3V5C7 5.6 6.6 6 6 6ZM11 5V3C11 2.4 10.6 2 10 2C9.4 2 9 2.4 9 3V5C9 5.6 9.4 6 10 6C10.6 6 11 5.6 11 5ZM15 5V3C15 2.4 14.6 2 14 2C13.4 2 13 2.4 13 3V5C13 5.6 13.4 6 14 6C14.6 6 15 5.6 15 5ZM19 5V3C19 2.4 18.6 2 18 2C17.4 2 17 2.4 17 3V5C17 5.6 17.4 6 18 6C18.6 6 19 5.6 19 5Z" fill="currentColor"></path>
-                                        <path d="M8.8 13.1C9.2 13.1 9.5 13 9.7 12.8C9.9 12.6 10.1 12.3 10.1 11.9C10.1 11.6 10 11.3 9.8 11.1C9.6 10.9 9.3 10.8 9 10.8C8.8 10.8 8.59999 10.8 8.39999 10.9C8.19999 11 8.1 11.1 8 11.2C7.9 11.3 7.8 11.4 7.7 11.6C7.6 11.8 7.5 11.9 7.5 12.1C7.5 12.2 7.4 12.2 7.3 12.3C7.2 12.4 7.09999 12.4 6.89999 12.4C6.69999 12.4 6.6 12.3 6.5 12.2C6.4 12.1 6.3 11.9 6.3 11.7C6.3 11.5 6.4 11.3 6.5 11.1C6.6 10.9 6.8 10.7 7 10.5C7.2 10.3 7.49999 10.1 7.89999 10C8.29999 9.90003 8.60001 9.80003 9.10001 9.80003C9.50001 9.80003 9.80001 9.90003 10.1 10C10.4 10.1 10.7 10.3 10.9 10.4C11.1 10.5 11.3 10.8 11.4 11.1C11.5 11.4 11.6 11.6 11.6 11.9C11.6 12.3 11.5 12.6 11.3 12.9C11.1 13.2 10.9 13.5 10.6 13.7C10.9 13.9 11.2 14.1 11.4 14.3C11.6 14.5 11.8 14.7 11.9 15C12 15.3 12.1 15.5 12.1 15.8C12.1 16.2 12 16.5 11.9 16.8C11.8 17.1 11.5 17.4 11.3 17.7C11.1 18 10.7 18.2 10.3 18.3C9.9 18.4 9.5 18.5 9 18.5C8.5 18.5 8.1 18.4 7.7 18.2C7.3 18 7 17.8 6.8 17.6C6.6 17.4 6.4 17.1 6.3 16.8C6.2 16.5 6.10001 16.3 6.10001 16.1C6.10001 15.9 6.2 15.7 6.3 15.6C6.4 15.5 6.6 15.4 6.8 15.4C6.9 15.4 7.00001 15.4 7.10001 15.5C7.20001 15.6 7.3 15.6 7.3 15.7C7.5 16.2 7.7 16.6 8 16.9C8.3 17.2 8.6 17.3 9 17.3C9.2 17.3 9.5 17.2 9.7 17.1C9.9 17 10.1 16.8 10.3 16.6C10.5 16.4 10.5 16.1 10.5 15.8C10.5 15.3 10.4 15 10.1 14.7C9.80001 14.4 9.50001 14.3 9.10001 14.3C9.00001 14.3 8.9 14.3 8.7 14.3C8.5 14.3 8.39999 14.3 8.39999 14.3C8.19999 14.3 7.99999 14.2 7.89999 14.1C7.79999 14 7.7 13.8 7.7 13.7C7.7 13.5 7.79999 13.4 7.89999 13.2C7.99999 13 8.2 13 8.5 13H8.8V13.1ZM15.3 17.5V12.2C14.3 13 13.6 13.3 13.3 13.3C13.1 13.3 13 13.2 12.9 13.1C12.8 13 12.7 12.8 12.7 12.6C12.7 12.4 12.8 12.3 12.9 12.2C13 12.1 13.2 12 13.6 11.8C14.1 11.6 14.5 11.3 14.7 11.1C14.9 10.9 15.2 10.6 15.5 10.3C15.8 10 15.9 9.80003 15.9 9.70003C15.9 9.60003 16.1 9.60004 16.3 9.60004C16.5 9.60004 16.7 9.70003 16.8 9.80003C16.9 9.90003 17 10.2 17 10.5V17.2C17 18 16.7 18.4 16.2 18.4C16 18.4 15.8 18.3 15.6 18.2C15.4 18.1 15.3 17.8 15.3 17.5Z" fill="currentColor"></path>
-                                    </svg>
-                                </span>
-                                <input class="form-control form-control-solid ps-12 flatpickr-input active" name="GerceklesenTablolamaTeslim" id="gerceklesen_tablolama_teslim" value="@Model.ProcessDetails.GerceklesenTablolamaTeslim?.ToString("yyyy-MM-ddTHH:mm:ss")">
-                            </div>
-                            <div class="fv-plugins-message-container invalid-feedback"></div>
-                        </div>
-                    </div>
-
-                </div>
-                 
-                <div class="card-body  ">
-                    <div class="row  ">
-                        <div class="col-xl-3">
-                            <div class="fs-6 fw-bold mt-2 mb-3">Rapor Teslim Tarihi</div>
-                        </div>
-                        <div class="col-xl-9 fv-row fv-plugins-icon-container">
-                            <div class="position-relative d-flex align-items-center">
-                                <span class="svg-icon position-absolute ms-4 mb-1 svg-icon-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path opacity="0.3" d="M21 22H3C2.4 22 2 21.6 2 21V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5V21C22 21.6 21.6 22 21 22Z" fill="currentColor"></path>
-                                        <path d="M6 6C5.4 6 5 5.6 5 5V3C5 2.4 5.4 2 6 2C6.6 2 7 2.4 7 3V5C7 5.6 6.6 6 6 6ZM11 5V3C11 2.4 10.6 2 10 2C9.4 2 9 2.4 9 3V5C9 5.6 9.4 6 10 6C10.6 6 11 5.6 11 5ZM15 5V3C15 2.4 14.6 2 14 2C13.4 2 13 2.4 13 3V5C13 5.6 13.4 6 14 6C14.6 6 15 5.6 15 5ZM19 5V3C19 2.4 18.6 2 18 2C17.4 2 17 2.4 17 3V5C17 5.6 17.4 6 18 6C18.6 6 19 5.6 19 5Z" fill="currentColor"></path>
-                                        <path d="M8.8 13.1C9.2 13.1 9.5 13 9.7 12.8C9.9 12.6 10.1 12.3 10.1 11.9C10.1 11.6 10 11.3 9.8 11.1C9.6 10.9 9.3 10.8 9 10.8C8.8 10.8 8.59999 10.8 8.39999 10.9C8.19999 11 8.1 11.1 8 11.2C7.9 11.3 7.8 11.4 7.7 11.6C7.6 11.8 7.5 11.9 7.5 12.1C7.5 12.2 7.4 12.2 7.3 12.3C7.2 12.4 7.09999 12.4 6.89999 12.4C6.69999 12.4 6.6 12.3 6.5 12.2C6.4 12.1 6.3 11.9 6.3 11.7C6.3 11.5 6.4 11.3 6.5 11.1C6.6 10.9 6.8 10.7 7 10.5C7.2 10.3 7.49999 10.1 7.89999 10C8.29999 9.90003 8.60001 9.80003 9.10001 9.80003C9.50001 9.80003 9.80001 9.90003 10.1 10C10.4 10.1 10.7 10.3 10.9 10.4C11.1 10.5 11.3 10.8 11.4 11.1C11.5 11.4 11.6 11.6 11.6 11.9C11.6 12.3 11.5 12.6 11.3 12.9C11.1 13.2 10.9 13.5 10.6 13.7C10.9 13.9 11.2 14.1 11.4 14.3C11.6 14.5 11.8 14.7 11.9 15C12 15.3 12.1 15.5 12.1 15.8C12.1 16.2 12 16.5 11.9 16.8C11.8 17.1 11.5 17.4 11.3 17.7C11.1 18 10.7 18.2 10.3 18.3C9.9 18.4 9.5 18.5 9 18.5C8.5 18.5 8.1 18.4 7.7 18.2C7.3 18 7 17.8 6.8 17.6C6.6 17.4 6.4 17.1 6.3 16.8C6.2 16.5 6.10001 16.3 6.10001 16.1C6.10001 15.9 6.2 15.7 6.3 15.6C6.4 15.5 6.6 15.4 6.8 15.4C6.9 15.4 7.00001 15.4 7.10001 15.5C7.20001 15.6 7.3 15.6 7.3 15.7C7.5 16.2 7.7 16.6 8 16.9C8.3 17.2 8.6 17.3 9 17.3C9.2 17.3 9.5 17.2 9.7 17.1C9.9 17 10.1 16.8 10.3 16.6C10.5 16.4 10.5 16.1 10.5 15.8C10.5 15.3 10.4 15 10.1 14.7C9.80001 14.4 9.50001 14.3 9.10001 14.3C9.00001 14.3 8.9 14.3 8.7 14.3C8.5 14.3 8.39999 14.3 8.39999 14.3C8.19999 14.3 7.99999 14.2 7.89999 14.1C7.79999 14 7.7 13.8 7.7 13.7C7.7 13.5 7.79999 13.4 7.89999 13.2C7.99999 13 8.2 13 8.5 13H8.8V13.1ZM15.3 17.5V12.2C14.3 13 13.6 13.3 13.3 13.3C13.1 13.3 13 13.2 12.9 13.1C12.8 13 12.7 12.8 12.7 12.6C12.7 12.4 12.8 12.3 12.9 12.2C13 12.1 13.2 12 13.6 11.8C14.1 11.6 14.5 11.3 14.7 11.1C14.9 10.9 15.2 10.6 15.5 10.3C15.8 10 15.9 9.80003 15.9 9.70003C15.9 9.60003 16.1 9.60004 16.3 9.60004C16.5 9.60004 16.7 9.70003 16.8 9.80003C16.9 9.90003 17 10.2 17 10.5V17.2C17 18 16.7 18.4 16.2 18.4C16 18.4 15.8 18.3 15.6 18.2C15.4 18.1 15.3 17.8 15.3 17.5Z" fill="currentColor"></path>
-                                    </svg>
-                                </span>
-                                <input class="form-control form-control-solid ps-12 flatpickr-input active" name="GerceklesenRaporTeslim" id="gerceklesen_rapor_teslim" value="@Model.ProcessDetails.GerceklesenRaporTeslim?.ToString("yyyy-MM-ddTHH:mm:ss")">
-                            </div>
-                            <div class="fv-plugins-message-container invalid-feedback"></div>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="card-footer d-flex justify-content-end py-6 px-9">
-                    <button type="submit" class="btn btn-primary" id="project_update_completed">Güncelle</button>
-                </div>
-                <input type="hidden" value="@Model.Id" name="ProjectId"><div></div>
-            </form>
-
-
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light rounded-pill px-6" data-bs-dismiss="modal">İptal</button>
+                <button id="add_project_methods_submit" type="submit" class="btn btn-info rounded-pill px-6">
+                    <span class="indicator-label">Kaydet</span>
+                    <span class="indicator-progress">
+                        Lütfen bekleyiniz... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                    </span>
+                </button>
+            </div>
         </div>
     </div>
-
 </div>
 
 @section js {
-    <script src="https://npmcdn.com/flatpickr/dist/l10n/tr.js"></script> 
-    <script src="js/projectDetails/TarihFlatpickr.js"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/tr.js"></script>
     <script>
-
-        $(document).ready(function() {
-            $('#project_process_update').on('click', function(event) { 
-                // var formData = $(this).serialize();
-                //  console.log(formData);
-                $.ajax({
-                    url: 'update-project-planned',
-                    method: 'POST',
-                    data: new FormData(document.getElementById("project_planlanan")),
-                     processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        console.log(response)
-                        Swal.fire({
-                            text: "Güncelleme başarıyla gerçekleştirildi.",
-                            icon: "success",
-                            buttonsStyling: false,
-                            confirmButtonText: "Tamam",
-                            customClass: {
-                                confirmButton: "btn btn-primary"
-                            },
-                        }).then(function() {
-                            location.reload();
-                        });
-                    },
-                    error: function(xhr, status, error) {
-                        Swal.fire({
-                            text: "Güncelleme sırasında hata oluştu. Lütfen tekrar deneyin.",
-                            icon: "error",
-                            buttonsStyling: false,
-                            confirmButtonText: "Tamam",
-                            customClass: {
-                                confirmButton: "btn btn-primary"
-                            },
-                        });
-                    }
-                });
-            });
-        });
-
-        $(document).ready(function() {
-            $('#project_process_update').on('click', function(event) {
-                $.ajax({
-                    url: 'update-project-completed',
-                    method: 'POST',
-                    data: new FormData(document.getElementById("project_gerceklesen")),
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        Swal.fire({
-                            text: "Güncelleme başarıyla gerçekleştirildi.",
-                            icon: "success",
-                            buttonsStyling: false,
-                            confirmButtonText: "Tamam",
-                            customClass: {
-                                confirmButton: "btn btn-primary"
-                            },
-                        }).then(function() {
-                            location.reload();
-                        });
-                    },
-                    error: function(xhr, status, error) {
-                        Swal.fire({
-                            text: "Güncelleme sırasında hata oluştu. Lütfen tekrar deneyin.",
-                            icon: "error",
-                            buttonsStyling: false,
-                            confirmButtonText: "Tamam",
-                            customClass: {
-                                confirmButton: "btn btn-primary"
-                            },
-                        });
-                    }
-                });
-            });
-        });
-
-
-        $(document).ready(function() {
-            $('#project_methods').on('submit', function(event) {
-                event.preventDefault();
-
-        var formDataArray = $(this).serializeArray();
-        var formData = {};
-        formDataArray.forEach(function(item) {
-            if (formData[item.name]) {
-                if (Array.isArray(formData[item.name])) {
-                    formData[item.name].push(item.value);
-                } else {
-                    formData[item.name] = [formData[item.name], item.value];
-                }
-            } else {
-                formData[item.name] = item.value;
+        // Tarih alanları için Flatpickr ayarları
+              document.addEventListener('DOMContentLoaded', function() {
+            const dateInputs = document.querySelectorAll('.date-input');
+            dateInputs.forEach(input => {
+                flatpickr(input, {
+                    locale: "tr",
+        dateFormat: "d-m-Y",
+        allowInput: false,
+        altInput: true,
+        altFormat: "d F Y",
+        disableMobile: true,
+        defaultDate: new Date(), // Bugünün tarihini varsayılan olarak kullan
+        time_24hr: true, // 24 saat formatını kullan
+        parseDate: (datestr, format) => {
+            return flatpickr.parseDate(datestr, format);
+        },
+        formatDate: (date, format, locale) => {
+            if (format === "d F Y") {
+                const aylar = [
+                    'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
+                    'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'
+                ];
+                const gun = date.getDate();
+                const ay = aylar[date.getMonth()];
+                const yil = date.getFullYear();
+                return `${gun} ${ay} ${yil}`;
             }
-        });
-                $.ajax({
-                    url: 'update-project-methods',
-                    method: 'POST',
-                    data: formData,
-                    success: function(response) {
-                        Swal.fire({
-                            text: "Güncelleme başarıyla gerçekleştirildi.",
-                            icon: "success",
-                            buttonsStyling: false,
-                            confirmButtonText: "Tamam",
-                            customClass: {
-                                confirmButton: "btn btn-primary"
-                            },
-                        }).then(function() {
-                            location.reload();
-                        });
-                    },
-                    error: function(xhr, status, error) {
-                        Swal.fire({
-                            text: "Güncelleme sırasında hata oluştu. Lütfen tekrar deneyin.",
-                            icon: "error",
-                            buttonsStyling: false,
-                            confirmButtonText: "Tamam",
-                            customClass: {
-                                confirmButton: "btn btn-primary"
-                            },
-                        });
-                    }
-                });
-            });
-        });
-    </script>
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-                const statusCheckbox = document.getElementById('status');
-
-                statusCheckbox.addEventListener('change', function () {
-                    if (this.checked) {
-                        this.value = 'true';
-                    } else {
-                        this.value = 'false';
-                    }
-                    console.log(`Checkbox is now: ${this.value}`);  // Debug amaçlı
-                });
-            });
-           document.getElementById('surveyId').addEventListener('input', function (e) {
-        this.value = this.value.replace(/[^0-9]/g, '');
-         ş
-        if (this.value.startsWith('0')) {
-            this.value = this.value.substring(1);
+            return flatpickr.formatDate(date, format, locale);
         }
+                });
             });
+        });
+        // Anket ID için doğrulama
+        function validateSurveyId(input) {
+            // Sadece sayıları kabul et
+            input.value = input.value.replace(/[^0-9]/g, '');
 
+            // 0 ile başlamasını engelle
+            if (input.value.startsWith('0')) {
+                input.value = input.value.substring(1);
+            }
+        }
 
-    </script> 
-    <script>
-               function validateInput(input) {
+        // Sayısal girişler için doğrulama
+        function validateInput(input) {
             input.value = input.value.replace(/[^0-9]/g, '');
         }
 
-        const form = document.getElementById('add_project_methods');
-
-        var validator = FormValidation.formValidation(
-            form,
-            {
-                fields: {
-                    'MethodName': {
-                        validators: {
-                            notEmpty: {
-                                message: 'Kota Adı zorunludur'
-                            }
-                        }
-                    },
-                     'Size': {
-                        validators: {
-                            notEmpty: {
-                                message: 'Kota Büyüklüğü zorunludur'
-                            }
-                        }
-                    },
-                },
-
-                plugins: {
-                    trigger: new FormValidation.plugins.Trigger(),
-                    bootstrap: new FormValidation.plugins.Bootstrap5({
-                        rowSelector: '.fv-row',
-                        eleInvalidClass: '',
-                        eleValidClass: ''
-                    })
-                }
-            }
-        );
-
-        const submitButton = document.getElementById('add_project_methods_submit');
-        submitButton.addEventListener('click', function (e) {
+        // Proje ayarlarını güncelleme formu
+        const projectSettingsForm = document.getElementById('kt_project_settings_form');
+        projectSettingsForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            if (validator) {
-                validator.validate().then(function (status) {
-                    if (status == 'Valid') {
-                        submitButton.setAttribute('data-kt-indicator', 'on');
-                        submitButton.disabled = true;
+            const submitButton = document.getElementById('project_update');
+            submitButton.setAttribute('data-kt-indicator', 'on');
+            submitButton.disabled = true;
 
-                        setTimeout(function () {
-                            const formData = new FormData(form);
-                            fetch('add-project-method', {
-                                method: 'POST',
-                                body: formData,
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                console.log(data)
-                                submitButton.removeAttribute('data-kt-indicator');
-                                submitButton.disabled = false;
-                                Swal.fire({
-                                    text: "Kota Ekleme Başarıyla Gerçekleştirildi!",
-                                    icon: "success",
-                                    buttonsStyling: false,
-                                    confirmButtonText: "Tamam",
-                                    customClass: {
-                                        confirmButton: "btn btn-primary"
-                                    }
-                                });
+            const formData = new FormData(this);
+            fetch('update-project', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                submitButton.removeAttribute('data-kt-indicator');
+                submitButton.disabled = false;
 
-                                // İşlem başarılı olduğunda yapılacak diğer işlemler
-                            })
-                            .catch(error => {
-                                submitButton.removeAttribute('data-kt-indicator');
-                                submitButton.disabled = false;
-                                Swal.fire({
-                                    text: "Bir hata oluştu. Lütfen tekrar deneyin.",
-                                    icon: "error",
-                                    buttonsStyling: false,
-                                    confirmButtonText: "Tamam",
-                                    customClass: {
-                                        confirmButton: "btn btn-danger"
-                                    }
-                                });
-
-                                console.error('Hata:', error);
-                            });
-                        }, 2000);
+                Swal.fire({
+                    text: "Proje bilgileri başarıyla güncellendi!",
+                    icon: "success",
+                    buttonsStyling: false,
+                    confirmButtonText: "Tamam",
+                    customClass: {
+                        confirmButton: "btn btn-primary"
                     }
+                }).then(function() {
+                    location.reload();
+                });
+            })
+            .catch(error => {
+                submitButton.removeAttribute('data-kt-indicator');
+                submitButton.disabled = false;
+                Swal.fire({
+                    text: "Bir hata oluştu. Lütfen tekrar deneyin.",
+                    icon: "error",
+                    buttonsStyling: false,
+                    confirmButtonText: "Tamam",
+                    customClass: {
+                        confirmButton: "btn btn-danger"
+                    }
+                });
+                console.error('Hata:', error);
+            });
+        });
+
+        // Planlanan tarihleri güncelleme
+        document.getElementById('project_process_update').addEventListener('click', function(event) {
+            event.preventDefault(); // Önce formu normal yolla göndermeyi engelle
+
+            const button = this;
+            button.setAttribute('data-kt-indicator', 'on');
+            button.disabled = true;
+
+            // Flatpickr tarafından oluşturulan gizli inputların değerlerini ana inputlara kopyala
+            const form = document.getElementById("project_planlanan");
+            const dateInputs = form.querySelectorAll('.flatpickr-input');
+            dateInputs.forEach(input => { 
+                if (input._flatpickr) {
+                    input.value = input._flatpickr.selectedDates.length > 0 ?
+                        input._flatpickr.formatDate(input._flatpickr.selectedDates[0], "Y-m-d H:i:S") :
+                        "";
+                }
+            });
+
+            // FormData nesnesi oluştur
+            const formData = new FormData(form);
+
+            // Formun boş olması durumunu kontrol et ve log'a yaz
+            for (let pair of formData.entries()) {
+                console.log(pair[0] + ': ' + pair[1]);
+            }
+
+            fetch('update-project-planned', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Sunucu yanıtı hatalı: ' + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                button.removeAttribute('data-kt-indicator');
+                button.disabled = false;
+                Swal.fire({
+                    text: "Planlanan tarihler başarıyla güncellendi!",
+                    icon: "success",
+                    buttonsStyling: false,
+                    confirmButtonText: "Tamam",
+                    customClass: {
+                        confirmButton: "btn btn-primary"
+                    }
+                }).then(function() {
+                    location.reload();
+                });
+            })
+            .catch(error => {
+                button.removeAttribute('data-kt-indicator');
+                button.disabled = false;
+                console.error('Hata:', error);
+                Swal.fire({
+                    text: "Güncelleme sırasında hata oluştu. Lütfen tekrar deneyin.",
+                    icon: "error",
+                    buttonsStyling: false,
+                    confirmButtonText: "Tamam",
+                    customClass: {
+                        confirmButton: "btn btn-danger"
+                    }
+                });
+            });
+        });
+
+
+        // Kota ayarlarını güncelleme
+          document.getElementById('project_methods').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const button = document.getElementById('project_update_methods');
+            button.setAttribute('data-kt-indicator', 'on');
+            button.disabled = true;
+
+            // Form verilerini manuel olarak topla
+            const projectId = parseInt(document.querySelector('input[name="ProjectId"]').value);
+
+            // Ids ve Sizes dizilerini oluştur
+            const ids = [];
+            const sizes = [];
+
+            // Tüm Ids[] inputlarını topla
+            document.querySelectorAll('input[name="Ids[]"]').forEach(element => {
+                ids.push(parseInt(element.value)); // String'i integer'a çevir
+            });
+
+            // Tüm Sizes[] inputlarını topla
+            document.querySelectorAll('input[name="Sizes[]"]').forEach(element => {
+                sizes.push(parseInt(element.value)); // String'i integer'a çevir
+            });
+
+            // Command sınıfına uygun bir nesne oluştur
+            const commandData = {
+                projectId: projectId, // küçük harf "p" ile başlıyor (sınıfınızdaki gibi)
+                Ids: ids,          // Büyük harf "I" ile başlıyor (sınıfınızdaki gibi)
+                Sizes: sizes       // Büyük harf "S" ile başlıyor (sınıfınızdaki gibi)
+            };
+
+            console.log("Gönderilecek veri:", commandData);
+
+            fetch('update-project-methods', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(commandData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        console.error('Sunucu hata yanıtı:', text);
+                        throw new Error('Sunucu yanıtı: ' + text);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                button.removeAttribute('data-kt-indicator');
+                button.disabled = false;
+
+                Swal.fire({
+                    text: "Kota bilgileri başarıyla güncellendi!",
+                    icon: "success",
+                    buttonsStyling: false,
+                    confirmButtonText: "Tamam",
+                    customClass: {
+                        confirmButton: "btn btn-primary"
+                    }
+                }).then(function() {
+                    location.reload();
+                });
+            })
+            .catch(error => {
+                button.removeAttribute('data-kt-indicator');
+                button.disabled = false;
+
+                console.error('Hata:', error);
+
+                Swal.fire({
+                    text: "Güncelleme sırasında hata oluştu: " + error.message,
+                    icon: "error",
+                    buttonsStyling: false,
+                    confirmButtonText: "Tamam",
+                    customClass: {
+                        confirmButton: "btn btn-danger"
+                    }
+                });
+            });
+        });
+
+        // Gerçekleşen tarihleri güncelleme
+        document.getElementById('project_gerceklesen').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const button = document.getElementById('project_update_completed');
+            button.setAttribute('data-kt-indicator', 'on');
+            button.disabled = true;
+
+            const formData = new FormData(this);
+            fetch('update-project-completed', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                button.removeAttribute('data-kt-indicator');
+                button.disabled = false;
+                Swal.fire({
+                    text: "Gerçekleşen tarihler başarıyla güncellendi!",
+                    icon: "success",
+                    buttonsStyling: false,
+                    confirmButtonText: "Tamam",
+                    customClass: {
+                        confirmButton: "btn btn-primary"
+                    }
+                }).then(function() {
+                    location.reload();
+                });
+            })
+            .catch(error => {
+                button.removeAttribute('data-kt-indicator');
+                button.disabled = false;
+                Swal.fire({
+                    text: "Güncelleme sırasında hata oluştu. Lütfen tekrar deneyin.",
+                    icon: "error",
+                    buttonsStyling: false,
+                    confirmButtonText: "Tamam",
+                    customClass: {
+                        confirmButton: "btn btn-danger"
+                    }
+                });
+                console.error('Hata:', error);
+            });
+        });
+
+        // Kota ekleme formunun doğrulaması
+        const addQuotaForm = document.getElementById('add_project_methods');
+        const addQuotaButton = document.getElementById('add_project_methods_submit');
+
+        addQuotaButton.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // Form alanlarını kontrol et
+            const methodName = addQuotaForm.querySelector('[name="MethodName"]').value;
+            const size = addQuotaForm.querySelector('[name="Size"]').value;
+
+            if (!methodName || !size) {
+                Swal.fire({
+                    text: "Lütfen tüm zorunlu alanları doldurun.",
+                    icon: "warning",
+                    buttonsStyling: false,
+                    confirmButtonText: "Tamam",
+                    customClass: {
+                        confirmButton: "btn btn-primary"
+                    }
+                });
+                return;
+            }
+
+            // İşlemi başlat
+            addQuotaButton.setAttribute('data-kt-indicator', 'on');
+            addQuotaButton.disabled = true;
+
+            const formData = new FormData(addQuotaForm);
+            fetch('add-project-method', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                addQuotaButton.removeAttribute('data-kt-indicator');
+                addQuotaButton.disabled = false;
+
+                Swal.fire({
+                    text: "Kota başarıyla eklendi!",
+                    icon: "success",
+                    buttonsStyling: false,
+                    confirmButtonText: "Tamam",
+                    customClass: {
+                        confirmButton: "btn btn-primary"
+                    }
+                }).then(function() {
+                    // Modalı kapat
+                    $('#kt_modal_add_quota').modal('hide');
+                    // Formu temizle
+                    addQuotaForm.reset();
+                    // Sayfayı yenile
+                    location.reload();
+                });
+            })
+            .catch(error => {
+                addQuotaButton.removeAttribute('data-kt-indicator');
+                addQuotaButton.disabled = false;
+
+                Swal.fire({
+                    text: "Kota eklenirken bir hata oluştu. Lütfen tekrar deneyin.",
+                    icon: "error",
+                    buttonsStyling: false,
+                    confirmButtonText: "Tamam",
+                    customClass: {
+                        confirmButton: "btn btn-danger"
+                    }
+                });
+                console.error('Hata:', error);
+            });
+        });
+
+        // Modalı kapattığımızda formu temizle
+        $('#kt_modal_add_quota').on('hidden.bs.modal', function () {
+            document.getElementById('add_project_methods').reset();
+        });
+
+        // Sayfanın ilk yüklenişinde select2 bileşenlerini başlat
+        $(document).ready(function() {
+            // Select2 başlatma
+            if ($.fn.select2) {
+                $('.form-select[data-control="select2"]').select2({
+                    minimumResultsForSearch: 5,
+                    allowClear: true,
+                    dropdownParent: $(this).data('dropdown-parent')
                 });
             }
         });
-
     </script>
 }

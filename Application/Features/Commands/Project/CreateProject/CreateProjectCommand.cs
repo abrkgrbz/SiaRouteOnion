@@ -77,7 +77,7 @@ namespace Application.Features.Commands.Project.CreateProject
                     if (request.ProjectOfficers != null && request.ProjectOfficers.Any())
                     {
                         var projectOfficers = request.ProjectOfficers.Select(officerId =>
-                            new ProjectOfficers()
+                            new Domain.Entities.ProjectOfficers()
                             {
                                 ProjectId = newProject.Id,
                                 UserId = officerId
@@ -111,22 +111,22 @@ namespace Application.Features.Commands.Project.CreateProject
                     if (request.ProjectNotes != null && request.ProjectNotes.Any())
                     {
                         var projectNotes = new ProjectNotes()
-                            { ProjectId = newProject.Id, Note = request.ProjectNotes };
+                            { ProjectId = newProject.Id, Note = request.ProjectNotes,NoteType = 1,NoteCategory = "Not"};
                         await _projectNoteRepository.AddAsync(projectNotes, cancellationToken);
                     }
 
-                    await _projectProcessRepositoryAsync.AddAsync(new Domain.Entities.ProjectProcess()
+                    var result=await _projectProcessRepositoryAsync.AddAsync(new Domain.Entities.ProjectProcess()
                     {
                         ProjectId = newProject.Id,
-                        PlanlananSoruFormuTeslim = request.PlanlananSoruFormuTeslim,
-                        PlanlananRaporTeslim = request.PlanlananRaporTeslim,
-                        PlanlananKodlamaTeslim = request.PlanlananKodlamaTeslim,
-                        PlanlananSahaBaslangic = request.PlanlananSahaBaslangic,
-                        PlanlananSahaBitis = request.PlanlananSahaBitis,
-                        PlanlananScriptKontrol = request.PlanlananScriptKontrol,
-                        PlanlananScriptRevizyon = request.PlanlananScriptRevizyon,
-                        PlanlananScriptTeslim = request.PlanlananScriptTeslim,
-                        PlanlananTablolamaTeslim = request.PlanlananTablolamaTeslim
+                        PlanlananSoruFormuTeslim = ConvertToUtc(request.PlanlananSoruFormuTeslim),
+                        PlanlananRaporTeslim = ConvertToUtc(request.PlanlananRaporTeslim),
+                        PlanlananKodlamaTeslim = ConvertToUtc(request.PlanlananKodlamaTeslim),
+                        PlanlananSahaBaslangic = ConvertToUtc(request.PlanlananSahaBaslangic),
+                        PlanlananSahaBitis = ConvertToUtc(request.PlanlananSahaBitis),
+                        PlanlananScriptKontrol = ConvertToUtc(request.PlanlananScriptKontrol),
+                        PlanlananScriptRevizyon = ConvertToUtc(request.PlanlananScriptRevizyon),
+                        PlanlananScriptTeslim = ConvertToUtc(request.PlanlananScriptTeslim),
+                        PlanlananTablolamaTeslim = ConvertToUtc(request.PlanlananTablolamaTeslim),
                     }, cancellationToken);
                     return new Response<bool>(true, "Proje Oluşturuldu");
                 }
@@ -136,6 +136,17 @@ namespace Application.Features.Commands.Project.CreateProject
                 throw new ApiException("Proje oluşturulamadı.");
             }
             throw new ApiException("Proje oluşturulamadı.");
+        }
+
+
+        private DateTime? ConvertToUtc(DateTime? date)
+        {
+            if (date.HasValue)
+            {
+                return DateTime.SpecifyKind(date.Value, DateTimeKind.Utc);
+            }
+
+            return null;
         }
     }
 }

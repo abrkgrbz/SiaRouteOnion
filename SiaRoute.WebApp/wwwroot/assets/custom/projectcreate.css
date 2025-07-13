@@ -1,0 +1,346 @@
+﻿<style >
+/* Temel Stiller */
+.form-wizard {
+    margin-bottom: 30px;
+}
+
+/* Adım Göstergeleri */
+.form-wizard-steps {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.form-wizard-step {
+    text-align: center;
+    position: relative;
+    width: 100%;
+}
+
+.form-wizard-step-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #f3f6f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+    position: relative;
+    z-index: 1;
+    transition: all 0.3s ease;
+}
+
+    .form-wizard-step-icon i {
+        font-size: 1.5rem;
+        color: #7e8299;
+        transition: all 0.3s ease;
+    }
+
+.form-wizard-step.active .form-wizard-step-icon {
+    background-color: #009ef7;
+    box-shadow: 0 0.5rem 1.5rem 0.5rem rgba(0, 158, 247, 0.2);
+    transform: scale(1.1);
+}
+
+    .form-wizard-step.active .form-wizard-step-icon i {
+        color: #ffffff;
+    }
+
+.form-wizard-step.completed .form-wizard-step-icon {
+    background-color: #50cd89;
+    box-shadow: 0 0.5rem 1.5rem 0.5rem rgba(80, 205, 137, 0.2);
+}
+
+    .form-wizard-step.completed .form-wizard-step-icon i {
+        color: #ffffff;
+    }
+
+.form-wizard-step-label {
+    font-weight: 600;
+    font-size: 14px;
+    color: #7e8299;
+    margin-top: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.form-wizard-step.active .form-wizard-step-label {
+    color: #009ef7;
+    font-weight: 700;
+}
+
+.form-wizard-step.completed .form-wizard-step-label {
+    color: #50cd89;
+}
+
+/* İlerleme Çubuğu */
+.form-wizard-progress {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #e4e6ef;
+}
+
+.form-wizard-progress-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: #50cd89;
+    width: 0;
+    transition: width 0.5s ease;
+}
+
+/* Panel Stilleri */
+.form-wizard-panel {
+    display: none;
+    animation: fadeEffect 0.5s;
+}
+
+    .form-wizard-panel.active {
+        display: block;
+    }
+
+keyframes fadeEffect {
+    from
+
+{
+    opacity: 0;
+}
+
+to {
+    opacity: 1;
+}
+
+}
+
+/* Adım Başlıkları */
+.step-title {
+    position: relative;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+    .step-title:after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 80px;
+        height: 3px;
+        background-color: #009ef7;
+        border-radius: 3px;
+    }
+
+/* Checkbox ve Radio Stilleri */
+.form-wizard-checkbox-label {
+    border: 1px solid #e4e6ef;
+    padding: 1.25rem;
+    border-radius: 0.475rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+    .form-wizard-checkbox-label:hover {
+        border-color: #009ef7;
+        background-color: #f1faff;
+        transform: translateY(-2px);
+        box-shadow: 0 0.5rem 1.5rem 0.5rem rgba(0, 0, 0, 0.05);
+    }
+
+    .form-wizard-checkbox-label.checked {
+        border-color: #009ef7;
+        background-color: #f1faff;
+    }
+
+    .form-wizard-checkbox-label .form-check-input {
+        position: absolute;
+        top: 1.25rem;
+        right: 1.25rem;
+        margin: 0;
+    }
+
+.form-wizard-checkbox-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #181c32;
+}
+
+.form-wizard-checkbox-desc {
+    color: #7e8299;
+    font-size: 0.9rem;
+}
+
+.form-wizard-checkbox-group {
+    margin-bottom: 2rem;
+}
+
+/* Örneklem Alanı */
+.form-wizard-sample-size {
+    display: none;
+    margin-left: 1.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 0.475rem;
+    border-left: 3px solid #009ef7;
+    animation: slideDown 0.3s ease;
+}
+
+keyframes slideDown {
+    from
+
+{
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+to {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+}
+
+.form-wizard-checkbox-label.checked + .form-wizard-sample-size {
+    display: block;
+}
+
+/* Form Butonları */
+.form-wizard-actions {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eff2f5;
+    margin-top: 2rem;
+}
+
+/* Özet Alanı */
+.form-wizard-summary {
+    margin-bottom: 1.5rem;
+}
+
+.form-wizard-summary-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+    color: #181c32;
+}
+
+.form-wizard-summary-info {
+    background-color: #f8f9fa;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 0.1rem 1rem 0.25rem rgba(0, 0, 0, 0.05);
+}
+
+.form-wizard-summary-item {
+    display: flex;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px dashed #e4e6ef;
+}
+
+    .form-wizard-summary-item:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: 0;
+    }
+
+.form-wizard-summary-label {
+    min-width: 180px;
+    font-weight: 600;
+    color: #5e6278;
+}
+
+.form-wizard-summary-value {
+    flex: 1;
+    color: #181c32;
+    font-weight: 500;
+}
+
+/* Form Kontrol Stilleri */
+.form-control:focus, .form-select:focus {
+    border-color: #009ef7;
+    box-shadow: 0 0 0 0.25rem rgba(0, 158, 247, 0.25);
+}
+
+.form-label.required:after {
+    content: "*";
+    color: #f1416c;
+    margin-left: 0.25rem;
+}
+
+/* Responsive Düzenlemeler */
+media (max-width: 991.98px) {
+    .form-wizard-steps
+
+{
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+    -webkit-overflow-scrolling: touch;
+}
+
+.form-wizard-step {
+    flex: 0 0 auto;
+    margin-right: 15px;
+    width: auto;
+    min-width: 120px;
+}
+
+.form-wizard-summary-label {
+    min-width: 140px;
+}
+
+}
+
+media (max-width: 767.98px) {
+    .form-wizard-step-icon
+
+{
+    width: 50px;
+    height: 50px;
+}
+
+.form-wizard-step-label {
+    font-size: 12px;
+}
+
+.form-wizard-summary-label {
+    min-width: 120px;
+}
+
+}
+
+/* Animasyonlar */
+.pulse-animation {
+    animation: pulse 2s infinite;
+}
+
+keyframes pulse {
+    0%
+
+{
+    box-shadow: 0 0 0 0 rgba(0, 158, 247, 0.4);
+}
+
+70% {
+    box-shadow: 0 0 0 10px rgba(0, 158, 247, 0);
+}
+
+100% {
+    box-shadow: 0 0 0 0 rgba(0, 158, 247, 0);
+}
+
+}
+</style >

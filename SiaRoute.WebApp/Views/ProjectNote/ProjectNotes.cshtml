@@ -1,627 +1,969 @@
 ﻿@{
-    ViewData["Title"] = "ProjectNotes";
+    ViewData["Title"] = "Proje Notları";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section css {
     <link href="~/custom/projectNote/projectNote.css" rel="stylesheet" type="text/css" />
+    <style>
+        /* Kart animasyonları ve stillemeler */
+        .note-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            box-shadow: 0 0.1rem 1rem 0.25rem rgba(0, 0, 0, 0.05);
+            border-radius: 0.85rem;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
 
+            .note-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 0.5rem 1.5rem 0.5rem rgba(0, 0, 0, 0.08);
+            }
+
+            .note-card .card-body {
+                padding: 2rem;
+            }
+
+        .note-header {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+            .note-header::after {
+                content: '';
+                position: absolute;
+                bottom: -0.5rem;
+                left: 0;
+                height: 4px;
+                width: 3rem;
+                border-radius: 2px;
+            }
+
+        .note-type-1 .note-header::after {
+            background-color: #ffc700; /* warning color */
+        }
+
+        .note-type-2 .note-header::after {
+            background-color: #7239ea; /* info color */
+        }
+
+        .note-type-3 .note-header::after {
+            background-color: #f1416c; /* danger color */
+        }
+
+        .note-content {
+            white-space: pre-line;
+            background-color: #f9f9f9;
+            padding: 1.25rem;
+            border-radius: 0.65rem;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .note-date {
+            font-size: 0.85rem;
+            color: #a1a5b7;
+            display: flex;
+            align-items: center;
+        }
+
+            .note-date i {
+                margin-right: 0.5rem;
+            }
+
+        .section-header {
+            background-color: #f9f9f9;
+            padding: 1.25rem;
+            border-radius: 0.65rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-left: 5px solid #000;
+        }
+
+        .section-notes .section-header {
+            border-left-color: #ffc700;
+        }
+
+        .section-tk .section-header {
+            border-left-color: #7239ea;
+        }
+
+        .section-data .section-header {
+            border-left-color: #f1416c;
+        }
+
+        .scrollable-container {
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+
+            .scrollable-container::-webkit-scrollbar {
+                width: 6px;
+            }
+
+            .scrollable-container::-webkit-scrollbar-thumb {
+                background-color: #e4e6ef;
+                border-radius: 3px;
+            }
+
+                .scrollable-container::-webkit-scrollbar-thumb:hover {
+                    background-color: #b5b5c3;
+                }
+
+        .add-note-btn {
+            border-radius: 0.475rem;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .note-count {
+            padding: 0.15rem 0.5rem;
+            border-radius: 0.475rem;
+            font-weight: 500;
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 1rem;
+            color: #a1a5b7;
+        }
+
+            .empty-state i {
+                font-size: 3rem;
+                margin-bottom: 1rem;
+                opacity: 0.5;
+            }
+    </style>
 }
+
 @{
     Html.RenderPartial("_ProjectDetailPartialView");
 }
+
+<!-- Ana İçerik -->
+<div class="card card-custom gutter-b">
+    <div class="card-body p-0">
+        <!-- Üst bilgi kartı -->
+        <div class="bg-light-primary px-6 py-8 rounded-top mb-6">
+            <div class="d-flex align-items-center justify-content-between">
+               
+            </div>
+        </div>
+
+        <!-- Not bölümleri -->
+        <div class="row g-7 px-6">
+            <!-- Notlar Bölümü -->
+            <div class="col-md-4 section-notes">
+                <div class="section-header">
+                    <div class="d-flex align-items-center">
+                        <span class="svg-icon svg-icon-warning svg-icon-2x me-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path opacity="0.3" d="M19 22H5C4.4 22 4 21.6 4 21V3C4 2.4 4.4 2 5 2H14L20 8V21C20 21.6 19.6 22 19 22Z" fill="currentColor" />
+                                <path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8Z" fill="currentColor" />
+                            </svg>
+                        </span>
+                        <h3 class="fs-4 fw-bold mb-0 me-3">Notlar</h3>
+                        <span class="note-count bg-light-warning text-warning">0</span>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-warning add-note-btn" data-bs-toggle="modal" data-bs-target="#add_project_notes">
+                        <i class="fas fa-plus me-2"></i>Not Ekle
+                    </button>
+                </div>
+                <div class="scrollable-container" id="notes-container">
+                    <!-- Not kartları buraya gelecek -->
+                </div>
+            </div>
+
+            <!-- TK Soruları Bölümü -->
+            <div class="col-md-4 section-tk">
+                <div class="section-header">
+                    <div class="d-flex align-items-center">
+                        <span class="svg-icon svg-icon-info svg-icon-2x me-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path opacity="0.3" d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="currentColor" />
+                                <path d="M12 17C11.4696 17 11.4696 16.5305 11.0909 16.0909C10.7122 15.6513 10.2427 15.6513 10.2427 15C10.2427 14.3487 10.7122 14.3487 11.0909 13.9091C11.4696 13.4696 11.4696 13 12 13C12.5304 13 12.5304 13.4696 12.9091 13.9091C13.2878 14.3487 13.7573 14.3487 13.7573 15C13.7573 15.6513 13.2878 15.6513 12.9091 16.0909C12.5304 16.5305 12.5304 17 12 17Z" fill="currentColor" />
+                                <path d="M12 10C11.4477 10 11 9.55228 11 9V5C11 4.44772 11.4477 4 12 4C12.5523 4 13 4.44772 13 5V9C13 9.55228 12.5523 10 12 10Z" fill="currentColor" />
+                            </svg>
+                        </span>
+                        <h3 class="fs-4 fw-bold mb-0 me-3">TK Soruları</h3>
+                        <span class="note-count bg-light-info text-info">0</span>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-info add-note-btn" data-bs-toggle="modal" data-bs-target="#add_project_add_tk">
+                        <i class="fas fa-plus me-2"></i>TK Sorusu Ekle
+                    </button>
+                </div>
+                <div class="scrollable-container" id="tk-container">
+                    <!-- TK Soruları kartları buraya gelecek -->
+                </div>
+            </div>
+
+            <!-- Data Kontrol Soruları Bölümü -->
+            <div class="col-md-4 section-data">
+                <div class="section-header">
+                    <div class="d-flex align-items-center">
+                        <span class="svg-icon svg-icon-danger svg-icon-2x me-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path opacity="0.3" d="M20 14H11C10.4 14 10 13.6 10 13V10C10 9.4 10.4 9 11 9H20C20.6 9 21 9.4 21 10V13C21 13.6 20.6 14 20 14ZM21 19V16C21 15.4 20.6 15 20 15H11C10.4 15 10 15.4 10 16V19C10 19.6 10.4 20 11 20H20C20.6 20 21 19.6 21 19ZM21 7V4C21 3.4 20.6 3 20 3H11C10.4 3 10 3.4 10 4V7C10 7.6 10.4 8 11 8H20C20.6 8 21 7.6 21 7Z" fill="currentColor" />
+                                <path d="M6 14H3C2.4 14 2 13.6 2 13V10C2 9.4 2.4 9 3 9H6C6.6 9 7 9.4 7 10V13C7 13.6 6.6 14 6 14ZM7 19V16C7 15.4 6.6 15 6 15H3C2.4 15 2 15.4 2 16V19C2 19.6 2.4 20 3 20H6C6.6 20 7 19.6 7 19ZM7 7V4C7 3.4 6.6 3 6 3H3C2.4 3 2 3.4 2 4V7C2 7.6 2.4 8 3 8H6C6.6 8 7 7.6 7 7Z" fill="currentColor" />
+                            </svg>
+                        </span>
+                        <h3 class="fs-4 fw-bold mb-0 me-3">Data Kontrol Soruları</h3>
+                        <span class="note-count bg-light-danger text-danger">0</span>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-danger add-note-btn" data-bs-toggle="modal" data-bs-target="#add_project_add_dks">
+                        <i class="fas fa-plus me-2"></i>DKS Ekle
+                    </button>
+                </div>
+                <div class="scrollable-container" id="data-container">
+                    <!-- Data Kontrol Soruları kartları buraya gelecek -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Not Ekleme Modalı -->
 <div class="modal fade" id="add_project_notes" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered mw-650px">
-        <div class="modal-content rounded">
-            <div class="modal-header pb-0 border-0 justify-content-end">
-                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                    <span class="svg-icon svg-icon-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content rounded shadow-lg">
+            <div class="modal-header py-4 bg-light-warning">
+                <h3 class="modal-title fw-bolder text-dark">
+                    <span class="svg-icon svg-icon-warning svg-icon-2x me-3">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor" />
-                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+                            <path opacity="0.3" d="M19 22H5C4.4 22 4 21.6 4 21V3C4 2.4 4.4 2 5 2H14L20 8V21C20 21.6 19.6 22 19 22Z" fill="currentColor" />
+                            <path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8Z" fill="currentColor" />
                         </svg>
                     </span>
-                </div>
-            </div>
-            <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
-                <form id="kt_modal_new_target_form" class="form" action="#">
-                    <div class="mb-13 text-center">
-                        <h1 class="mb-3">Not Oluşturun</h1>
-                        <div class="text-muted fw-bold fs-5">
-                            Oluşturulan not proje ekibi tarafından görüntülenecektir.
-                        </div>
-                    </div>
-
-                    <div class="d-flex flex-column mb-8">
-                        <textarea class="form-control form-control-solid" rows="6" name="note" placeholder="Lütfen Notunuzu buraya yazınız."></textarea>
-                    </div>
-
-                    <div class="text-center">
-                        <button type="reset" id="kt_modal_new_target_cancel" class="btn btn-light me-3">Vazgeç</button>
-                        <button type="submit" id="kt_modal_new_target_submit" class="btn btn-primary">
-                            <span class="indicator-label">Kaydet</span>
-                            <span class="indicator-progress">
-                                Lütfen Bekleyiniz...
-                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                            </span>
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row g-9">
-    <div class="col-md-4 col-lg-12 col-xl-4">
-        <div class="mb-9" id="notes">
-            <div class="d-flex flex-stack">
-                <div class="fw-bolder fs-4">
-                    Notlar
-                </div>
-            </div>
-            <div class="h-3px w-100 bg-warning"></div>
-        </div>
-        <div class="scrollable-container">
-            <div class="card mb-6 mb-xl-9">
-                <div class="card-body">
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4 col-lg-12 col-xl-4">
-        <div class="mb-9" id="tk">
-            <div class="d-flex flex-stack">
-                <div class="fw-bolder fs-4">
-                    TK Soruları
-                </div>
-
-            </div>
-            <div class="h-3px w-100 bg-info"></div>
-        </div>
-        <div class="scrollable-container">
-            <div class="card mb-6 mb-xl-9">
-                <div class="card-body">
-                </div>
-            </div>
-        </div>
-
-    </div>
-    <div class="col-md-4 col-lg-12 col-xl-4">
-        <div class="mb-9" id="data">
-            <div class="d-flex flex-stack">
-                <div class="fw-bolder fs-4">
-                    Data Kontrol Soruları
-                </div>
-
-            </div>
-            <div class="h-3px w-100 bg-danger"></div>
-        </div>
-        <div class="scrollable-container">
-            <div class="card mb-6 mb-xl-9">
-                <div class="card-body">
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-</div>
-
-<div class="modal fade" id="add_project_add_tk" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered mw-650px">
-        <div class="modal-content rounded">
-            <div class="modal-header pb-0 border-0 justify-content-end">
-                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                    <span class="svg-icon svg-icon-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor" />
-                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
-                        </svg>
-                    </span>
-                </div>
-            </div>
-            <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
-                <form id="kt_modal_new_target_form_tk" class="form" action="#">
-                    <div class="mb-13 text-center">
-                        <h1 class="mb-3">TK Soruları Oluşturun</h1>
-                        <div class="text-muted fw-bold fs-5">
-                            Oluşturulan TK Soruları proje ekibi tarafından görüntülenecektir.
-                        </div>
-                    </div>
-
-                    <div class="d-flex flex-column mb-8">
-                        <textarea class="form-control form-control-solid" rows="6" name="note_tk" placeholder="Lütfen TK Sorularını buraya yazınız."></textarea>
-                    </div>
-
-                    <div class="text-center">
-                        <button type="reset" id="kt_modal_tk_new_target_cancel_tk" class="btn btn-light me-3">Vazgeç</button>
-                        <button type="submit" id="kt_modal_tk_new_target_submit_tk" class="btn btn-primary">
-                            <span class="indicator-label">Kaydet</span>
-                            <span class="indicator-progress">
-                                Lütfen Bekleyiniz...
-                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                            </span>
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="add_project_add_dks" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered mw-650px">
-        <div class="modal-content rounded">
-            <div class="modal-header pb-0 border-0 justify-content-end">
-                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                    <span class="svg-icon svg-icon-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor" />
-                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
-                        </svg>
-                    </span>
-                </div>
-            </div>
-            <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
-                <form id="kt_modal_new_target_form_dks" class="form" action="#">
-                    <div class="mb-13 text-center">
-                        <h1 class="mb-3">Data Kontrol Soruları Oluşturun</h1>
-                        <div class="text-muted fw-bold fs-5">
-                            Oluşturulan Data Kontrol Soruları proje ekibi tarafından görüntülenecektir.
-                        </div>
-                    </div>
-
-                    <div class="d-flex flex-column mb-8">
-                        <textarea class="form-control form-control-solid" rows="6" name="note_dks" placeholder="Lütfen Data Kontrol Sorularını buraya yazınız."></textarea>
-                    </div>
-
-                    <div class="text-center">
-                        <button type="reset" id="kt_modal_dks_new_target_cancel_dks" class="btn btn-light me-3">Vazgeç</button>
-                        <button type="submit" id="kt_modal_dks_new_target_submit_dks" class="btn btn-primary">
-                            <span class="indicator-label">Kaydet</span>
-                            <span class="indicator-progress">
-                                Lütfen Bekleyiniz...
-                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                            </span>
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="editNoteModal" tabindex="-1" aria-labelledby="editNoteModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editNoteModalLabel">Not Düzenle</h5>
+                    Yeni Not Oluştur
+                </h3>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <form id="editNoteForm">
-                    <input type="hidden" id="editNoteId">
-                    <div class="mb-3">
-                        <textarea class="form-control" id="editNoteContent" rows="5"></textarea>
+            <div class="modal-body p-6">
+                <form id="kt_modal_new_target_form" class="form" action="#">
+                    <div class="mb-5 text-center">
+                        <div class="text-muted fw-bold fs-6">
+                            Oluşturduğunuz not proje ekibi tarafından görüntülenecektir.
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-column mb-5">
+                        <label class="required fw-bold fs-6 mb-2">Not İçeriği</label>
+                        <textarea class="form-control form-control-solid" rows="8" name="note" placeholder="Lütfen notunuzu buraya yazınız..."></textarea>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="button" class="btn btn-light me-3 rounded-pill px-6" data-bs-dismiss="modal">İptal</button>
+                        <button type="submit" id="kt_modal_new_target_submit" class="btn btn-warning rounded-pill px-6">
+                            <span class="indicator-label">
+                                <i class="fas fa-save me-2"></i>Kaydet
+                            </span>
+                            <span class="indicator-progress">
+                                Lütfen Bekleyiniz... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            </span>
+                        </button>
                     </div>
                 </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">İptal</button>
-                <button type="button" class="btn btn-primary" id="saveNoteChanges">Kaydet</button>
             </div>
         </div>
     </div>
 </div>
 
+<!-- TK Sorusu Ekleme Modalı -->
+<div class="modal fade" id="add_project_add_tk" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content rounded shadow-lg">
+            <div class="modal-header py-4 bg-light-info">
+                <h3 class="modal-title fw-bolder text-dark">
+                    <span class="svg-icon svg-icon-info svg-icon-2x me-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path opacity="0.3" d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="currentColor" />
+                            <path d="M12 17C11.4696 17 11.4696 16.5305 11.0909 16.0909C10.7122 15.6513 10.2427 15.6513 10.2427 15C10.2427 14.3487 10.7122 14.3487 11.0909 13.9091C11.4696 13.4696 11.4696 13 12 13C12.5304 13 12.5304 13.4696 12.9091 13.9091C13.2878 14.3487 13.7573 14.3487 13.7573 15C13.7573 15.6513 13.2878 15.6513 12.9091 16.0909C12.5304 16.5305 12.5304 17 12 17Z" fill="currentColor" />
+                            <path d="M12 10C11.4477 10 11 9.55228 11 9V5C11 4.44772 11.4477 4 12 4C12.5523 4 13 4.44772 13 5V9C13 9.55228 12.5523 10 12 10Z" fill="currentColor" />
+                        </svg>
+                    </span>
+                    TK Soruları Oluştur
+                </h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-6">
+                <form id="kt_modal_new_target_form_tk" class="form" action="#">
+                    <div class="mb-5 text-center">
+                        <div class="text-muted fw-bold fs-6">
+                            Oluşturduğunuz TK Soruları proje ekibi tarafından görüntülenecektir.
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-column mb-5">
+                        <label class="required fw-bold fs-6 mb-2">TK Soruları</label>
+                        <textarea class="form-control form-control-solid" rows="8" name="note_tk" placeholder="Lütfen TK Sorularını buraya yazınız..."></textarea>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="button" class="btn btn-light me-3 rounded-pill px-6" data-bs-dismiss="modal">İptal</button>
+                        <button type="submit" id="kt_modal_tk_new_target_submit_tk" class="btn btn-info rounded-pill px-6">
+                            <span class="indicator-label">
+                                <i class="fas fa-save me-2"></i>Kaydet
+                            </span>
+                            <span class="indicator-progress">
+                                Lütfen Bekleyiniz... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Data Kontrol Sorusu Ekleme Modalı -->
+<div class="modal fade" id="add_project_add_dks" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content rounded shadow-lg">
+            <div class="modal-header py-4 bg-light-danger">
+                <h3 class="modal-title fw-bolder text-dark">
+                    <span class="svg-icon svg-icon-danger svg-icon-2x me-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path opacity="0.3" d="M20 14H11C10.4 14 10 13.6 10 13V10C10 9.4 10.4 9 11 9H20C20.6 9 21 9.4 21 10V13C21 13.6 20.6 14 20 14ZM21 19V16C21 15.4 20.6 15 20 15H11C10.4 15 10 15.4 10 16V19C10 19.6 10.4 20 11 20H20C20.6 20 21 19.6 21 19ZM21 7V4C21 3.4 20.6 3 20 3H11C10.4 3 10 3.4 10 4V7C10 7.6 10.4 8 11 8H20C20.6 8 21 7.6 21 7Z" fill="currentColor" />
+                            <path d="M6 14H3C2.4 14 2 13.6 2 13V10C2 9.4 2.4 9 3 9H6C6.6 9 7 9.4 7 10V13C7 13.6 6.6 14 6 14ZM7 19V16C7 15.4 6.6 15 6 15H3C2.4 15 2 15.4 2 16V19C2 19.6 2.4 20 3 20H6C6.6 20 7 19.6 7 19ZM7 7V4C7 3.4 6.6 3 6 3H3C2.4 3 2 3.4 2 4V7C2 7.6 2.4 8 3 8H6C6.6 8 7 7.6 7 7Z" fill="currentColor" />
+                        </svg>
+                    </span>
+                    Data Kontrol Soruları Oluştur
+                </h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-6">
+                <form id="kt_modal_new_target_form_dks" class="form" action="#">
+                    <div class="mb-5 text-center">
+                        <div class="text-muted fw-bold fs-6">
+                            Oluşturduğunuz Data Kontrol Soruları proje ekibi tarafından görüntülenecektir.
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-column mb-5">
+                        <label class="required fw-bold fs-6 mb-2">Data Kontrol Soruları</label>
+                        <textarea class="form-control form-control-solid" rows="8" name="note_dks" placeholder="Lütfen Data Kontrol Sorularını buraya yazınız..."></textarea>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="button" class="btn btn-light me-3 rounded-pill px-6" data-bs-dismiss="modal">İptal</button>
+                        <button type="submit" id="kt_modal_dks_new_target_submit_dks" class="btn btn-danger rounded-pill px-6">
+                            <span class="indicator-label">
+                                <i class="fas fa-save me-2"></i>Kaydet
+                            </span>
+                            <span class="indicator-progress">
+                                Lütfen Bekleyiniz... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Not Düzenleme Modalı -->
+<div class="modal fade" id="edit_note_modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content rounded shadow-lg">
+            <div class="modal-header py-4 bg-light-primary">
+                <h3 class="modal-title fw-bolder text-dark">
+                    <span class="svg-icon svg-icon-primary svg-icon-2x me-3" id="edit-modal-icon">
+                        <!-- İlgili ikonu JavaScript ile güncelleriz -->
+                    </span>
+                    <span id="edit-modal-title">Not Düzenle</span>
+                </h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-6">
+                <form id="edit_note_form" class="form" action="#">
+                    <div class="mb-5 text-center">
+                        <div class="text-muted fw-bold fs-6">
+                            Düzenlediğiniz not proje ekibi tarafından güncellenmiş olarak görüntülenecektir.
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-column mb-5">
+                        <label class="required fw-bold fs-6 mb-2">İçerik</label>
+                        <textarea class="form-control form-control-solid" rows="8" name="edit_note_content" id="edit_note_content"></textarea>
+                    </div>
+
+                    <input type="hidden" id="edit_note_id" name="edit_note_id">
+                    <input type="hidden" id="edit_note_type" name="edit_note_type">
+
+                    <div class="text-center">
+                        <button type="button" class="btn btn-light me-3 rounded-pill px-6" data-bs-dismiss="modal">İptal</button>
+                        <button type="submit" id="edit_note_submit" class="btn btn-primary rounded-pill px-6">
+                            <span class="indicator-label">
+                                <i class="fas fa-save me-2"></i>Güncelle
+                            </span>
+                            <span class="indicator-progress">
+                                Lütfen Bekleyiniz... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Silme Onay Modalı -->
+<div class="modal fade" id="delete_note_modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded shadow-lg">
+            <div class="modal-header py-4 bg-light-danger">
+                <h3 class="modal-title fw-bolder text-dark">
+                    <span class="svg-icon svg-icon-danger svg-icon-2x me-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z" fill="currentColor" />
+                            <path opacity="0.5" d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z" fill="currentColor" />
+                            <path opacity="0.5" d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z" fill="currentColor" />
+                        </svg>
+                    </span>
+                    Notu Sil
+                </h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-6">
+                <div class="mb-5 text-center">
+                    <div class="text-dark fw-bold fs-5 mb-3">
+                        Bu notu silmek istediğinizden emin misiniz?
+                    </div>
+                    <div class="text-muted fw-bold fs-6">
+                        Bu işlem geri alınamaz ve not kalıcı olarak silinecektir.
+                    </div>
+                </div>
+
+                <input type="hidden" id="delete_note_id" name="delete_note_id">
+                <input type="hidden" id="delete_note_type" name="delete_note_type">
+
+                <div class="text-center">
+                    <button type="button" class="btn btn-light me-3 rounded-pill px-6" data-bs-dismiss="modal">İptal</button>
+                    <button type="button" id="delete_note_confirm" class="btn btn-danger rounded-pill px-6">
+                        <span class="indicator-label">
+                            <i class="fas fa-trash-alt me-2"></i>Sil
+                        </span>
+                        <span class="indicator-progress">
+                            Lütfen Bekleyiniz... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @section js {
     <script src="https://npmcdn.com/flatpickr/dist/l10n/tr.js"></script>
     <script>
-                    function fetchAllData() {
-                      const urlParams = new URLSearchParams(window.location.search);
-                      const projectId = urlParams.get('id');
+         // Tüm verileri getir ve düzenle
+         function fetchAllData() {
+             const urlParams = new URLSearchParams(window.location.search);
+             const projectId = urlParams.get('id');
 
-                      $.ajax({
-                        url: '@Url.Action("GetAllProjectNoteByProject")',
-                        method: 'GET',
-                        data: { ProjectId: projectId },
-                        success: function(response) {
-                          console.log('Tüm veriler:', response);
+             // Yükleniyor animasyonu göster
+             showLoading();
 
-                           if (response.succeeded && response.data) {
-                            const groupedData = response.data;
+             $.ajax({
+                 url: '@Url.Action("GetAllProjectNoteByProject", "ProjectNote")',
+                 method: 'GET',
+                 data: { ProjectId: projectId },
+                 success: function(response) {
+                     console.log('Tüm veriler:', response);
 
-                            const notes = groupedData['Not'] || [];
-                             const tkQuestions = groupedData['TkSorulari'] || [];
-                             const dataQuestions = groupedData['DataKontrolSorulari'] || [];
+                     if (response.succeeded && response.data) {
+                         // NoteType'a göre gruplandırılmış veriyi işleme
+                         const groupedData = response.data;
 
-                            updateSection('notes', notes);
-                            updateSection('tk', tkQuestions);
-                            updateSection('data', dataQuestions);
-                          } else {
-                            showErrorInAllSections('Veri formatı beklendiği gibi değil veya veri bulunamadı');
-                          }
-                        },
-                             error: function(xhr, status, error) {
+                         // NoteType enum değerlerine göre seçim yapma
+                         const notes = groupedData['Not'] || [];
+                         const tkQuestions = groupedData['TkSorulari'] || [];
+                         const dataQuestions = groupedData['DataKontrolSorulari'] || [];
 
-               if (xhr.responseJSON) {
-                 if (xhr.responseJSON.Message) {
-                   errorMessage = xhr.responseJSON.Message;
-                 } else if (xhr.responseJSON.Errors && xhr.responseJSON.Errors.length > 0) {
-                   errorMessage = xhr.responseJSON.Errors.join(', ');
+                         // Her kategoriyi ilgili bölüme yerleştir
+                         updateSection('notes-container', notes, 1);
+                         updateSection('tk-container', tkQuestions, 2);
+                         updateSection('data-container', dataQuestions, 3);
+
+                         // Sayaçları güncelle
+                         updateCount('.section-notes .note-count', notes.length);
+                         updateCount('.section-tk .note-count', tkQuestions.length);
+                         updateCount('.section-data .note-count', dataQuestions.length);
+
+                         // Yükleniyor animasyonunu kaldır
+                         hideLoading();
+                     } else {
+                         // Veri formatı uygun değilse hata mesajı göster
+                         showErrorInAllSections('Veri formatı beklendiği gibi değil veya veri bulunamadı');
+                         hideLoading();
+                     }
+                 },
+                 error: function(xhr, status, error) {
+                     var response = JSON.parse(xhr.responseText);  
+                     let errorMessage = response.Message;
+                     
+                     showErrorInAllSections(errorMessage);
+                     hideLoading();
                  }
-               }
+             });
+         }
 
-               showErrorInAllSections(errorMessage);
-            }
-                      });
-                    }
-                    function updateSection(sectionId, items) {
-              const sectionHeader = $(`#${sectionId}`);
-              const sectionContainer = sectionHeader.next('.scrollable-container');
-              if (sectionContainer.length === 0) {
-                sectionHeader.after('<div class="scrollable-container"></div>');
-                sectionContainer = sectionHeader.next('.scrollable-container');
-              }
+         // Sayacı güncelleme
+         function updateCount(selector, count) {
+             $(selector).text(count);
+             if (count > 0) {
+                 $(selector).removeClass('bg-light-gray').addClass($(selector).attr('class').includes('text-warning') ? 'bg-light-warning' : ($(selector).attr('class').includes('text-info') ? 'bg-light-info' : 'bg-light-danger'));
+             } else {
+                 $(selector).removeClass('bg-light-warning bg-light-info bg-light-danger').addClass('bg-light-gray');
+             }
+         }
 
-              $(`#${sectionId} .fs-6.text-gray-400`).text(items.length);
+         // Yükleniyor durumu gösterme
+         function showLoading() {
+             $('.scrollable-container').append('<div class="text-center py-10"><span class="spinner-border text-primary" role="status"></span><p class="text-muted mt-2">Veriler yükleniyor...</p></div>');
+         }
 
-              sectionContainer.empty();
+         // Yükleniyor durumunu gizleme
+         function hideLoading() {
+             $('.scrollable-container .spinner-border').parent().remove();
+         }
 
-              if (items && items.length > 0) {
+         // Bölüm içeriğini güncelleme fonksiyonu
+         function updateSection(sectionId, items, noteType) {
+             // İlgili bölümü seç
+             const sectionContainer = $(`#${sectionId}`);
+
+             // İçeriği temizle
+             sectionContainer.empty();
+
+           if (items && items.length > 0) {
+                // Her kayıt için kart oluştur ve ekle
                 items.forEach(item => {
-                  console.log(item)
-                  const itemDate = new Date(item.created).toLocaleString();
-                  const content = item.note || "";
-                        // İçeriği güvenli hale getir
-            const safeContent = encodeURIComponent(content).replace(/'/g, "\\'");
+                    const itemDate = new Date(item.created).toLocaleString('tr-TR', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
 
-                  const card = `
-                    <div class="card mb-6 mb-xl-9">
-                      <div class="card-body">
-                                                                            <div class="d-flex flex-stack mb-3">
-                                                            <div class="badge badge-light">Seçenekler</div>
-                                                            <div>
-                                                                <button type="button" class="btn btn-sm btn-icon btn-color-dark btn-active-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-                                                                    <span class="svg-icon svg-icon-2">
-                                                                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path opacity="0.3" d="M22.1 11.5V12.6C22.1 13.2 21.7 13.6 21.2 13.7L19.9 13.9C19.7 14.7 19.4 15.5 18.9 16.2L19.7 17.2999C20 17.6999 20 18.3999 19.6 18.7999L18.8 19.6C18.4 20 17.8 20 17.3 19.7L16.2 18.9C15.5 19.3 14.7 19.7 13.9 19.9L13.7 21.2C13.6 21.7 13.1 22.1 12.6 22.1H11.5C10.9 22.1 10.5 21.7 10.4 21.2L10.2 19.9C9.4 19.7 8.6 19.4 7.9 18.9L6.8 19.7C6.4 20 5.7 20 5.3 19.6L4.5 18.7999C4.1 18.3999 4.1 17.7999 4.4 17.2999L5.2 16.2C4.8 15.5 4.4 14.7 4.2 13.9L2.9 13.7C2.4 13.6 2 13.1 2 12.6V11.5C2 10.9 2.4 10.5 2.9 10.4L4.2 10.2C4.4 9.39995 4.7 8.60002 5.2 7.90002L4.4 6.79993C4.1 6.39993 4.1 5.69993 4.5 5.29993L5.3 4.5C5.7 4.1 6.3 4.10002 6.8 4.40002L7.9 5.19995C8.6 4.79995 9.4 4.39995 10.2 4.19995L10.4 2.90002C10.5 2.40002 11 2 11.5 2H12.6C13.2 2 13.6 2.40002 13.7 2.90002L13.9 4.19995C14.7 4.39995 15.5 4.69995 16.2 5.19995L17.3 4.40002C17.7 4.10002 18.4 4.1 18.8 4.5L19.6 5.29993C20 5.69993 20 6.29993 19.7 6.79993L18.9 7.90002C19.3 8.60002 19.7 9.39995 19.9 10.2L21.2 10.4C21.7 10.5 22.1 11 22.1 11.5ZM12.1 8.59998C10.2 8.59998 8.6 10.2 8.6 12.1C8.6 14 10.2 15.6 12.1 15.6C14 15.6 15.6 14 15.6 12.1C15.6 10.2 14 8.59998 12.1 8.59998Z" fill="currentColor"/>
-            <path d="M17.1 12.1C17.1 14.9 14.9 17.1 12.1 17.1C9.30001 17.1 7.10001 14.9 7.10001 12.1C7.10001 9.29998 9.30001 7.09998 12.1 7.09998C14.9 7.09998 17.1 9.29998 17.1 12.1ZM12.1 10.1C11 10.1 10.1 11 10.1 12.1C10.1 13.2 11 14.1 12.1 14.1C13.2 14.1 14.1 13.2 14.1 12.1C14.1 11 13.2 10.1 12.1 10.1Z" fill="currentColor"/>
-            </svg>
-                                                                    </span>
-                                                                </button>
-                                                                <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-bold w-200px py-3" data-kt-menu="true" style="">
+                    const content = item.note || "";
+                    const typeCssClass = `note-type-${noteType}`;
 
-                                                                    <div class="menu-item px-3">
-                                                                             <a href="javascript:EditProjectNote(${item.id}, '${safeContent}')" class="menu-link px-3">Düzenle</a>
-                                                                    </div>
-                                                                    <div class="menu-item px-3">
-                                                                        <a href="javascript:DeleteProjectNote(${item.id})" class="menu-link px-3 text-danger">Sil</a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                        <div class="fs-6 fw-bold text-gray-600 mb-5">${escapeHtml(content)}</div>
-                        <div class="text-muted fs-7">${itemDate}</div>
-                      </div>
-                    </div>`;
-                  sectionContainer.append(card);
-                  KTMenu.createInstances();
-                });
-              } else {
-                // Kayıt yoksa bilgi mesajı göster
-                const emptyCard = `
-                  <div class="card mb-6 mb-xl-9">
-                    <div class="card-body">
-                      <div class="fs-6 fw-bold text-gray-600 mb-5">Bu bölüm için oluşturulmuş herhangi bir kayıt yoktur</div>
+                    const card = `
+                            <div class="note-card ${typeCssClass}" data-id="${item.id}" data-note-type="${noteType}">
+            <div class="card-body">
+                <div class="note-header d-flex justify-content-between">
+                    <div class="fw-bold fs-6 text-dark d-flex align-items-center">
+                        <span class="svg-icon svg-icon-${noteType === 1 ? 'warning' : (noteType === 2 ? 'info' : 'danger')} svg-icon-2x me-2">
+                            ${getNoteTypeIcon(noteType)}
+                        </span>
+                        ${getNoteTypeTitle(noteType)}
                     </div>
-                  </div>`;
-                sectionContainer.append(emptyCard);
-               
-              }
-                    }
-                    function showErrorInAllSections(errorMessage) {
-                      ['notes', 'tk', 'data'].forEach(sectionId => {
-                        const sectionContainer = $(`#${sectionId}`).parent();
-                        const errorCard = `
-                          <div class="card mb-6 mb-xl-9">
-                            <div class="card-body">
-                              <div class="fs-6 fw-bold text-danger mb-5">${errorMessage}</div>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-icon btn-light" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li><a class="dropdown-item edit-note" href="javascript:;"
+                                data-id="${item.id}"
+                                data-note-type="${noteType}"
+                                data-content="${escapeHtml(content)}">
+                                <i class="fas fa-edit me-2"></i>Düzenle</a>
+                            </li>
+                            <li><a class="dropdown-item copy-note" href="javascript:;" data-content="${escapeHtml(content)}">
+                                <i class="fas fa-copy me-2"></i>Kopyala</a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item delete-note text-danger" href="javascript:;"
+                                data-id="${item.id}"
+                                data-note-type="${noteType}">
+                                <i class="fas fa-trash-alt me-2"></i>Sil</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="note-content">${formatNoteContent(content)}</div>
+                <div class="note-date">
+                    <i class="far fa-calendar-alt me-1"></i>${itemDate}
+                </div>
+            </div>
+        </div>`;
+                    sectionContainer.append(card);
+                });
+
+                // Kopyalama işlevini etkinleştir
+                $('.copy-note').on('click', function() {
+                    const content = $(this).data('content');
+                    copyToClipboard(content);
+                    toastr.success("İçerik panoya kopyalandı!");
+                });
+            } else {
+                // Kayıt yoksa bilgi mesajı göster
+                const emptyState = `
+                    <div class="empty-state">
+                        <i class="far fa-${noteType === 1 ? 'sticky-note' : (noteType === 2 ? 'question-circle' : 'database')}"></i>
+                        <div class="fs-5 fw-bold text-muted">Henüz kayıt bulunmuyor</div>
+                        <button type="button" class="btn btn-sm btn-${noteType === 1 ? 'warning' : (noteType === 2 ? 'info' : 'danger')} mt-4" data-bs-toggle="modal" data-bs-target="#${noteType === 1 ? 'add_project_notes' : (noteType === 2 ? 'add_project_add_tk' : 'add_project_add_dks')}">
+                            <i class="fas fa-plus me-2"></i>Yeni Ekle
+                        </button>
+                    </div>`;
+                sectionContainer.append(emptyState);
+            }
+        }
+
+        // Not türüne göre ikon getir
+        function getNoteTypeIcon(noteType) {
+            switch (noteType) {
+                case 1: // Not
+                    return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path opacity="0.3" d="M19 22H5C4.4 22 4 21.6 4 21V3C4 2.4 4.4 2 5 2H14L20 8V21C20 21.6 19.6 22 19 22Z" fill="currentColor"/>
+                                <path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8Z" fill="currentColor"/>
+                            </svg>`;
+                case 2: // TK Soruları
+                    return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path opacity="0.3" d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="currentColor"/>
+                                <path d="M12 17C11.4696 17 11.4696 16.5305 11.0909 16.0909C10.7122 15.6513 10.2427 15.6513 10.2427 15C10.2427 14.3487 10.7122 14.3487 11.0909 13.9091C11.4696 13.4696 11.4696 13 12 13C12.5304 13 12.5304 13.4696 12.9091 13.9091C13.2878 14.3487 13.7573 14.3487 13.7573 15C13.7573 15.6513 13.2878 15.6513 12.9091 16.0909C12.5304 16.5305 12.5304 17 12 17Z" fill="currentColor"/>
+                                <path d="M12 10C11.4477 10 11 9.55228 11 9V5C11 4.44772 11.4477 4 12 4C12.5523 4 13 4.44772 13 5V9C13 9.55228 12.5523 10 12 10Z" fill="currentColor"/>
+                            </svg>`;
+                case 3: // Data Kontrol Soruları
+                    return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path opacity="0.3" d="M20 14H11C10.4 14 10 13.6 10 13V10C10 9.4 10.4 9 11 9H20C20.6 9 21 9.4 21 10V13C21 13.6 20.6 14 20 14ZM21 19V16C21 15.4 20.6 15 20 15H11C10.4 15 10 15.4 10 16V19C10 19.6 10.4 20 11 20H20C20.6 20 21 19.6 21 19ZM21 7V4C21 3.4 20.6 3 20 3H11C10.4 3 10 3.4 10 4V7C10 7.6 10.4 8 11 8H20C20.6 8 21 7.6 21 7Z" fill="currentColor"/>
+                                <path d="M6 14H3C2.4 14 2 13.6 2 13V10C2 9.4 2.4 9 3 9H6C6.6 9 7 9.4 7 10V13C7 13.6 6.6 14 6 14ZM7 19V16C7 15.4 6.6 15 6 15H3C2.4 15 2 15.4 2 16V19C2 19.6 2.4 20 3 20H6C6.6 20 7 19.6 7 19ZM7 7V4C7 3.4 6.6 3 6 3H3C2.4 3 2 3.4 2 4V7C2 7.6 2.4 8 3 8H6C6.6 8 7 7.6 7 7Z" fill="currentColor"/>
+                            </svg>`;
+                default:
+                    return '';
+            }
+        }
+
+        // Not türüne göre başlık getir
+        function getNoteTypeTitle(noteType) {
+            switch (noteType) {
+                case 1:
+                    return 'Not';
+                case 2:
+                    return 'TK Sorusu';
+                case 3:
+                    return 'Data Kontrol Sorusu';
+                default:
+                    return '';
+            }
+        }
+
+        // Not içeriğini formatla
+        function formatNoteContent(content) {
+            if (!content) return '';
+
+            // URL'leri otomatik bağlantılara dönüştür
+            content = content.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" class="text-primary">$1</a>');
+
+            // Satır sonlarını <br> etiketlerine dönüştür
+            content = content.replace(/\n/g, '<br>');
+
+            return content;
+        }
+
+        // Tüm bölümlere hata mesajı gösterme
+        function showErrorInAllSections(errorMessage) {
+            ['notes-container', 'tk-container', 'data-container'].forEach(sectionId => {
+                const sectionContainer = $(`#${sectionId}`);
+                const errorCard = `
+                    <div class="note-card">
+                        <div class="card-body">
+                            <div class="alert alert-danger d-flex align-items-center p-5 mb-0">
+                                <span class="svg-icon svg-icon-2hx svg-icon-danger me-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path opacity="0.3" d="M12 10.6L14.8 7.8C15.2 7.4 15.8 7.4 16.2 7.8C16.6 8.2 16.6 8.80002 16.2 9.20002L13.4 12L16.2 14.8C16.6 15.2 16.6 15.8 16.2 16.2C15.8 16.6 15.2 16.6 14.8 16.2L12 13.4L9.2 16.2C8.8 16.6 8.2 16.6 7.8 16.2C7.4 15.8 7.4 15.2 7.8 14.8L10.6 12L7.8 9.2C7.4 8.8 7.4 8.2 7.8 7.8C8.2 7.4 8.80002 7.4 9.20002 7.8L12 10.6Z" fill="currentColor"></path>
+                                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="currentColor"></path>
+                                    </svg>
+                                </span>
+                                <div class="d-flex flex-column">
+                                    <h5 class="mb-1">Hata</h5>
+                                    <span>${errorMessage}</span>
+                                </div>
+                                <button type="button" class="btn btn-icon position-absolute position-sm-relative m-2 m-sm-0 top-0 end-0 btn-active-light-danger" data-bs-dismiss="alert">
+                                    <span class="svg-icon svg-icon-2x">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor"></rect>
+                                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor"></rect>
+                                        </svg>
+                                    </span>
+                                </button>
                             </div>
-                          </div>`;
-                        sectionContainer.find('.card').remove();
-                        sectionContainer.append(errorCard);
-                      });
-                    }
-
-                    function escapeHtml(unsafe) {
-                      return unsafe
-                        .replace(/&/g, "&amp;")
-                        .replace(/</g, "&lt;")
-                        .replace(/>/g, "&gt;")
-                        .replace(/"/g, "&quot;")
-                        .replace(/'/g, "&#039;");
-                    }
-
-                    $(document).ready(function() {
-                      fetchAllData();
-                    });
-
-                    function DeleteProjectNote(id)
-                    {
-                              Swal.fire({
-                html: `<b>Bu Notu silmek istiyormusunuz?</b>`,
-                icon: "warning",
-                buttonsStyling: false,
-                showCancelButton: true,
-                confirmButtonText: "Evet",
-                cancelButtonText: 'Hayır',
-                customClass: {
-                    confirmButton: "btn btn-danger",
-                    cancelButton: 'btn btn-light'
-                }
-            }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: '@Url.Action("DeleteProjectNote")',
-                type: 'GET',
-                data: {
-                    id: id
-                },
-                success: function(response) {
-              Swal.fire({
-    title: 'Başarılı!',
-    text: 'Not başarıyla silindi',
-    icon: 'success',
-    buttonsStyling: false,
-    customClass: {
-        confirmButton: "btn btn-primary"
-    }
-        }).then((result) => {
-    if (result.isConfirmed) { 
-        window.location.reload();
-    }
-        });
-                },
-                error: function(xhr, status, error) {
-                    Swal.fire({
-                        title: 'Hata!',
-                        text: 'Not silinirken bir hata oluştu',
-                        icon: 'error',
-                        buttonsStyling: false,
-                        customClass: {
-                            confirmButton: "btn btn-primary"
-                        }
-                    });
-                }
+                        </div>
+                    </div>`;
+                sectionContainer.empty().append(errorCard);
             });
         }
-            });
-                    }
 
-               // HTML Decode fonksiyonu (modalda gösterirken)
-        function decodeHtml(html) {
-            var txt = document.createElement("textarea");
-            txt.innerHTML = html;
-            return txt.value;
+        // Panoya kopyalama
+        function copyToClipboard(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
         }
 
-        // Modal açılırken içeriği decode et
-        function EditProjectNote(noteId, encodedContent) {
-            const content = decodeURIComponent(encodedContent);
-            $('#editNoteModal').modal('show');
-            $('#editNoteContent').val(decodeHtml(content));
-            $('#editNoteId').val(noteId);
+        // XSS saldırılarını önlemek için HTML kaçış fonksiyonu
+        function escapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
         }
 
-                $(document).ready(function() {
-          // Kaydet butonuna tıklandığında
-          $('#saveNoteChanges').on('click', function() {
-            const noteId = $('#editNoteId').val();
-            const updatedContent = $('#editNoteContent').val();
+        // Not formu gönderimi
+        function submitNoteForm(formId, noteTypeValue, successMessage) {
+            $(formId).submit(function(event) {
+                event.preventDefault();
 
-            // AJAX ile güncelleme isteği gönder
-            $.ajax({
-              url: '@Url.Action("UpdateProjectNote")',
-              method: 'POST',
-              data: {
-                id: noteId,
-                note: updatedContent
-              },
-              success: function(response) {
-                if (response.succeeded) {
-                  $('#editNoteModal').modal('hide');
+                const form = $(this);
+                const submitButton = form.find('[type="submit"]');
+                const indicatorLabel = submitButton.find('.indicator-label');
+                const indicatorProgress = submitButton.find('.indicator-progress');
 
-                  fetchAllData();
+                // Formu kilitlemek
+                submitButton.prop('disabled', true);
+                indicatorLabel.hide();
+                indicatorProgress.show();
 
-                  toastr.success('Not başarıyla güncellendi');
-                } else {
-                  toastr.error(response.message || 'Not güncellenirken bir hata oluştu');
-                }
-              },
-              error: function(xhr, status, error) {
-                let errorMessage = 'Not güncellenirken bir hata oluştu';
+                const urlParams = new URLSearchParams(window.location.search);
+                const projectId = urlParams.get('id');
 
-                if (xhr.responseJSON) {
-                  if (xhr.responseJSON.Message) {
-                    errorMessage = xhr.responseJSON.Message;
-                  } else if (xhr.responseJSON.Errors && xhr.responseJSON.Errors.length > 0) {
-                    errorMessage = xhr.responseJSON.Errors.join(', ');
-                  }
-                }
-
-                toastr.error(errorMessage);
-              }
-            });
-          });
-        });
-    </script>
-    <script>
-               $(document).ready(function(){
-                        toastr.options = {
-            "closeButton": true,
-            "debug": true,
-            "newestOnTop": false,
-            "progressBar": true,
-            "positionClass": "toastr-bottom-center",
-            "preventDuplicates": false,
-            "onclick": null,
-            "showDuration": "300",
-            "hideDuration": "1000",
-            "timeOut": "5000",
-            "extendedTimeOut": "1000",
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "fadeIn",
-            "hideMethod": "fadeOut"
-        };
-            const urlParams = new URLSearchParams(window.location.search);
-            const projectId = urlParams.get('id');
-            const noteType=1;
-            $('#kt_modal_new_target_form').submit(function(event){
-                event.preventDefault(); // Formun standart gönderimini engelle
-
-                var formData = new FormData();
-                formData.append('Note', $('textarea[name="note"]').val());
+                const formData = new FormData();
+                formData.append('Note', form.find('textarea').val());
                 formData.append('ProjectId', projectId);
-                formData.append('NoteType',noteType);
+                formData.append('NoteType', noteTypeValue);
+
                 $.ajax({
-                    url: '@Url.Action("AddProjectNote")',
+                    url: '@Url.Action("AddProjectNote", "ProjectNote")',
                     method: 'POST',
                     processData: false,
                     contentType: false,
                     data: formData,
-                    beforeSend: function() {
-                        $('#kt_modal_new_target_submit .indicator-label').hide();
-                        $('#kt_modal_new_target_submit .indicator-progress').show();
+                    success: function(response) {
+                        console.log(response);
+                        toastr.success(successMessage);
+                        form[0].reset();
+
+                        // Modalı kapat
+                        $(form).closest('.modal').modal('hide');
+
+                        // Verileri yeniden yükle
+                        fetchAllData();
                     },
-                    success: function(response){
-                        console.log(response)
-                        toastr.success("Notunuz oluşturuldu");
-                        $('#kt_modal_new_target_form')[0].reset();
-                          fetchAllData();
-                    },
-                    error: function(){
-                        toastr.error("Notunuz oluşturulamadı");
+                    error: function(xhr, status, error) {
+                        let errorMessage = "Bir hata oluştu. Lütfen tekrar deneyin.";
+
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
+
+                        toastr.error(errorMessage);
                     },
                     complete: function() {
-                        $('#kt_modal_new_target_submit .indicator-label').show();
-                        $('#kt_modal_new_target_submit .indicator-progress').hide();
+                        // Formu açmak
+                        submitButton.prop('disabled', false);
+                        indicatorLabel.show();
+                        indicatorProgress.hide();
                     }
                 });
             });
+        }
+
+        // Sayfa yüklendiğinde
+        $(document).ready(function() {
+            // Toastr ayarları
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": true,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+
+            // Form gönderim işlemleri
+            submitNoteForm('#kt_modal_new_target_form', 1, "Not başarıyla kaydedildi");
+            submitNoteForm('#kt_modal_new_target_form_tk', 2, "TK Sorusu başarıyla kaydedildi");
+            submitNoteForm('#kt_modal_new_target_form_dks', 3, "Data Kontrol Sorusu başarıyla kaydedildi");
+
+            // Modallar kapandığında formları sıfırla
+            $('.modal').on('hidden.bs.modal', function() {
+                $(this).find('form')[0].reset();
+            });
+
+            // Tüm verileri çek
+            fetchAllData();
         });
-    </script>
-    <script>
-        $(document).ready(function(){
-               toastr.options = {
-                "closeButton": true,
-                "debug": true,
-                "newestOnTop": false,
-                "progressBar": true,
-                "positionClass": "toastr-bottom-center",
-                "preventDuplicates": false,
-                "onclick": null,
-                "showDuration": "300",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            };
-                const urlParams = new URLSearchParams(window.location.search);
-                const projectId = urlParams.get('id');
-                const noteType=2;
-                        $('#kt_modal_new_target_form_tk').submit(function(event){
-                    event.preventDefault(); // Formun standart gönderimini engelle
 
-                    var formData = new FormData();
-                    formData.append('Note', $('textarea[name="note_tk"]').val());
-                    formData.append('ProjectId', projectId);
-                    formData.append('NoteType',noteType);
-                    $.ajax({
-                        url: '@Url.Action("AddProjectNote")',
-                        method: 'POST',
-                        processData: false,
-                        contentType: false,
-                        data: formData,
-                        beforeSend: function() {
-                            $('#kt_modal_new_target_submit_tk .indicator-label').hide();
-                            $('#kt_modal_new_target_submit_tk .indicator-progress').show();
-                        },
-                        success: function(response){
-                            console.log(response)
-                            toastr.success("TK Sorusu oluşturuldu");
-                            $('#kt_modal_new_target_form_tk')[0].reset();
-                                  fetchAllData();
-                        },
-                        error: function(){
-                            toastr.error("Notunuz oluşturulamadı");
-                        },
-                        complete: function() {
-                            $('#kt_modal_new_target_submit_tk .indicator-label').show();
-                            $('#kt_modal_new_target_submit_tk .indicator-progress').hide();
+         // Düzenleme ve silme işlevleri için JavaScript kodları
+        $(document).ready(function() {
+            // Mevcut ayarlar ve başlatmalar...
+
+            // Düzenleme modalını açma
+            $(document).on('click', '.edit-note', function() {
+                const noteId = $(this).data('id');
+                const noteType = $(this).data('note-type');
+                const content = $(this).data('content');
+
+                // Modal başlığını ve ikonunu ayarla
+                $('#edit-modal-title').text(getNoteTypeTitle(noteType) + ' Düzenle');
+                $('#edit-modal-icon').html(getNoteTypeIcon(noteType));
+
+                // Modal butonunun rengini ayarla
+                const buttonClasses = $('#edit_note_submit').attr('class').replace('btn-primary btn-warning btn-info btn-danger', '');
+                $('#edit_note_submit').attr('class', buttonClasses + ' btn-' + getNoteTypeClass(noteType));
+
+                // Form değerlerini doldur
+                $('#edit_note_content').val(content);
+                $('#edit_note_id').val(noteId);
+                $('#edit_note_type').val(noteType);
+
+                // Modalı göster
+                $('#edit_note_modal').modal('show');
+            });
+
+            // Not düzenleme formunu gönderme
+            $('#edit_note_form').submit(function(event) {
+                event.preventDefault();
+
+                const form = $(this);
+                const submitButton = $('#edit_note_submit');
+                const indicatorLabel = submitButton.find('.indicator-label');
+                const indicatorProgress = submitButton.find('.indicator-progress');
+
+                // Buton durumunu güncelle
+                submitButton.prop('disabled', true);
+                indicatorLabel.hide();
+                indicatorProgress.show();
+
+                const noteId = $('#edit_note_id').val();
+                const noteType = $('#edit_note_type').val();
+                const content = $('#edit_note_content').val();
+
+                // AJAX isteği ile notu güncelle
+                $.ajax({
+                    url: '@Url.Action("UpdateProjectNote", "ProjectNote")',
+                    method: 'POST',
+                    data: {
+                        Id: noteId,
+                        Note: content,
+                        NoteType: noteType
+                    },
+                    success: function(response) {
+                        if (response.succeeded) {
+                            toastr.success('Not başarıyla güncellendi');
+                            $('#edit_note_modal').modal('hide');
+                            fetchAllData(); // Verileri yeniden yükle
+                        } else {
+                            toastr.error(response.message || 'Not güncellenirken bir hata oluştu');
                         }
-                    });
+                    },
+                    error: function(xhr, status, error) {
+                        let errorMessage = "Not güncellenirken bir hata oluştu";
+
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
+
+                        toastr.error(errorMessage);
+                    },
+                    complete: function() {
+                        // Buton durumunu eski haline getir
+                        submitButton.prop('disabled', false);
+                        indicatorLabel.show();
+                        indicatorProgress.hide();
+                    }
                 });
             });
-    </script>
-    <script>
-        $(document).ready(function(){
-               toastr.options = {
-                "closeButton": true,
-                "debug": true,
-                "newestOnTop": false,
-                "progressBar": true,
-                "positionClass": "toastr-bottom-center",
-                "preventDuplicates": false,
-                "onclick": null,
-                "showDuration": "300",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            };
-                const urlParams = new URLSearchParams(window.location.search);
-                const projectId = urlParams.get('id');
-                const noteType=3;
-                        $('#kt_modal_new_target_form_dks').submit(function(event){
-                    event.preventDefault(); // Formun standart gönderimini engelle
 
-                    var formData = new FormData();
-                    formData.append('Note', $('textarea[name="note_dks"]').val());
-                    formData.append('ProjectId', projectId);
-                    formData.append('NoteType',noteType);
-                    $.ajax({
-                        url: '@Url.Action("AddProjectNote")',
-                        method: 'POST',
-                        processData: false,
-                        contentType: false,
-                        data: formData,
-                        beforeSend: function() {
-                            $('#kt_modal_new_target_submit_dks .indicator-label').hide();
-                            $('#kt_modal_new_target_submit_dks .indicator-progress').show();
-                        },
-                        success: function(response){
-                            console.log(response)
-                            toastr.success("Data Kontrol Sorusu oluşturuldu");
-                            $('#kt_modal_new_target_form_dks')[0].reset();
-                            fetchAllData();
-                        },
-                        error: function(){
-                            toastr.error("Notunuz oluşturulamadı");
-                        },
-                        complete: function() {
-                            $('#kt_modal_new_target_submit_dks .indicator-label').show();
-                            $('#kt_modal_new_target_submit_dks .indicator-progress').hide();
+            // Silme modalını açma
+            $(document).on('click', '.delete-note', function() {
+                const noteId = $(this).data('id');
+                const noteType = $(this).data('note-type');
+
+                // Gizli alanlara değerleri ata
+                $('#delete_note_id').val(noteId);
+                $('#delete_note_type').val(noteType);
+
+                // Modalı göster
+                $('#delete_note_modal').modal('show');
+            });
+
+            // Not silme işlemi
+            $('#delete_note_confirm').click(function() {
+                const button = $(this);
+                const indicatorLabel = button.find('.indicator-label');
+                const indicatorProgress = button.find('.indicator-progress');
+
+                // Buton durumunu güncelle
+                button.prop('disabled', true);
+                indicatorLabel.hide();
+                indicatorProgress.show();
+
+                const noteId = $('#delete_note_id').val();
+
+                // AJAX isteği ile notu sil
+                $.ajax({
+                    url: '@Url.Action("DeleteProjectNote", "ProjectNote")',
+                    method: 'GET',
+                    data: {
+                        id: noteId
+                    },
+                    success: function(response) {
+                        if (response.succeeded) {
+                            toastr.success('Not başarıyla silindi');
+                            $('#delete_note_modal').modal('hide');
+                            fetchAllData(); // Verileri yeniden yükle
+                        } else {
+                            toastr.error(response.message || 'Not silinirken bir hata oluştu');
                         }
-                    });
+                    },
+                    error: function(xhr, status, error) {
+                        let errorMessage = "Not silinirken bir hata oluştu";
+
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
+
+                        toastr.error(errorMessage);
+                    },
+                    complete: function() {
+                        // Buton durumunu eski haline getir
+                        button.prop('disabled', false);
+                        indicatorLabel.show();
+                        indicatorProgress.hide();
+                    }
                 });
             });
+
+            // Not türüne göre CSS sınıfı getir
+            function getNoteTypeClass(noteType) {
+                switch (parseInt(noteType)) {
+                    case 1: return 'warning';
+                    case 2: return 'info';
+                    case 3: return 'danger';
+                    default: return 'primary';
+                }
+            }
+        });
     </script>
 }

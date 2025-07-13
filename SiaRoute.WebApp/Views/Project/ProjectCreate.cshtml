@@ -1,0 +1,1069 @@
+﻿@{
+    ViewData["Title"] = "Yeni Proje Oluştur";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section css {
+    <link href="~/assets/custom/projectcreate.css" rel="stylesheet" type="text/css" />
+    
+}
+
+<!-- Ana Kart -->
+<div class="card card-custom gutter-b">
+    <!-- Kart Başlığı -->
+    <div class="card-header border-0 pt-6">
+        <h3 class="card-title align-items-start flex-column">
+            <span class="card-label fw-bolder text-dark">Yeni Proje Oluştur</span>
+            <span class="text-muted mt-1 fw-bold fs-7">Yeni bir proje oluşturmak için adımları takip edin</span>
+        </h3>
+        <div class="card-toolbar">
+           
+            <a href="@Url.Action("ProjectList")" class="btn btn-sm btn-light">
+                <i class="bi bi-arrow-left me-1"></i> Listeye Dön
+            </a>
+        </div>
+    </div>
+
+    <!-- Kart İçeriği -->
+    <div class="card-body py-4">
+        <!-- Form Wizard -->
+        <div class="form-wizard">
+            <!-- Adım Göstergeleri -->
+            <div class="form-wizard-steps">
+                <div class="form-wizard-progress">
+                    <div class="form-wizard-progress-bar" style="width: 0%"></div>
+                </div>
+
+                <div class="form-wizard-step active" data-step="1">
+                    <div class="form-wizard-step-icon">
+                        <i class="bi bi-info-circle"></i>
+                    </div>
+                    <div class="form-wizard-step-label">Proje Bilgileri</div>
+                </div>
+
+                <div class="form-wizard-step" data-step="2">
+                    <div class="form-wizard-step-icon">
+                        <i class="bi bi-building"></i>
+                    </div>
+                    <div class="form-wizard-step-label">Sektör</div>
+                </div>
+
+                <div class="form-wizard-step" data-step="3">
+                    <div class="form-wizard-step-icon">
+                        <i class="bi bi-bar-chart"></i>
+                    </div>
+                    <div class="form-wizard-step-label">Metot</div>
+                </div>
+
+                <div class="form-wizard-step" data-step="4">
+                    <div class="form-wizard-step-icon">
+                        <i class="bi bi-people"></i>
+                    </div>
+                    <div class="form-wizard-step-label">Saha Firması</div>
+                </div>
+
+                <div class="form-wizard-step" data-step="5">
+                    <div class="form-wizard-step-icon">
+                        <i class="bi bi-calendar3"></i>
+                    </div>
+                    <div class="form-wizard-step-label">Zaman Planı</div>
+                </div>
+
+                <div class="form-wizard-step" data-step="6">
+                    <div class="form-wizard-step-icon">
+                        <i class="bi bi-person-workspace"></i>
+                    </div>
+                    <div class="form-wizard-step-label">Proje Ekibi</div>
+                </div>
+
+                <div class="form-wizard-step" data-step="7">
+                    <div class="form-wizard-step-icon">
+                        <i class="bi bi-check-circle"></i>
+                    </div>
+                    <div class="form-wizard-step-label">Tamamla</div>
+                </div>
+            </div>
+
+            <!-- Form İçeriği -->
+            <form id="kt_modal_create_app_form">
+                <!-- Adım 1: Proje Bilgileri -->
+                <div class="form-wizard-panel active" data-step="1">
+                    <div class="mb-10">
+                        <h2 class="fw-bold step-title">Proje Bilgileri</h2>
+                        <p class="text-gray-600 fs-6">Projenin temel bilgilerini bu adımda giriniz. Doldurulması zorunlu alanlar * ile işaretlenmiştir.</p>
+                    </div>
+
+                    <div class="card card-flush shadow-sm mb-5">
+                        <div class="card-body py-5">
+                            <div class="row mb-8">
+                                <div class="col-lg-6">
+                                    <label class="form-label required fs-6 fw-bold">Proje Kodu</label>
+                                    <input type="text" class="form-control form-control-solid" name="ProjectName" placeholder="Proje kodunu giriniz" />
+                                    <div class="form-text">Örnek: ABC-2025</div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <label class="form-label required fs-6 fw-bold">Proje Adı</label>
+                                    <input type="text" class="form-control form-control-solid" name="ProjectHeader" placeholder="Proje adını giriniz" />
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <label class="form-label required fs-6 fw-bold">Müşteri Adı</label>
+                                    <select class="form-select form-select-solid" name="CustomerName" data-control="select2" data-placeholder="Müşteri Seçiniz" data-dropdown-parent="#kt_modal_create_app_form">
+                                        <option></option>
+                                        <option value="A101">A101</option>
+                                        <option value="AAMR MARKETING">AAMR MARKETING</option>
+                                        <option value="ABBOT">ABBOT</option>
+                                        <option value="ABC">ABC</option>
+                                        <option value="ABDİ İBRAHİM">ABDİ İBRAHİM</option>
+                                        <option value="ACIBADEM">ACIBADEM</option>
+                                        <option value="AÇEV">AÇEV</option>
+                                        <option value="ADEL">ADEL</option>
+                                        <option value="ADİDAS">ADİDAS</option>
+                                        <option value="ADL">ADL</option>
+                                        <option value="AGESA">AGESA</option>
+                                        <option value="AĞAOĞLU">AĞAOĞLU</option>
+                                        <option value="AHMET BATAT">AHMET BATAT</option>
+                                        <option value="AKAR GIDA">AKAR GIDA</option>
+                                        <option value="AKBANK">AKBANK</option>
+                                        <option value="AKSİGORTA">AKSİGORTA</option>
+                                        <option value="AKTAŞLAR GIDA GRUBU">AKTAŞLAR GIDA GRUBU</option>
+                                        <option value="ALARKO">ALARKO</option>
+                                        <option value="ALARKO CARRIER">ALARKO CARRIER</option>
+                                        <option value="ALKEV OKULLARI">ALKEV OKULLARI</option>
+                                        <option value="ALLIANZ">ALLIANZ</option>
+                                        <option value="ALTERNA GIDA">ALTERNA GIDA</option>
+                                        <option value="AMERİKADANİSTE">AMERİKADANİSTE</option>
+                                        <option value="ANADOLU EFES">ANADOLU EFES</option>
+                                        <option value="ANADOLU HAYAT VE EMEKLİLİK">ANADOLU HAYAT VE EMEKLİLİK</option>
+                                        <option value="ANAKO">ANAKO</option>
+                                        <option value="ANETA">ANETA</option>
+                                        <option value="ARÇELİK">ARÇELİK</option>
+                                        <option value="ARMUT.COM">ARMUT.COM</option>
+                                        <option value="AROMA">AROMA</option>
+                                        <option value="ARZUM">ARZUM</option>
+                                        <option value="ASC HUKUK">ASC HUKUK</option>
+                                        <option value="ASELSAN">ASELSAN</option>
+                                        <option value="ASSIST">ASSIST</option>
+                                        <option value="AVANSAS">AVANSAS</option>
+                                        <option value="AVOYA">AVOYA</option>
+                                        <option value="AYGAZ">AYGAZ</option>
+                                        <option value="AZERSUN">AZERSUN</option>
+                                        <option value="BAIN & COMPANY">BAIN & COMPANY</option>
+                                        <option value="BATH & BODY WORKS">BATH & BODY WORKS</option>
+                                        <option value="BAU">BAU</option>
+                                        <option value="BAYER">BAYER</option>
+                                        <option value="BCMM">BCMM</option>
+                                        <option value="BELLA MAISON">BELLA MAISON</option>
+                                        <option value="BELLONA">BELLONA</option>
+                                        <option value="BENARRATIVE">BENARRATIVE</option>
+                                        <option value="BENOPLAST">BENOPLAST</option>
+                                        <option value="BERSAY İLETİŞİM">BERSAY İLETİŞİM</option>
+                                        <option value="BETEK">BETEK</option>
+                                        <option value="BEYMEN">BEYMEN</option>
+                                        <option value="BİLGİ ÜNİVERSİTESİ">BİLGİ ÜNİVERSİTESİ</option>
+                                        <option value="BİLKOM">BİLKOM</option>
+                                        <option value="BİLYONER">BİLYONER</option>
+                                        <option value="BİTEXEN">BİTEXEN</option>
+                                        <option value="BİZ FİNANS">BİZ FİNANS</option>
+                                        <option value="BLUEYONDER">BLUEYONDER</option>
+                                        <option value="BOYNER">BOYNER</option>
+                                        <option value="BRİSA">BRİSA</option>
+                                        <option value="BSH">BSH</option>
+                                        <option value="BTA">BTA</option>
+                                        <option value="BULBSHARE">BULBSHARE</option>
+                                        <option value="BURGAN BANK">BURGAN BANK</option>
+                                        <option value="CARREFOURSA">CARREFOURSA</option>
+                                        <option value="CASTROL">CASTROL</option>
+                                        <option value="CCI">CCI</option>
+                                        <option value="CHAKRA">CHAKRA</option>
+                                        <option value="CHERY GROUP">CHERY GROUP</option>
+                                        <option value="COCA-COLA">COCA-COLA</option>
+                                        <option value="COLLEZİONE">COLLEZİONE</option>
+                                        <option value="COMPANY GLOBAL">COMPANY GLOBAL</option>
+                                        <option value="COMPETEN FIELDWORK">COMPETEN FIELDWORK</option>
+                                        <option value="CONCERTATE">CONCERTATE</option>
+                                        <option value="CONSUL PEOPLE">CONSUL PEOPLE</option>
+                                        <option value="CORAL TRAVEL">CORAL TRAVEL</option>
+                                        <option value="COSMOPOLITAN">COSMOPOLİTAN</option>
+                                        <option value="COURSE5I">COURSE5I</option>
+                                        <option value="ÇİLEK MOBİLYA">ÇİLEK MOBİLYA</option>
+                                        <option value="ÇOCUK İYİLİK MERKEZİ">ÇOCUK İYİLİK MERKEZİ</option>
+                                        <option value="DAİKİN">DAİKİN</option>
+                                        <option value="DALAN">DALAN</option>
+                                        <option value="DANONE">DANONE</option>
+                                        <option value="DANONE - NUTRICIA">DANONE - NUTRICIA</option>
+                                        <option value="DECATHLON">DECATHLON</option>
+                                        <option value="DEFACTO">DEFACTO</option>
+                                        <option value="DEMİRDÖKÜM">DEMİRDÖKÜM</option>
+                                        <option value="DEMİRÖREN">DEMİRÖREN</option>
+                                        <option value="DIAGEO">DIAGEO</option>
+                                        <option value="DIGITAL PANORAMA">DIGITAL PANORAMA</option>
+                                        <option value="DISS.RESEARCH">DISS.RESEARCH</option>
+                                        <option value="DİAGEO">DİAGEO</option>
+                                        <option value="DİMES">DİMES</option>
+                                        <option value="DİVAN">DİVAN</option>
+                                        <option value="DOGMA ALERES">DOGMA ALERES</option>
+                                        <option value="DOĞADAN">DOĞADAN</option>
+                                        <option value="DOĞAN HOLDİNG">DOĞAN HOLDİNG</option>
+                                        <option value="DOĞTAŞ">DOĞTAŞ</option>
+                                        <option value="DOĞUŞ OTOMOTİV">DOĞUŞ OTOMOTİV</option>
+                                        <option value="DOMİNO'S PİZZA">DOMİNO'S PİZZA</option>
+                                        <option value="DORİS">DORİS</option>
+                                        <option value="DRD">DRD</option>
+                                        <option value="DURU BAKLİYAT">DURU BAKLİYAT</option>
+                                        <option value="DYO">DYO</option>
+                                        <option value="DYSON">DYSON</option>
+                                        <option value="E2E RESEARCH">E2E RESEARCH</option>
+                                        <option value="EASYCEP">EASYCEP</option>
+                                        <option value="EBSO">EBSO</option>
+                                        <option value="ECB TÜKETİM">ECB TÜKETİM</option>
+                                        <option value="ECLIT">ECLIT</option>
+                                        <option value="ECZACIBAŞI">ECZACIBAŞI</option>
+                                        <option value="ECZACIBAŞI TÜKETİM">ECZACIBAŞI TÜKETİM</option>
+                                        <option value="ECZACIBAŞI YAPI">ECZACIBAŞI YAPI</option>
+                                        <option value="EDENRED">EDENRED</option>
+                                        <option value="EINHELL">EINHELL</option>
+                                        <option value="EMİN EVİM">EMİN EVİM</option>
+                                        <option value="EMSAN">EMSAN</option>
+                                        <option value="ENERJİSA">ENERJİSA</option>
+                                        <option value="ENERYA">ENERYA</option>
+                                        <option value="ENGLISH HOME">ENGLISH HOME</option>
+                                        <option value="ENİDA KİMYA">ENİDA KİMYA</option>
+                                        <option value="EPITOME">EPITOME</option>
+                                        <option value="EPİTOME RESEARCH">EPİTOME RESEARCH</option>
+                                        <option value="ERÇAL OTOMOTİV">ERÇAL OTOMOTİV</option>
+                                        <option value="ERDEMİR">ERDEMİR</option>
+                                        <option value="ERZPHARMA">ERZPHARMA</option>
+                                        <option value="EŞARJ">EŞARJ</option>
+                                        <option value="ETİ">ETİ</option>
+                                        <option value="EUROKA">EUROKA</option>
+                                        <option value="EVYAP">EVYAP</option>
+                                        <option value="FAKİR">FAKİR</option>
+                                        <option value="FCBART GROUP">FCBART GROUP</option>
+                                        <option value="FİBABANKA">FİBABANKA</option>
+                                        <option value="FORD">FORD</option>
+                                        <option value="FRİTOLAY">FRİTOLAY</option>
+                                        <option value="FUTUREFULCONSULTİNG">FUTUREFULCONSULTİNG</option>
+                                        <option value="GARANTİ">GARANTİ</option>
+                                        <option value="GARANTİ BBVA">GARANTİ BBVA</option>
+                                        <option value="GARANTİ BVVA EMEKLİ SANDIĞI">GARANTİ BVVA EMEKLİ SANDIĞI</option>
+                                        <option value="GCA">GCA</option>
+                                        <option value="GEMIUS">GEMIUS</option>
+                                        <option value="GETİR">GETİR</option>
+                                        <option value="GEWISS ELEKTRIK">GEWISS ELEKTRIK</option>
+                                        <option value="GEZİNOMİ">GEZİNOMİ</option>
+                                        <option value="GFK SPAIN">GFK SPAIN</option>
+                                        <option value="GLORIA JEANS">GLORIA JEANS</option>
+                                        <option value="GOLF DONDURMA">GOLF DONDURMA</option>
+                                        <option value="GOON">GOON</option>
+                                        <option value="GRATIS">GRATIS</option>
+                                        <option value="GREE KLİMA">GREE KLİMA</option>
+                                        <option value="GREEN SALAD">GREEN SALAD</option>
+                                        <option value="GTBD">GTBD</option>
+                                        <option value="GÜNSAN">GÜNSAN</option>
+                                        <option value="GÜRALLAR">GÜRALLAR</option>
+                                        <option value="GÜROK">GÜROK</option>
+                                        <option value="GÜZEL ENERJİ">GÜZEL ENERJİ</option>
+                                        <option value="HADİ-TOM DİJİTAL">HADİ-TOM DİJİTAL</option>
+                                        <option value="HALKBANK">HALKBANK</option>
+                                        <option value="HAMİDİYE SU">HAMİDİYE SU</option>
+                                        <option value="HAPPY PEOPLE">HAPPY PEOPLE</option>
+                                        <option value="HARIBO">HARIBO</option>
+                                        <option value="HAYAT FİNANS">HAYAT FİNANS</option>
+                                        <option value="HAYAT HOLDİNG">HAYAT HOLDİNG</option>
+                                        <option value="HAYAT KİMYA">HAYAT KİMYA</option>
+                                        <option value="HBG KNOWLEDGE">HBG KNOWLEDGE</option>
+                                        <option value="HEP İYİ SİGORTA">HEP İYİ SİGORTA</option>
+                                        <option value="HEPSİBURADA">HEPSİBURADA</option>
+                                        <option value="HERBALIFE">HERBALIFE</option>
+                                        <option value="HOBİ KOZMETİK">HOBİ KOZMETİK</option>
+                                        <option value="HRANT DINK VAKFI">HRANT DINK VAKFI</option>
+                                        <option value="HYUNDAI ASSAN">HYUNDAI ASSAN</option>
+                                        <option value="IDEFIX">IDEFIX</option>
+                                        <option value="IDEMA">IDEMA</option>
+                                        <option value="INGBANK">INGBANK</option>
+                                        <option value="INOLIVA - Aİ">INOLIVA - Aİ</option>
+                                        <option value="INTEMA">INTEMA</option>
+                                        <option value="INTERSPOR">INTERSPOR</option>
+                                        <option value="IPSOS SWİTZERLAND">IPSOS SWİTZERLAND</option>
+                                        <option value="ISTANPOL">ISTANPOL</option>
+                                        <option value="IVECO">IVECO</option>
+                                        <option value="IZOCAM">IZOCAM</option>
+                                        <option value="İNCİ AKÜ">İNCİ AKÜ</option>
+                                        <option value="İPEKYOL">İPEKYOL</option>
+                                        <option value="İSTANBUL BİLGİ ÜNİVERSİTESİ">İSTANBUL BİLGİ ÜNİVERSİTESİ</option>
+                                        <option value="İSTANPOL ENTİTÜTÜSÜ">İSTANPOL ENTİTÜTÜSÜ</option>
+                                        <option value="İŞ BANKASI">İŞ BANKASI</option>
+                                        <option value="İŞ PORTFÖY">İŞ PORTFÖY</option>
+                                        <option value="İTÜ">İTÜ</option>
+                                        <option value="İZOCAM">İZOCAM</option>
+                                        <option value="JOLLY TUR">JOLLY TUR</option>
+                                        <option value="JTI">JTI</option>
+                                        <option value="JUSTGROW">JUSTGROW</option>
+                                        <option value="KAHVE DÜNYASI">KAHVE DÜNYASI</option>
+                                        <option value="KALE KİLİT">KALE KİLİT</option>
+                                        <option value="KALE SERAMİK">KALE SERAMİK</option>
+                                        <option value="KARACA">KARACA</option>
+                                        <option value="KARACA HOME">KARACA HOME</option>
+                                        <option value="KARADENİZ HOLDİNG">KARADENİZ HOLDİNG</option>
+                                        <option value="KARGOMSENDE">KARGOMSENDE</option>
+                                        <option value="KELEBEK">KELEBEK</option>
+                                        <option value="KENTON">KENTON</option>
+                                        <option value="KEREVİTAŞ">KEREVİTAŞ</option>
+                                        <option value="KOÇ AİLEM">KOÇ AİLEM</option>
+                                        <option value="KOÇ HOLDİNG">KOÇ HOLDİNG</option>
+                                        <option value="KOÇAİLEM">KOÇAİLEM</option>
+                                        <option value="KOÇTAŞ">KOÇTAŞ</option>
+                                        <option value="KOM">KOM</option>
+                                        <option value="KOMAGENE">KOMAGENE</option>
+                                        <option value="KOPAŞ">KOPAŞ</option>
+                                        <option value="KOROPLAST">KOROPLAST</option>
+                                        <option value="KOTON">KOTON</option>
+                                        <option value="LANDOR&FITCH">LANDOR&FITCH</option>
+                                        <option value="LAV">LAV</option>
+                                        <option value="LC WAIKIKI">LC WAIKIKI</option>
+                                        <option value="LEMONADE">LEMONADE</option>
+                                        <option value="LEXIS RESEARCH">LEXIS RESEARCH</option>
+                                        <option value="LEZİTA">LEZİTA</option>
+                                        <option value="LİLA KAĞIT">LİLA KAĞIT</option>
+                                        <option value="LİZAY PIRLANTA">LİZAY PIRLANTA</option>
+                                        <option value="LOGO YAZILIM">LOGO YAZILIM</option>
+                                        <option value="L'OREAL">L'OREAL</option>
+                                        <option value="MADAME COCO">MADAME COCO</option>
+                                        <option value="MAGNETIC MARCA">MAGNETIC MARCA</option>
+                                        <option value="MARKAMI YÖNET">MARKAMI YÖNET</option>
+                                        <option value="MARKETİNG TÜRKİYE">MARKETİNG TÜRKİYE</option>
+                                        <option value="MARKETMIND">MARKETMIND</option>
+                                        <option value="MARTI">MARTI</option>
+                                        <option value="MASMI">MASMI</option>
+                                        <option value="MASTERCARD">MASTERCARD</option>
+                                        <option value="MAZARS DENGE">MAZARS DENGE</option>
+                                        <option value="MCDONALDS">MCDONALDS</option>
+                                        <option value="MEDIAMARKT">MEDIAMARKT</option>
+                                        <option value="MEDYAPIM GROUP">MEDYAPIM GROUP</option>
+                                        <option value="MEMORIAL">MEMORIAL</option>
+                                        <option value="METLIFE">METLIFE</option>
+                                        <option value="METRO İSTANBUL">METRO İSTANBUL</option>
+                                        <option value="METRO MARKET">METRO MARKET</option>
+                                        <option value="MEY">MEY</option>
+                                        <option value="MITSUBISHI">MITSUBISHI</option>
+                                        <option value="MİGROS">MİGROS</option>
+                                        <option value="MODANİSA">MODANİSA</option>
+                                        <option value="MOMWELL">MOMWELL</option>
+                                        <option value="MON REVE">MON REVE</option>
+                                        <option value="MONDELEZ">MONDELEZ</option>
+                                        <option value="MUSTELA">MUSTELA</option>
+                                        <option value="N11">N11</option>
+                                        <option value="NACAR SAAT">NACAR SAAT</option>
+                                        <option value="NBL PREBİOTİC">NBL PREBİOTİC</option>
+                                        <option value="NEF">NEF</option>
+                                        <option value="NESTLE">NESTLE</option>
+                                        <option value="NEW INN">NEW INN</option>
+                                        <option value="NGN">NGN</option>
+                                        <option value="NIKE">NIKE</option>
+                                        <option value="NİVOGO">NİVOGO</option>
+                                        <option value="NOBEL">NOBEL</option>
+                                        <option value="OKUTU">OKUTU</option>
+                                        <option value="OKX RESEARCH">OKX RESEARCH</option>
+                                        <option value="OMSAN">OMSAN</option>
+                                        <option value="ON DİJİTAL">ON DİJİTAL</option>
+                                        <option value="OPET">OPET</option>
+                                        <option value="OTOKOÇ">OTOKOÇ</option>
+                                        <option value="OYAK MADEN METALÜRJİ">OYAK MADEN METALÜRJİ</option>
+                                        <option value="ÖZTREYLER">ÖZTREYLER</option>
+                                        <option value="PARAŞÜT">PARAŞÜT</option>
+                                        <option value="PAŞABAHÇE">PAŞABAHÇE</option>
+                                        <option value="PAZARAMA">PAZARAMA</option>
+                                        <option value="PEGASUS">PEGASUS</option>
+                                        <option value="PERNOD RICARD">PERNOD RICARD</option>
+                                        <option value="PERRIGO">PERRIGO</option>
+                                        <option value="PETRA">PETRA</option>
+                                        <option value="PETROL OFİSİ">PETROL OFİSİ</option>
+                                        <option value="PEUGEOT">PEUGEOT</option>
+                                        <option value="PEYMAN">PEYMAN</option>
+                                        <option value="PHİLOMATH RESEARCH">PHİLOMATH RESEARCH</option>
+                                        <option value="PINAR">PINAR</option>
+                                        <option value="PINAR SU">PINAR SU</option>
+                                        <option value="POLİSAN">POLİSAN</option>
+                                        <option value="PROFI RESEARCH">PROFI RESEARCH</option>
+                                        <option value="PSYMA RESEARCH">PSYMA RESEARCH</option>
+                                        <option value="PURE ENERGY">PURE ENERGY</option>
+                                        <option value="PYSMA">PYSMA</option>
+                                        <option value="QNB FİNANSBANK">QNB FİNANSBANK</option>
+                                        <option value="RAKUTEN">RAKUTEN</option>
+                                        <option value="RAY SİGORTA">RAY SİGORTA</option>
+                                        <option value="RECKİTT BENCKİSER">RECKİTT BENCKİSER</option>
+                                        <option value="RECREAM">RECREAM</option>
+                                        <option value="REDCRESEARCH">REDCRESEARCH</option>
+                                        <option value="RENAULT">RENAULT</option>
+                                        <option value="RESEARCH MRC">RESEARCH MRC</option>
+                                        <option value="RESEARCH RMC">RESEARCH RMC</option>
+                                        <option value="RESEARCH VIEW">RESEARCH VIEW</option>
+                                        <option value="RESERACH RMC">RESERACH RMC</option>
+                                        <option value="SABANCI EDU">SABANCI EDU</option>
+                                        <option value="SABANCI VAKFI">SABANCI VAKFI</option>
+                                        <option value="SAGRA">SAGRA</option>
+                                        <option value="SAHİBİNDEN.COM">SAHİBİNDEN.COM</option>
+                                        <option value="SAINT GOBAIN">SAINT GOBAIN</option>
+                                        <option value="SAMSUNG">SAMSUNG</option>
+                                        <option value="SANKO OKULLARI">SANKO OKULLARI</option>
+                                        <option value="SANOFİ">SANOFİ</option>
+                                        <option value="SCA YILDIZ">SCA YILDIZ</option>
+                                        <option value="SENDEO">SENDEO</option>
+                                        <option value="SEPHORA">SEPHORA</option>
+                                        <option value="SERVIER ILAÇ">SERVIER ILAÇ</option>
+                                        <option value="SETUR">SETUR</option>
+                                        <option value="SETUR-MARİNA">SETUR-MARİNA</option>
+                                        <option value="SEV">SEV</option>
+                                        <option value="SHELL">SHELL</option>
+                                        <option value="SİA">SİA</option>
+                                        <option value="SİSAL ŞANS OYUNLARI">SİSAL ŞANS OYUNLARI</option>
+                                        <option value="SPEED MEDYA">SPEED MEDYA</option>
+                                        <option value="STANTEC">STANTEC</option>
+                                        <option value="STM">STM</option>
+                                        <option value="STRATEGIR">STRATEGIR</option>
+                                        <option value="SÜTAŞ">SÜTAŞ</option>
+                                        <option value="ŞENPİLİÇ">ŞENPİLİÇ</option>
+                                        <option value="ŞİŞECAM">ŞİŞECAM</option>
+                                        <option value="ŞÖLEN">ŞÖLEN</option>
+                                        <option value="TAHİNCİOĞLU">TAHİNCİOĞLU</option>
+                                        <option value="TAMEK">TAMEK</option>
+                                        <option value="TARIM KREDİ MARKET">TARIM KREDİ MARKET</option>
+                                        <option value="TAT">TAT</option>
+                                        <option value="TATİLSEPETİ">TATİLSEPETİ</option>
+                                        <option value="TAV">TAV</option>
+                                        <option value="TAZE FİKİR">TAZE FİKİR</option>
+                                        <option value="TCHIBO">TCHIBO</option>
+                                        <option value="TEB">TEB</option>
+                                        <option value="TEKNOSA">TEKNOSA</option>
+                                        <option value="TETRA PAK">TETRA PAK</option>
+                                        <option value="THAAT'S IT!">THAAT'S IT!</option>
+                                        <option value="THAATSIT">THAATSIT</option>
+                                        <option value="THE INSİGHTS SHOP">THE INSİGHTS SHOP</option>
+                                        <option value="THY">THY</option>
+                                        <option value="TK HOLDİNG">TK HOLDİNG</option>
+                                        <option value="TOFAŞ">TOFAŞ</option>
+                                        <option value="TOKEN INC">TOKEN INC</option>
+                                        <option value="TOKKDER">TOKKDER</option>
+                                        <option value="TOYOTA">TOYOTA</option>
+                                        <option value="TRADESOFT">TRADESOFT</option>
+                                        <option value="TRASSIR">TRASSIR</option>
+                                        <option value="TRENDYOL">TRENDYOL</option>
+                                        <option value="TRICONSULT">TRICONSULT</option>
+                                        <option value="TRT">TRT</option>
+                                        <option value="TURKCELL">TURKCELL</option>
+                                        <option value="TUSAS">TUSAS</option>
+                                        <option value="TÜRK TELEKOM">TÜRK TELEKOM</option>
+                                        <option value="TÜRK TRAKTÖR">TÜRK TRAKTÖR</option>
+                                        <option value="TÜRKİYE FİNANS BANKASI">TÜRKİYE FİNANS BANKASI</option>
+                                        <option value="UNILEVER">UNILEVER</option>
+                                        <option value="UNITED GROUP">UNITED GROUP</option>
+                                        <option value="UNO">UNO</option>
+                                        <option value="UNTAPPED INNOVATION">UNTAPPED INNOVATION</option>
+                                        <option value="ÜLKER">ÜLKER</option>
+                                        <option value="ÜLKER">ÜLKER</option>
+                                        <option value="VAILLANT">VAILLANT</option>
+                                        <option value="VAKIF KATILIM">VAKIF KATILIM</option>
+                                        <option value="VAKIFBANK">VAKIFBANK</option>
+                                        <option value="VDF SİGORTA">VDF SİGORTA</option>
+                                        <option value="VESTEL">VESTEL</option>
+                                        <option value="VİSA">VİSA</option>
+                                        <option value="VODAFONE">VODAFONE</option>
+                                        <option value="VOLVO">VOLVO</option>
+                                        <option value="WARMHOUSE">WARMHOUSE</option>
+                                        <option value="WATSONS">WATSONS</option>
+                                        <option value="WEAREHUMAN8">WEAREHUMAN8</option>
+                                        <option value="WEBER">WEBER</option>
+                                        <option value="WEFOOD">WEFOOD</option>
+                                        <option value="WHY FIVE">WHY FIVE</option>
+                                        <option value="YANDEX">YANDEX</option>
+                                        <option value="YEMEKSEPETİ">YEMEKSEPETİ</option>
+                                        <option value="YILDIZ DEMİR ÇELİK">YILDIZ DEMİR ÇELİK</option>
+                                        <option value="YILIN SEÇİLMİŞ ÜRÜNÜ">YILIN SEÇİLMİŞ ÜRÜNÜ</option>
+                                        <option value="YKB">YKB</option>
+                                        <option value="YORGLASS">YORGLASS</option>
+                                        <option value="YURTİÇİ KARGO">YURTİÇİ KARGO</option>
+                                        <option value="YÜCE OTO">YÜCE OTO</option>
+                                        <option value="YVES ROCHER">YVES ROCHER</option>
+                                        <option value="ZEN PIRLANTA">ZEN PIRLANTA</option>
+                                        <option value="ZER">ZER</option>
+                                        <option value="ZER -AYGAZ">ZER -AYGAZ</option>
+                                        <option value="ZER-BİLKOM">ZER-BİLKOM</option>
+                                        <option value="ZER-FORD">ZER-FORD</option>
+                                        <option value="ZER-KOÇ HOLDİNG">ZER-KOÇ HOLDİNG</option>
+                                        <option value="ZER-SETUR">ZER-SETUR</option>
+                                        <option value="ZES">ZES</option>
+
+
+                                    </select>
+                                    <div class="form-text">Eğer müşteri listede yoksa, lütfen önce müşteri ekleyin.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Adım 2: Sektör Seçimi -->
+                <div class="form-wizard-panel" data-step="2">
+                    <div class="mb-10">
+                        <h2 class="fw-bold step-title">Sektör Seçimi</h2>
+                        <p class="text-gray-600 fs-6">Projenin hangi sektöre ait olduğunu seçiniz. Bu bilgi proje raporlaması ve analizi için önemlidir.</p>
+                    </div>
+
+                    <div class="card card-flush shadow-sm mb-5">
+                        <div class="card-body py-5">
+                            <div class="form-wizard-checkbox-group">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="form-wizard-checkbox-label d-flex align-items-center">
+                                            <div>
+                                                <span class="form-wizard-checkbox-title">FMCG</span>
+                                                <span class="form-wizard-checkbox-desc">Hızlı Tüketim Malları</span>
+                                            </div>
+                                            <input class="form-check-input" type="radio" name="ProjectSector" value="FMCG" />
+                                        </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-wizard-checkbox-label d-flex align-items-center">
+                                            <div>
+                                                <span class="form-wizard-checkbox-title">Toptan & Perakende</span>
+                                                <span class="form-wizard-checkbox-desc">Toptan ve perakende satış sektörü</span>
+                                            </div>
+                                            <input class="form-check-input" type="radio" name="ProjectSector" value="ToptanvePerakende" />
+                                        </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-wizard-checkbox-label d-flex align-items-center">
+                                            <div>
+                                                <span class="form-wizard-checkbox-title">Medikal</span>
+                                                <span class="form-wizard-checkbox-desc">Sağlık ve medikal sektörü</span>
+                                            </div>
+                                            <input class="form-check-input" type="radio" name="ProjectSector" value="Medikal" />
+                                        </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-wizard-checkbox-label d-flex align-items-center">
+                                            <div>
+                                                <span class="form-wizard-checkbox-title">Dayanıklı Tüketim</span>
+                                                <span class="form-wizard-checkbox-desc">Dayanıklı tüketim malzemeleri</span>
+                                            </div>
+                                            <input class="form-check-input" type="radio" name="ProjectSector" value="DayanikliTuketim" />
+                                        </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-wizard-checkbox-label d-flex align-items-center">
+                                            <div>
+                                                <span class="form-wizard-checkbox-title">Otomotiv</span>
+                                                <span class="form-wizard-checkbox-desc">Otomotiv sektörü</span>
+                                            </div>
+                                            <input class="form-check-input" type="radio" name="ProjectSector" value="Otomotiv" />
+                                        </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-wizard-checkbox-label d-flex align-items-center">
+                                            <div>
+                                                <span class="form-wizard-checkbox-title">Finans</span>
+                                                <span class="form-wizard-checkbox-desc">Finans ve bankacılık sektörü</span>
+                                            </div>
+                                            <input class="form-check-input" type="radio" name="ProjectSector" value="Finans" />
+                                        </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-wizard-checkbox-label d-flex align-items-center">
+                                            <div>
+                                                <span class="form-wizard-checkbox-title">Enerji</span>
+                                                <span class="form-wizard-checkbox-desc">Enerji sektörü</span>
+                                            </div>
+                                            <input class="form-check-input" type="radio" name="ProjectSector" value="Enerji" />
+                                        </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-wizard-checkbox-label d-flex align-items-center">
+                                            <div>
+                                                <span class="form-wizard-checkbox-title">Diğer</span>
+                                                <span class="form-wizard-checkbox-desc">Yukarıdaki sektörler dışında</span>
+                                            </div>
+                                            <input class="form-check-input" type="radio" name="ProjectSector" id="other-option" />
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div id="other-text-field" class="d-none mt-5">
+                                    <label class="form-label fs-6 fw-bold">Sektör Adı</label>
+                                    <input type="text" class="form-control form-control-solid" name="ProjectSectorInput" placeholder="Sektör adını giriniz" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Adım 3: Metot Seçimi -->
+                <div class="form-wizard-panel" data-step="3">
+                    <div class="mb-10">
+                        <h2 class="fw-bold step-title">Metot Seçimi</h2>
+                        <p class="text-gray-600 fs-6">Projenin hangi metot(lar) ile yürütüleceğini seçiniz. Birden fazla metot seçebilirsiniz.</p>
+                    </div>
+
+                    <div class="card card-flush shadow-sm mb-5">
+                        <div class="card-body py-5">
+                            <div class="form-wizard-checkbox-group">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="form-wizard-checkbox-label d-flex align-items-center">
+                                            <div>
+                                                <span class="form-wizard-checkbox-title">Cawi</span>
+                                                <span class="form-wizard-checkbox-desc">Computer Assisted Web Interviewing</span>
+                                            </div>
+                                            <input class="form-check-input" type="checkbox" name="ProjectMethod" value="Cawi" />
+                                        </label>
+                                        <div class="form-wizard-sample-size">
+                                            <label class="form-label fs-6 fw-bold">Örneklem Büyüklüğü</label>
+                                            <input type="text" class="form-control form-control-solid" name="CawiSize" placeholder="Örneklem büyüklüğünü giriniz" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-wizard-checkbox-label d-flex align-items-center">
+                                            <div>
+                                                <span class="form-wizard-checkbox-title">Capi</span>
+                                                <span class="form-wizard-checkbox-desc">Computer Assisted Personal Interviewing</span>
+                                            </div>
+                                            <input class="form-check-input" type="checkbox" name="ProjectMethod" value="Capi" />
+                                        </label>
+                                        <div class="form-wizard-sample-size">
+                                            <label class="form-label fs-6 fw-bold">Örneklem Büyüklüğü</label>
+                                            <input type="text" class="form-control form-control-solid" name="CapiSize" placeholder="Örneklem büyüklüğünü giriniz" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-5">
+                                    <div class="col-md-6">
+                                        <label class="form-wizard-checkbox-label d-flex align-items-center">
+                                            <div>
+                                                <span class="form-wizard-checkbox-title">Cati</span>
+                                                <span class="form-wizard-checkbox-desc">Computer Assisted Telephone Interviewing</span>
+                                            </div>
+                                            <input class="form-check-input" type="checkbox" name="ProjectMethod" value="Cati" />
+                                        </label>
+                                        <div class="form-wizard-sample-size">
+                                            <label class="form-label fs-6 fw-bold">Örneklem Büyüklüğü</label>
+                                            <input type="text" class="form-control form-control-solid" name="CatiSize" placeholder="Örneklem büyüklüğünü giriniz" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-wizard-checkbox-label d-flex align-items-center">
+                                            <div>
+                                                <span class="form-wizard-checkbox-title">Mailing</span>
+                                                <span class="form-wizard-checkbox-desc">E-posta yoluyla görüşme</span>
+                                            </div>
+                                            <input class="form-check-input" type="checkbox" name="ProjectMethod" value="Mailing" />
+                                        </label>
+                                        <div class="form-wizard-sample-size">
+                                            <label class="form-label fs-6 fw-bold">Örneklem Büyüklüğü</label>
+                                            <input type="text" class="form-control form-control-solid" name="MailingSize" placeholder="Örneklem büyüklüğünü giriniz" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-5">
+                                    <div class="col-md-6">
+                                        <label class="form-wizard-checkbox-label d-flex align-items-center">
+                                            <div>
+                                                <span class="form-wizard-checkbox-title">Hibrid/QR</span>
+                                                <span class="form-wizard-checkbox-desc">QR kodları ile hibrit araştırma</span>
+                                            </div>
+                                            <input class="form-check-input" type="checkbox" name="ProjectMethod" value="HibridveyaQR" />
+                                        </label>
+                                        <div class="form-wizard-sample-size">
+                                            <label class="form-label fs-6 fw-bold">Örneklem Büyüklüğü</label>
+                                            <input type="text" class="form-control form-control-solid" name="HibridSize" placeholder="Örneklem büyüklüğünü giriniz" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-wizard-checkbox-label d-flex align-items-center">
+                                            <div>
+                                                <span class="form-wizard-checkbox-title">Diğer</span>
+                                                <span class="form-wizard-checkbox-desc">Yukarıdaki metotlar dışında</span>
+                                            </div>
+                                            <input class="form-check-input" type="checkbox" name="ProjectMethod" id="other-option-method" value="OtherMethod" />
+                                        </label>
+                                        <div class="form-wizard-sample-size">
+                                            <label class="form-label fs-6 fw-bold">Metot Adı</label>
+                                            <input type="text" class="form-control form-control-solid mb-3" name="OtherMethodName" placeholder="Metot adını giriniz" />
+                                            <label class="form-label fs-6 fw-bold">Örneklem Büyüklüğü</label>
+                                            <input type="text" class="form-control form-control-solid" name="OtherSize" placeholder="Örneklem büyüklüğünü giriniz" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Adım 4: Saha Firması -->
+                <div class="form-wizard-panel" data-step="4">
+                    <div class="mb-10">
+                        <h2 class="fw-bold step-title">Saha Firması Seçimi</h2>
+                        <p class="text-gray-600 fs-6">Proje için çalışılacak saha firmasını seçiniz. Birden fazla firma seçebilirsiniz.</p>
+                    </div>
+
+                    <div class="card card-flush shadow-sm mb-5">
+                        <div class="card-body py-5">
+                            <div class="mb-7">
+                                <label class="form-label required fs-6 fw-bold">Saha Firması</label>
+                                <select class="form-select form-select-solid" id="sahaSelect" name="ScmId" data-control="select2" data-placeholder="Saha firması seçiniz" data-allow-clear="true" multiple="multiple">
+                                    <option></option>
+                                    <!-- Saha firmaları dinamik olarak doldurulacak -->
+                                </select>
+                                <div class="form-text mt-2">
+                                    <span class="text-muted">Birden fazla firma seçmek için Ctrl tuşuna basılı tutarak seçim yapabilirsiniz.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Adım 5: Zaman Planı -->
+                <div class="form-wizard-panel" data-step="5">
+                    <div class="mb-10">
+                        <h2 class="fw-bold step-title">Proje Zaman Planı</h2>
+                        <p class="text-gray-600 fs-6">Projenin zaman planını belirleyiniz. Bu tarihler proje takibi için kullanılacaktır.</p>
+                    </div>
+
+                    <div class="card card-flush shadow-sm mb-5">
+                        <div class="card-body py-5">
+                            <!-- Hazırlık Süreci -->
+                            <h5 class="fw-bold text-dark mb-5">Hazırlık Süreci</h5>
+                            <div class="row mb-5">
+                                <div class="col-lg-6 mb-5">
+                                    <label class="form-label fs-6 fw-bold">Planlanan Soru Formu Teslim</label>
+                                    <div class="position-relative">
+                                        <span class="position-absolute top-50 translate-middle-y ms-4">
+                                            <i class="bi bi-calendar fs-5 text-gray-600"></i>
+                                        </span>
+                                        <input class="form-control form-control-solid ps-12 flatpickr-input" name="PlanlananSoruFormuTeslim" id="planlanan_soruformu_teslim" placeholder="Tarih seçiniz" />
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 mb-5">
+                                    <label class="form-label fs-6 fw-bold">Planlanan Script Teslim</label>
+                                    <div class="position-relative">
+                                        <span class="position-absolute top-50 translate-middle-y ms-4">
+                                            <i class="bi bi-calendar fs-5 text-gray-600"></i>
+                                        </span>
+                                        <input class="form-control form-control-solid ps-12 flatpickr-input" name="PlanlananScriptTeslim" id="planlanan_scrpt_teslim" placeholder="Tarih seçiniz" />
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 mb-5">
+                                    <label class="form-label fs-6 fw-bold">Planlanan Script Kontrol</label>
+                                    <div class="position-relative">
+                                        <span class="position-absolute top-50 translate-middle-y ms-4">
+                                            <i class="bi bi-calendar fs-5 text-gray-600"></i>
+                                        </span>
+                                        <input class="form-control form-control-solid ps-12 flatpickr-input" name="PlanlananScriptKontrol" id="planlanan_scrpt_kontrol" placeholder="Tarih seçiniz" />
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 mb-5">
+                                    <label class="form-label fs-6 fw-bold">Planlanan Script Revizyon</label>
+                                    <div class="position-relative">
+                                        <span class="position-absolute top-50 translate-middle-y ms-4">
+                                            <i class="bi bi-calendar fs-5 text-gray-600"></i>
+                                        </span>
+                                        <input class="form-control form-control-solid ps-12 flatpickr-input" name="PlanlananScriptRevizyon" id="planlanan_scrpt_revizyon" placeholder="Tarih seçiniz" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="separator separator-dashed my-8"></div>
+
+                            <!-- Saha Süreci -->
+                            <h5 class="fw-bold text-dark mb-5">Saha Süreci</h5>
+                            <div class="row mb-5">
+                                <div class="col-lg-6 mb-5">
+                                    <label class="form-label fs-6 fw-bold">Planlanan Saha Başlangıç</label>
+                                    <div class="position-relative">
+                                        <span class="position-absolute top-50 translate-middle-y ms-4">
+                                            <i class="bi bi-calendar fs-5 text-gray-600"></i>
+                                        </span>
+                                        <input class="form-control form-control-solid ps-12 flatpickr-input" name="PlanlananSahaBaslangic" id="planlanan_saha_baslangic" placeholder="Tarih seçiniz" />
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 mb-5">
+                                    <label class="form-label fs-6 fw-bold">Planlanan Saha Bitiş</label>
+                                    <div class="position-relative">
+                                        <span class="position-absolute top-50 translate-middle-y ms-4">
+                                            <i class="bi bi-calendar fs-5 text-gray-600"></i>
+                                        </span>
+                                        <input class="form-control form-control-solid ps-12 flatpickr-input" name="PlanlananSahaBitis" id="planlanan_saha_bitis" placeholder="Tarih seçiniz" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="separator separator-dashed my-8"></div>
+
+                            <!-- Analiz ve Raporlama Süreci -->
+                            <h5 class="fw-bold text-dark mb-5">Analiz ve Raporlama</h5>
+                            <div class="row">
+                                <div class="col-lg-6 mb-5">
+                                    <label class="form-label fs-6 fw-bold">Planlanan Kodlama Teslim</label>
+                                    <div class="position-relative">
+                                        <span class="position-absolute top-50 translate-middle-y ms-4">
+                                            <i class="bi bi-calendar fs-5 text-gray-600"></i>
+                                        </span>
+                                        <input class="form-control form-control-solid ps-12 flatpickr-input" name="PlanlananKodlamaTeslim" id="planlanan_kodlama_teslim" placeholder="Tarih seçiniz" />
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 mb-5">
+                                    <label class="form-label fs-6 fw-bold">Planlanan Tablolama Teslim</label>
+                                    <div class="position-relative">
+                                        <span class="position-absolute top-50 translate-middle-y ms-4">
+                                            <i class="bi bi-calendar fs-5 text-gray-600"></i>
+                                        </span>
+                                        <input class="form-control form-control-solid ps-12 flatpickr-input" name="PlanlananTablolamaTeslim" id="planlanan_tablolama_teslim" placeholder="Tarih seçiniz" />
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <label class="form-label fs-6 fw-bold">Planlanan Rapor Teslim</label>
+                                    <div class="position-relative">
+                                        <span class="position-absolute top-50 translate-middle-y ms-4">
+                                            <i class="bi bi-calendar fs-5 text-gray-600"></i>
+                                        </span>
+                                        <input class="form-control form-control-solid ps-12 flatpickr-input" name="PlanlananRaporTeslim" id="planlanan_rapor_teslim" placeholder="Tarih seçiniz" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Adım 6: Proje Ekibi -->
+                <div class="form-wizard-panel" data-step="6">
+                    <div class="mb-10">
+                        <h2 class="fw-bold step-title">Proje Ekibi ve Notlar</h2>
+                        <p class="text-gray-600 fs-6">Proje ekibini belirleyiniz ve varsa proje notlarını ekleyiniz.</p>
+                    </div>
+
+                    <div class="card card-flush shadow-sm mb-5">
+                        <div class="card-body py-5">
+                            <div class="row mb-8">
+                                <div class="col-lg-12 mb-8">
+                                    <label class="form-label required fs-6 fw-bold">Ekip Yöneticisi</label>
+                                    <select class="form-select form-select-solid" id="userManagerSelect" name="ProjectManager" data-control="select2" data-placeholder="Ekip yöneticisi seçiniz">
+                                        <option></option>
+                                        <!-- Ekip yöneticileri dinamik olarak doldurulacak -->
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-12 mb-8">
+                                    <label class="form-label required fs-6 fw-bold">Ekip Üyeleri</label>
+                                    <select class="form-select form-select-solid" id="userSelect" name="ProjectOfficers" data-control="select2" data-placeholder="Ekip üyelerini seçiniz" multiple="multiple">
+                                        <option></option>
+                                        <!-- Ekip üyeleri dinamik olarak doldurulacak -->
+                                    </select>
+                                    <div class="form-text mt-2">
+                                        <span class="text-muted">Birden fazla ekip üyesi seçmek için Ctrl tuşuna basılı tutarak seçim yapabilirsiniz.</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12 mb-8">
+                                    <label class="form-label required fs-6 fw-bold">Proje Durumu</label>
+                                    <select class="form-select form-select-solid" name="ProjectStatus" data-control="select2" data-placeholder="Proje durumunu seçiniz">
+                                        <option></option>
+                                        <option value="1">Onay Toplantısı</option>
+                                        <option value="2">Soru Formu Paylaşımı</option>
+                                        <option value="3">Script Yazımı</option>
+                                        <option value="4">Script Onayı</option>
+                                        <option value="5">Kota Dosyası</option>
+                                        <option value="6">Saha Başlangıç</option>
+                                        <option value="7">Sahada</option>
+                                        <option value="8">Saha Bitiş</option>
+                                        <option value="9">Kodlama</option>
+                                        <option value="10">Tablolama</option>
+                                        <option value="11">MS Analizleri</option>
+                                        <option value="12">Ek İstekler</option>
+                                        <option value="13">Raporlama</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-12">
+                                    <label class="form-label fs-6 fw-bold">Proje Notları</label>
+                                    <textarea class="form-control form-control-solid" rows="5" name="ProjectNotes" placeholder="Proje ile ilgili notlarınızı buraya ekleyebilirsiniz..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Adım 7: Tamamlama -->
+                <div class="form-wizard-panel" data-step="7">
+                    <div class="mb-10">
+                        <h2 class="fw-bold step-title">Proje Bilgilerini Onayla</h2>
+                        <p class="text-gray-600 fs-6">Girdiğiniz proje bilgilerini gözden geçirip onaylayınız.</p>
+                    </div>
+
+                    <div class="card card-flush shadow-sm mb-5">
+                        <div class="card-body py-5">
+                            <div class="form-wizard-summary">
+                                <!-- Temel Bilgiler -->
+                                <div class="form-wizard-summary-title">Proje Temel Bilgileri</div>
+                                <div class="form-wizard-summary-info mb-8">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-wizard-summary-item">
+                                                <div class="form-wizard-summary-label">Proje Kodu:</div>
+                                                <div class="form-wizard-summary-value" id="summary-project-code">-</div>
+                                            </div>
+                                            <div class="form-wizard-summary-item">
+                                                <div class="form-wizard-summary-label">Proje Adı:</div>
+                                                <div class="form-wizard-summary-value" id="summary-project-name">-</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-wizard-summary-item">
+                                                <div class="form-wizard-summary-label">Müşteri:</div>
+                                                <div class="form-wizard-summary-value" id="summary-customer">-</div>
+                                            </div>
+                                            <div class="form-wizard-summary-item">
+                                                <div class="form-wizard-summary-label">Sektör:</div>
+                                                <div class="form-wizard-summary-value" id="summary-sector">-</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Metot ve Örneklem -->
+                                <div class="form-wizard-summary-title">Proje Metodu ve Örneklem</div>
+                                <div class="form-wizard-summary-info mb-8">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-wizard-summary-item">
+                                                <div class="form-wizard-summary-label">Metot:</div>
+                                                <div class="form-wizard-summary-value" id="summary-method">-</div>
+                                            </div>
+                                            <div class="form-wizard-summary-item">
+                                                <div class="form-wizard-summary-label">Örneklem Büyüklüğü:</div>
+                                                <div class="form-wizard-summary-value" id="summary-sample-size">-</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-wizard-summary-item">
+                                                <div class="form-wizard-summary-label">Saha Firması:</div>
+                                                <div class="form-wizard-summary-value" id="summary-scm">-</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Zaman Planı -->
+                                <div class="form-wizard-summary-title">Proje Zaman Planı</div>
+                                <div class="form-wizard-summary-info mb-8">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-wizard-summary-item">
+                                                <div class="form-wizard-summary-label">Saha Başlangıç:</div>
+                                                <div class="form-wizard-summary-value" id="summary-saha-start">-</div>
+                                            </div>
+                                            <div class="form-wizard-summary-item">
+                                                <div class="form-wizard-summary-label">Saha Bitiş:</div>
+                                                <div class="form-wizard-summary-value" id="summary-saha-end">-</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-wizard-summary-item">
+                                                <div class="form-wizard-summary-label">Rapor Teslim:</div>
+                                                <div class="form-wizard-summary-value" id="summary-report-date">-</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Proje Ekibi -->
+                                <div class="form-wizard-summary-title">Proje Ekibi ve Durumu</div>
+                                <div class="form-wizard-summary-info">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-wizard-summary-item">
+                                                <div class="form-wizard-summary-label">Ekip Yöneticisi:</div>
+                                                <div class="form-wizard-summary-value" id="summary-manager">-</div>
+                                            </div>
+                                            <div class="form-wizard-summary-item">
+                                                <div class="form-wizard-summary-label">Proje Durumu:</div>
+                                                <div class="form-wizard-summary-value" id="summary-status">-</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-wizard-summary-item">
+                                                <div class="form-wizard-summary-label">Ekip Üyeleri:</div>
+                                                <div class="form-wizard-summary-value" id="summary-team">-</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Bilgilendirme Mesajı -->
+                            <div class="alert alert-primary d-flex align-items-center p-5 mb-10">
+                                <span class="svg-icon svg-icon-2hx svg-icon-primary me-4">
+                                    <i class="bi bi-info-circle-fill fs-2"></i>
+                                </span>
+                                <div class="d-flex flex-column">
+                                    <h5 class="mb-1 text-primary">Projeyi Kaydediyorsunuz</h5>
+                                    <span>Proje bilgilerini onaylayıp "Projeyi Oluştur" butonuna tıkladığınızda projeniz kaydedilecektir.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Wizard Butonları -->
+                <div class="form-wizard-actions">
+                    <button type="button" class="btn btn-lg btn-light-primary" id="prev-step" disabled>
+                        <span class="svg-icon svg-icon-3 me-1">
+                            <i class="bi bi-arrow-left"></i>
+                        </span>
+                        Geri
+                    </button>
+
+                    <div>
+                        <button type="button" class="btn btn-lg btn-primary" id="next-step">
+                            <span class="indicator-label">
+                                Devam Et
+                                <span class="svg-icon svg-icon-3 ms-2">
+                                    <i class="bi bi-arrow-right"></i>
+                                </span>
+                            </span>
+                            <span class="indicator-progress">
+                                Lütfen Bekleyiniz...
+                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            </span>
+                        </button>
+
+                        <button type="button" class="btn btn-lg btn-success pulse-animation" id="submit-form" style="display: none;">
+                            <span class="indicator-label">
+                                <i class="bi bi-check-lg fs-3 me-2"></i> Projeyi Oluştur
+                            </span>
+                            <span class="indicator-progress">
+                                Lütfen Bekleyiniz...
+                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section js {
+    
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/tr.js"></script>
+    <script src="~/js/project/createproject.js">
+         
+    </script>
+}
+

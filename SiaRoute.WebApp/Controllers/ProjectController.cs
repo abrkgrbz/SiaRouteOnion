@@ -36,6 +36,7 @@ using Application.Features.Queries.ProjectProcess.GetProjectProcessByProjectId;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using Newtonsoft.Json;
 using SiaRoute.WebApp.Models;
+using Application.Features.Queries.Project.GetProjects;
 
 #endregion
 
@@ -60,7 +61,7 @@ namespace SiaRoute.WebApp.Controllers
             return View();
         }
 
-        [HttpPost("project-list/proje-olustur")]
+        [HttpPost("proje-olustur")]
         public async Task<IActionResult> CreateProject(CreateProjectCommand command)
         {
             if (Request.Form.ContainsKey("ProjectSizes"))
@@ -73,8 +74,7 @@ namespace SiaRoute.WebApp.Controllers
         }
 
         [HttpPost("project-list/LoadTable")]
-        public async Task<IActionResult> GetProjectList(GetAllProjectQuery getAllProject)
-        {
+        public async Task<IActionResult> GetProjectList(GetAllProjectQuery getAllProject) {
             getAllProject.orderColumnIndex = Request.Form["order[0][column]"].FirstOrDefault();
             getAllProject.orderDir = Request.Form["order[0][dir]"].FirstOrDefault();
             getAllProject.orderColumnName =
@@ -83,7 +83,12 @@ namespace SiaRoute.WebApp.Controllers
             var response = await Mediator.Send(getAllProject);
             return Ok(response);
         }
-
+        [HttpGet("project-list/get-projects")]
+        public async Task<IActionResult> GetProjects()
+        {
+            var data= await Mediator.Send(new GetProjectsQuery());
+            return Ok(new {data=data.Data});
+        }
 
         [HttpGet("project-details")]
         public async Task<IActionResult> ProjectDetails(int id)
@@ -133,12 +138,7 @@ namespace SiaRoute.WebApp.Controllers
             return Ok(response);
         }
 
-        [HttpPost("add-user-project")]
-        public async Task<IActionResult> AddUserProject([FromBody] AssignUsersRequest model)
-        {
-            var response = await Mediator.Send(new CreateUserProjectCommand() { ProjectId = model.ProjectId, UserId = model.UserIds });
-            return Ok(response);
-        }
+    
 
         public class AssignUsersRequest
         {
@@ -146,17 +146,13 @@ namespace SiaRoute.WebApp.Controllers
             public List<string> UserIds { get; set; }
         }
 
-        [HttpGet("get-user-project-list")]
-        public async Task<IActionResult> GetUserListByProject([FromQuery] GetAllUserProjectQuery filter)
-        {
-            var response = await Mediator.Send(filter);
-            return Json(response);
-        }
+ 
         [HttpGet("project-file-list")]
         public async Task<IActionResult> ProjectFileList(int id)
         {
             var data = await Mediator.Send(new GetPrintStudyDetailsByProjectIdQuery() { ProjectId = id });
             ViewBag.ActivePage = "ProjectFileList";
+            
             if (data.Data is not null)
             {
                 ViewBag.ProjectName = data.Data.ProjectCode;
@@ -165,16 +161,12 @@ namespace SiaRoute.WebApp.Controllers
                 var difference = (currentDate - createdDate).Days;
                 ViewBag.CreatedDateDifference = difference;
             }
+
             await ProjectPartial(id);
             return View();
         }
 
-        [HttpPost("delete-user-project")]
-        public async Task<IActionResult> DeleteUserProject([FromBody] DeleteUserProjectCommand model)
-        {
-            var data = await Mediator.Send(model);
-            return Ok(data);
-        }
+    
 
         [HttpPost("upload-project-file")]
         public async Task<IActionResult> UploadProjectFile(IFormFile printStudyFile, [FromForm] int projectId)
@@ -237,7 +229,7 @@ namespace SiaRoute.WebApp.Controllers
         public async Task<IActionResult> UpdateProject(UpdateProjectCommand updateProjectCommand)
         {
             var response = await Mediator.Send(updateProjectCommand);
-            return RedirectToAction("ProjectSettings", "Project", new { id = updateProjectCommand.ProjectId });
+            return Ok(response);
         }
         [HttpPost("update-project-planned")]
         public async Task<IActionResult> UpdateProjectPlanned(UpdatePlannedProcessCommand plannedProcessCommand)
@@ -258,31 +250,7 @@ namespace SiaRoute.WebApp.Controllers
             var users = await Mediator.Send(new GetProjectOfficerByProjectIdQuery() { ProjectId = projectId });
             return Ok(users.Data);
         }
-
-        #region Project Note
-        //[HttpGet("project-notes")]
-        //public async Task<IActionResult> ProjectNotes(int id)
-        //{
-        //    ViewBag.ActivePage = "ProjectNotes";
-        //    await ProjectPartial(id);
-        //    return View();
-        //}
-
-        //[HttpPost("add-project-notes")]
-        //public async Task<IActionResult> AddProjectNote(CreateProjectNoteCommand createProjectNote)
-        //{
-        //    var response = await Mediator.Send(createProjectNote);
-        //    return Ok(response);
-        //}
-
-        //[HttpGet("get-all-project-notes")]
-        //public async Task<IActionResult> GetAllProjectNoteByProject(GetAllProjectNoteByProjectQuery getAllProjectNoteByProjectQuery)
-        //{
-        //    var data = await Mediator.Send(getAllProjectNoteByProjectQuery);
-        //    return Ok(data);
-        //}
-
-        #endregion
+ 
 
         [HttpGet("get-project-details-chart-data")]
         public async Task<IActionResult> GetProjectDetailsChartData()
@@ -300,7 +268,7 @@ namespace SiaRoute.WebApp.Controllers
         }
 
         [HttpPost("update-project-methods")]
-        public async Task<IActionResult> UpdateProjectMethods(UpdateProjectMethodCommand updateProjectMethodCommand)
+        public async Task<IActionResult> UpdateProjectMethods([FromBody] UpdateProjectMethodCommand updateProjectMethodCommand)
         {
             var data = await Mediator.Send(updateProjectMethodCommand);
             return Ok(data);
@@ -332,6 +300,22 @@ namespace SiaRoute.WebApp.Controllers
             });
             return Ok(data);
         }
+
+        [HttpGet("create-project")]
+        public async Task<IActionResult> ProjectCreate()
+        {
+            return View();
+        }
+
+        [HttpGet("project-process")]
+        public async Task<IActionResult> ProjectProcess(int id)
+        {
+            ViewBag.ActivePage = "ProjectProcess";
+            await ProjectPartial(id);
+            return View();
+
+        }
+
 
         #region Revize
 

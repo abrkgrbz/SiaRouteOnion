@@ -9,6 +9,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="Controllers\AccountController.cs" />
+    <Content Include="Controllers\BaseController.cs" />
+    <Content Include="Controllers\HomeController.cs" />
+    <Content Include="Controllers\PrintStudyController.cs" />
+    <Content Include="Controllers\ProjectBaseController.cs" />
+    <Content Include="Controllers\ProjectController.cs" />
+    <Content Include="Controllers\ProjectNoteController.cs" />
+    <Content Include="Controllers\ScmController.cs" />
+    <Content Include="Controllers\UserController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.104.1" />
     <PackageReference Include="FluentValidation" Version="11.10.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />

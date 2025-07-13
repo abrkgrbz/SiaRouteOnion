@@ -14,6 +14,7 @@ using Application.Features.Commands.UserProject.CreateUserProject;
 using Application.Features.Queries.PrintStudy;
 using Application.Features.Queries.Project.GetAllProject;
 using Application.Features.Queries.Project.GetProjectDetails;
+using Application.Features.Queries.Project.GetProjects;
 using Application.Features.Queries.ProjectMethod.GetProjectMethod;
 using Application.Features.Queries.ProjectNote;
 using Application.Features.Queries.Scm.GetAllScm;
@@ -44,6 +45,7 @@ namespace Application.Mappings
             CreateMap<GetAllProjectNoteViewModel, ProjectNotes>().ReverseMap();
             CreateMap<GetProjectMethodViewModel, ProjectMethods>().ReverseMap();
             CreateMap<CreateProjectMethodCommand, ProjectMethods>().ReverseMap();
+            CreateMap<GetProjectsVM, ProjectList>().ReverseMap();
         }
 
         #region Resolvers

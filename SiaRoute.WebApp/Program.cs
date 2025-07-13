@@ -38,6 +38,7 @@ builder.Services.AddIdentityInfrastructure(configuration);
 builder.Services.AddPersistenceInfrastructure(configuration);
 builder.Services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
 builder.Services.AddControllers();
+builder.Services.AddMemoryCache();
 builder.Services.AddCors(options => options.AddPolicy("AllowAll", p => p.AllowAnyOrigin()
     .AllowAnyMethod()
     .AllowAnyHeader()));
